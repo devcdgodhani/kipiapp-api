@@ -6,7 +6,6 @@ export interface IProductLotAttributes extends IDefaultAttributes {
   title: string;
   enTitle: string;
   sequence: number;
-  parentLotId: ObjectId;
   storeId: ObjectId;
 }
 

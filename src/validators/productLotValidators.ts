@@ -11,7 +11,7 @@ export default class ProductLotValidator {
 
   private createSchema = mongooseToJoi<IProductLotAttributes>({
     schema: ProductLotSchema,
-    includeFields: ['title', 'parentLotId', 'storeId'],
+    includeFields: ['title', 'storeId'],
     requiredFields: ['title', 'storeId'],
   });
 
