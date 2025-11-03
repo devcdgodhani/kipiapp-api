@@ -1,0 +1,71 @@
+export const SIXTY = 60 as const;
+export const ONE_HUNDRED = 100 as const;
+export const ONE_THOUSAND = 1000 as const;
+
+export enum USER_TYPE {
+  MASTER_ADMIN = 'MASTER_ADMIN',
+  ADMIN = 'ADMIN',
+  USER = 'USER',
+  VENDOR = 'VENDOR',
+}
+
+export enum GENDER {
+  MALE = 'MALE',
+  FEMALE = 'FEMALE',
+  OTHER = 'OTHER',
+  DO_NOT_TELL = 'DO_NOT_TELL',
+  NONE = 'NONE',
+}
+
+export enum SIGN_UP_TYPE {
+  APP = 'APP',
+  GOOGLE = 'GOOGLE',
+  APPLE = 'APPLE',
+  META = 'META',
+}
+
+export enum OTP_TYPE {
+  EMAIL = 'EMAIL',
+  MOBILE = 'MOBILE',
+  ACCOUNT_CREATE = 'ACCOUNT_CREATE',
+  FORGET_PASSWORD = 'FORGET_PASSWORD',
+}
+
+export enum AUTH_SETTINGS_ALLOW_LOGIN_FOR {
+  EMAIL = 'EMAIL',
+  MOBILE = 'MOBILE',
+  USERNAME = 'USERNAME',
+}
+
+export enum AUTH_SETTINGS_ALLOW_SIGN_UP_FOR {
+  EMAIL = 'EMAIL',
+  MOBILE = 'MOBILE',
+}
+
+export enum AUTH_SETTINGS_TYPE {
+  AUTH = 'ACCOUNT_CREATE',
+}
+
+export enum AUTH_ACTION_TYPE {
+  SIGN_IN = 'SIGN_IN',
+  SIGN_OUT = 'SIGN_OUT',
+  REFRESH_TOKEN = 'REFRESH_TOKEN',
+}
+
+export enum TOKEN_TYPE {
+  ACCESS_TOKEN = 'ACCESS_TOKEN',
+  REFRESH_TOKEN = 'REFRESH_TOKEN',
+  OTP_TOKEN = 'OTP_TOKEN',
+  FORGET_PASSWORD_TOKEN = 'FORGET_PASSWORD_TOKEN',
+}
+
+export enum USER_STATUS {
+  ACTIVE = 'ACTIVE',
+  INACTIVE = 'INACTIVE',
+}
+
+
+export enum COMMON_STATUS {
+  ACTIVE = 'ACTIVE',
+  INACTIVE = 'INACTIVE',
+}

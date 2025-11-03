@@ -1,1 +1,1 @@
-# kipiapp-api
+# vittaIQ-backend
