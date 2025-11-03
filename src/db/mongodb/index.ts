@@ -30,3 +30,4 @@ export * from './models/categoryModel';
 export * from './models/subCategoryModel';
 export * from './models/productLotModel';
 export * from './models/storeModel';
+export * from './models/productModel';

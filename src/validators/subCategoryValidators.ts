@@ -17,7 +17,7 @@ export default class SubCategoryValidator {
 
   private updateSchema = mongooseToJoi<ISubCategoryAttributes>({
     schema: SubCategorySchema,
-    excludeFields: ['title', 'status'],
+    // excludeFields: ['title', 'status'],
   });
 
   getOne = (req: Request, res: Response, next: NextFunction) => {

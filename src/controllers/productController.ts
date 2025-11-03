@@ -1,35 +1,31 @@
 import { Request, Response, NextFunction } from 'express';
-import {
-  HTTP_STATUS_CODE,
-  PRODUCT_LOT_SUCCESS_MESSAGES,
-  PRODUCT_LOT_ERROR_MESSAGES,
-} from '../constants';
-import { MongooseTransactionService, ProductLotService } from '../services';
-import { IApiResponse, IProductLotAttributes } from '../interfaces';
-import { TProductLotListPaginationRes, TProductLotListRes, TProductLotRes } from '../types';
+import { HTTP_STATUS_CODE, STORE_SUCCESS_MESSAGES, STORE_ERROR_MESSAGES } from '../constants';
+import { MongooseTransactionService, ProductService } from '../services';
+import { IApiResponse, IProductAttributes } from '../interfaces';
+import { TProductListPaginationRes, TProductListRes, TProductRes } from '../types';
 import { ApiError } from '../helpers';
 
-export default class ProductLotController {
-  productLotService = new ProductLotService();
+export default class ProductController {
+  productService = new ProductService();
 
   constructor() {}
 
-  /*********** Fetch productLot ***********/
+  /*********** Fetch product ***********/
   getOne = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const reqData = req.body;
-      const { filter, options } = this.productLotService.generateFilter({
+      const { filter, options } = this.productService.generateFilter({
         filters: reqData,
         // searchFields: ['email'],
       });
 
-      const productLot = await this.productLotService.findOne(filter, options);
+      const product = await this.productService.findOne(filter, options);
 
-      const response: TProductLotRes = {
+      const response: TProductRes = {
         status: HTTP_STATUS_CODE.OK.STATUS,
         code: HTTP_STATUS_CODE.OK.CODE,
-        message: PRODUCT_LOT_SUCCESS_MESSAGES.GET_SUCCESS,
-        data: productLot,
+        message: STORE_SUCCESS_MESSAGES.GET_SUCCESS,
+        data: product,
       };
 
       return res.status(response.status).json(response);
@@ -41,18 +37,18 @@ export default class ProductLotController {
   getAll = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const reqData = req.body;
-      const { filter, options } = this.productLotService.generateFilter({
+      const { filter, options } = this.productService.generateFilter({
         filters: reqData,
         // searchFields: ['email'],
       });
 
-      const productLotList = await this.productLotService.findAll(filter, options);
+      const productList = await this.productService.findAll(filter, options);
 
-      const response: TProductLotListRes = {
+      const response: TProductListRes = {
         status: HTTP_STATUS_CODE.OK.STATUS,
         code: HTTP_STATUS_CODE.OK.CODE,
-        message: PRODUCT_LOT_SUCCESS_MESSAGES.GET_SUCCESS,
-        data: productLotList,
+        message: STORE_SUCCESS_MESSAGES.GET_SUCCESS,
+        data: productList,
       };
       return res.status(response.status).json(response);
     } catch (err) {
@@ -63,18 +59,18 @@ export default class ProductLotController {
   getWithPagination = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const reqData = req.body;
-      const { filter, options } = this.productLotService.generateFilter({
+      const { filter, options } = this.productService.generateFilter({
         filters: reqData,
         searchFields: ['title', 'enTitle'],
       });
 
-      const productLotList = await this.productLotService.findAllWithPagination(filter, options);
+      const productList = await this.productService.findAllWithPagination(filter, options);
 
-      const response: TProductLotListPaginationRes = {
+      const response: TProductListPaginationRes = {
         status: HTTP_STATUS_CODE.OK.STATUS,
         code: HTTP_STATUS_CODE.OK.CODE,
-        message: PRODUCT_LOT_SUCCESS_MESSAGES.GET_SUCCESS,
-        data: productLotList,
+        message: STORE_SUCCESS_MESSAGES.GET_SUCCESS,
+        data: productList,
       };
 
       return res.status(response.status).json(response);
@@ -83,7 +79,7 @@ export default class ProductLotController {
     }
   };
 
-  /*********** Create productLot ***********/
+  /*********** Create product ***********/
   create = async (req: Request, res: Response, next: NextFunction) => {
     const transaction = new MongooseTransactionService();
     try {
@@ -92,37 +88,29 @@ export default class ProductLotController {
       let reqData = req.body;
       if (!Array.isArray(reqData)) reqData = [reqData];
 
-      const existProductLot = await this.productLotService.findOne({
-        title: { $in: reqData.map((productLot: IProductLotAttributes) => productLot.title) },
-        storeId: req.store.id,
+      const existSubCategory = await this.productService.findOne({
+        $or: reqData.map((subCategory: IProductAttributes) => ({
+          storeId: subCategory.storeId,
+          title: subCategory.title,
+        })),
       });
-      if (existProductLot) {
+
+      if (existSubCategory) {
         throw new ApiError(
           HTTP_STATUS_CODE.BAD_REQUEST.CODE,
           HTTP_STATUS_CODE.BAD_REQUEST.STATUS,
-          PRODUCT_LOT_ERROR_MESSAGES.EXIST
+          STORE_ERROR_MESSAGES.EXIST
         );
       }
-      let sequence = 0;
-      const lastProductLot = await this.productLotService.findOne({}, { sort: { sequence: -1 } });
-      if (lastProductLot) sequence = lastProductLot.sequence;
 
-      reqData = reqData.map((productLot: IProductLotAttributes) => {
-        sequence = sequence + 1;
-        return {
-          ...productLot,
-          sequence,
-        };
-      });
-
-      await this.productLotService.bulkCreate(reqData, { userId: req.user.id, session });
+      await this.productService.bulkCreate(reqData, { userId: req.user.id, session });
 
       await transaction.commit();
 
       const response: IApiResponse = {
         status: HTTP_STATUS_CODE.CREATED.STATUS,
         code: HTTP_STATUS_CODE.CREATED.CODE,
-        message: PRODUCT_LOT_SUCCESS_MESSAGES.CREATE_SUCCESS,
+        message: STORE_SUCCESS_MESSAGES.CREATE_SUCCESS,
       };
       return res.status(response.status).json(response);
     } catch (err) {
@@ -131,7 +119,7 @@ export default class ProductLotController {
     }
   };
 
-  /*********** Update productLot ***********/
+  /*********** Update product ***********/
   updateManyByFilter = async (req: Request, res: Response, next: NextFunction) => {
     const transaction = new MongooseTransactionService();
 
@@ -141,10 +129,10 @@ export default class ProductLotController {
       let reqData = req.body;
       if (!Array.isArray(reqData)) reqData = [reqData];
       for (const updateData of reqData) {
-        const { filter } = this.productLotService.generateFilter({
+        const { filter } = this.productService.generateFilter({
           filters: updateData.filter,
         });
-        await this.productLotService.update(filter, updateData.update, {
+        await this.productService.update(filter, updateData.update, {
           userId: req.user.id,
           session,
         });
@@ -152,7 +140,7 @@ export default class ProductLotController {
       const response: IApiResponse = {
         status: HTTP_STATUS_CODE.OK.STATUS,
         code: HTTP_STATUS_CODE.OK.CODE,
-        message: PRODUCT_LOT_SUCCESS_MESSAGES.UPDATE_SUCCESS,
+        message: STORE_SUCCESS_MESSAGES.UPDATE_SUCCESS,
       };
       await transaction.commit();
       return res.status(response.status).json(response);
@@ -167,10 +155,10 @@ export default class ProductLotController {
     try {
       const session = await transaction.start();
       const reqData = req.body;
-      const { filter } = this.productLotService.generateFilter({
+      const { filter } = this.productService.generateFilter({
         filters: reqData.filter,
       });
-      await this.productLotService.updateOne(filter, reqData.update, {
+      await this.productService.updateOne(filter, reqData.update, {
         userId: req.user.id,
         session,
       });
@@ -178,7 +166,7 @@ export default class ProductLotController {
       const response: IApiResponse = {
         status: HTTP_STATUS_CODE.OK.STATUS,
         code: HTTP_STATUS_CODE.OK.CODE,
-        message: PRODUCT_LOT_SUCCESS_MESSAGES.UPDATE_SUCCESS,
+        message: STORE_SUCCESS_MESSAGES.UPDATE_SUCCESS,
       };
       await transaction.commit();
       return res.status(response.status).json(response);
@@ -188,22 +176,22 @@ export default class ProductLotController {
     }
   };
 
-  /*********** Delete productLot ***********/
+  /*********** Delete product ***********/
   deleteByFilter = async (req: Request, res: Response, next: NextFunction) => {
     const transaction = new MongooseTransactionService();
     try {
       const session = await transaction.start();
       const reqData = req.body;
-      const { filter } = this.productLotService.generateFilter({
+      const { filter } = this.productService.generateFilter({
         filters: reqData,
       });
 
-      await this.productLotService.softDelete(filter, { userId: req.user.id, session });
+      await this.productService.softDelete(filter, { userId: req.user.id, session });
 
       const response: IApiResponse = {
         status: HTTP_STATUS_CODE.OK.STATUS,
         code: HTTP_STATUS_CODE.OK.CODE,
-        message: PRODUCT_LOT_SUCCESS_MESSAGES.DELETE_SUCCESS,
+        message: STORE_SUCCESS_MESSAGES.DELETE_SUCCESS,
       };
       await transaction.commit();
       return res.status(response.status).json(response);

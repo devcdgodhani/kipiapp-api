@@ -1,24 +1,23 @@
 import { Request, Response, NextFunction } from 'express';
-import { IUserAttributes } from '../interfaces';
-import { UserSchema } from '../db/mongodb';
+import { IProductAttributes } from '../interfaces';
+import { ProductSchema } from '../db/mongodb';
 import { mongooseToJoi, validateSchema } from '../helpers/joiSchemaBuilder';
 
-export default class UserValidator {
-  private filterSchema = mongooseToJoi<IUserAttributes>({
-    schema: UserSchema,
+export default class ProductValidator {
+  private filterSchema = mongooseToJoi<IProductAttributes>({
+    schema: ProductSchema,
     isFilterSchema: true,
   });
 
-  private createSchema = mongooseToJoi<IUserAttributes>({
-    schema: UserSchema,
-    includeFields: ['email', 'mobile', 'password', 'firstName', 'lastName', 'countryCode'],
-    requiredFields: ['email', 'mobile', 'password', 'firstName', 'lastName', 'countryCode'],
+  private createSchema = mongooseToJoi<IProductAttributes>({
+    schema: ProductSchema,
+    includeFields: ['title', 'storeId', 'description'],
+    requiredFields: ['title', 'storeId'],
   });
 
-  private updateSchema = mongooseToJoi<IUserAttributes>({
-    schema: UserSchema,
-    includeFields: ['firstName', 'lastName', 'mobile', 'countryCode', 'gender', 'status'],
-    excludeFields: ['email', 'password', 'mobile', 'countryCode'],
+  private updateSchema = mongooseToJoi<IProductAttributes>({
+    schema: ProductSchema,
+    // excludeFields: ['title',],
   });
 
   getOne = (req: Request, res: Response, next: NextFunction) => {

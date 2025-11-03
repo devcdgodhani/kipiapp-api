@@ -10,3 +10,4 @@ export * from './subCategoryService';
 export * from './productLotService';
 export * from './mongooseTransactionService';
 export * from './storeService';
+export * from './productService';

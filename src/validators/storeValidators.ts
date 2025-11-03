@@ -17,7 +17,7 @@ export default class StoreValidator {
 
   private updateSchema = mongooseToJoi<IStoreAttributes>({
     schema: StoreSchema,
-    excludeFields: ['title'],
+    // excludeFields: ['title'],
   });
 
   getOne = (req: Request, res: Response, next: NextFunction) => {

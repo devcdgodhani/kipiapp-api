@@ -1,5 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
-import { HTTP_STATUS_CODE, SUB_CATEGORY_SUCCESS_MESSAGES, SUB_CATEGORY_ERROR_MESSAGES } from '../constants';
+import {
+  HTTP_STATUS_CODE,
+  SUB_CATEGORY_SUCCESS_MESSAGES,
+  SUB_CATEGORY_ERROR_MESSAGES,
+} from '../constants';
 import { SubCategoryService } from '../services';
 import { IApiResponse, ISubCategoryAttributes } from '../interfaces';
 import { TSubCategoryListPaginationRes, TSubCategoryListRes, TSubCategoryRes } from '../types';
@@ -92,6 +96,7 @@ export default class SubCategoryController {
         $or: reqData.map((subCategory: ISubCategoryAttributes) => ({
           categoryId: subCategory.categoryId,
           title: subCategory.title,
+          storeId: subCategory.storeId,
         })),
       });
 

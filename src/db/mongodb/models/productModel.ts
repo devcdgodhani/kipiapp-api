@@ -1,8 +1,8 @@
 import { Schema, Types, model } from 'mongoose';
-import { IProductLotDocument } from '../../../interfaces';
+import { IProductDocument } from '../../../interfaces';
 import { defaultAttributes } from '../plugins/baseSchema';
 
-export const ProductLotSchema = new Schema<IProductLotDocument>(
+export const ProductSchema = new Schema<IProductDocument>(
   {
     title: {
       type: String,
@@ -14,14 +14,19 @@ export const ProductLotSchema = new Schema<IProductLotDocument>(
       required: false,
       trim: true,
     },
-    sequence: {
-      type: Number,
-      required: true,
-      unique: true,
+    description: {
+      type: String,
+      required: false,
+      trim: true,
+    },
+    enDescription: {
+      type: String,
+      required: false,
+      trim: true,
     },
     storeId: {
       type: Types.ObjectId,
-      ref: 'products',
+      ref: 'users',
     },
     ...defaultAttributes,
   },
@@ -31,4 +36,4 @@ export const ProductLotSchema = new Schema<IProductLotDocument>(
   }
 );
 
-export const ProductLotModel = model<IProductLotDocument>('product_lots', ProductLotSchema);
+export const ProductModel = model<IProductDocument>('product', ProductSchema);

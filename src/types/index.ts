@@ -9,3 +9,4 @@ export * from './otp';
 export * from './subCategory';
 export * from './productLot';
 export * from './store';
+export * from './product';

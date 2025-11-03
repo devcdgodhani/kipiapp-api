@@ -17,7 +17,7 @@ export default class CategoryValidator {
 
   private updateSchema = mongooseToJoi<ICategoryAttributes>({
     schema: CategorySchema,
-    excludeFields: ['title', 'status'],
+    // excludeFields: ['title', 'status'],
   });
 
   getOne = (req: Request, res: Response, next: NextFunction) => {

@@ -87,6 +87,7 @@ export default class CategoryController {
 
       const existCategory = await this.categoryService.findOne({
         title: { $in: reqData.map((category: ICategoryAttributes) => category.title) },
+        storeId: req.store.id,
       });
       if (existCategory) {
         throw new ApiError(

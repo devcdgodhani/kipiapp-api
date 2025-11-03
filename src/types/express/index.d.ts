@@ -6,6 +6,7 @@ declare global {
     export interface Request {
       user: IUserAttributes & { deviceIp?: string };
       token: JwtPayload;
+      store: IStoreAttributes;
     }
   }
 }

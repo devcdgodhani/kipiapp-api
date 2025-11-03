@@ -17,7 +17,7 @@ export default class ProductLotValidator {
 
   private updateSchema = mongooseToJoi<IProductLotAttributes>({
     schema: ProductLotSchema,
-    excludeFields: ['title'],
+    // excludeFields: ['title'],
   });
 
   getOne = (req: Request, res: Response, next: NextFunction) => {

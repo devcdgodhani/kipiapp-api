@@ -10,3 +10,4 @@ export * from './subCategoryServiceInterface';
 export * from './productLotServiceInterface';
 export * from './mongooseCommonServiceInterface';
 export * from './storeServiceInterface';
+export * from './productServiceInterface';
