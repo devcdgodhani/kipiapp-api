@@ -8,6 +8,8 @@ import categoryRoutes from './categoryRoutes';
 import subCategoryRoutes from './subCategoryRoutes';
 import productLotRoutes from './productLotRoutes';
 import storeRoutes from './storeRoutes';
+import productRoutes from './productRoutes';
+import productSpecificationRoutes from './productSpecificationRoutes';
 
 router.get('/healthCheck', (req, res) => {
   const now = new Date();
@@ -30,5 +32,9 @@ router.use('/subCategory', jwtAuth(), subCategoryRoutes);
 router.use('/productLot', jwtAuth(), productLotRoutes);
 
 router.use('/store', jwtAuth(), storeRoutes);
+
+router.use('/product', jwtAuth(), productRoutes);
+
+router.use('/productSpecification', jwtAuth(), productSpecificationRoutes);
 
 export default router;

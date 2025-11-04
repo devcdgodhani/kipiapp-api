@@ -1,8 +1,8 @@
 import { Schema, Types, model } from 'mongoose';
 import { IProductDocument } from '../../../interfaces';
 import { defaultAttributes } from '../plugins/baseSchema';
-import { ProductSpecificationSchema } from './productSpecificationModel';
-import { PRODUCT_COMMON_STATUS } from '../../../constants';
+import { ProductSpecificationSchemaObject } from './productSpecificationModel';
+import { MONGOOSE_MODEL, PRODUCT_COMMON_STATUS } from '../../../constants';
 
 export const ProductSchema = new Schema<IProductDocument>(
   {
@@ -28,17 +28,17 @@ export const ProductSchema = new Schema<IProductDocument>(
     },
     categoryId: {
       type: Types.ObjectId,
-      ref: 'stores',
+      ref: MONGOOSE_MODEL.CATEGORIES,
       required: true,
     },
     subCategoryId: {
       type: Types.ObjectId,
-      ref: 'stores',
+      ref: MONGOOSE_MODEL.SUB_CATEGORIES,
       required: true,
     },
     storeId: {
       type: Types.ObjectId,
-      ref: 'stores',
+      ref: MONGOOSE_MODEL.STORES,
       required: true,
     },
     totalUnit: {
@@ -56,7 +56,7 @@ export const ProductSchema = new Schema<IProductDocument>(
       required: true,
     },
     specifications: {
-      type: [ProductSpecificationSchema],
+      type: [ProductSpecificationSchemaObject],
       default: [],
     },
     status: {
@@ -73,4 +73,4 @@ export const ProductSchema = new Schema<IProductDocument>(
   }
 );
 
-export const ProductModel = model<IProductDocument>('product', ProductSchema);
+export const ProductModel = model<IProductDocument>(MONGOOSE_MODEL.PRODUCTS, ProductSchema);

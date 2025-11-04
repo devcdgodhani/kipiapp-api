@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { IProductSpecificationAttributes } from '../interfaces';
 import { ProductSpecificationSchema } from '../db/mongodb';
 import { mongooseToJoi, validateSchema } from '../helpers/joiSchemaBuilder';
+import { PRODUCT_SPECIFICATION_VALUE_TYPE } from '../constants';
 
 export default class ProductSpecificationValidator {
   private filterSchema = mongooseToJoi<IProductSpecificationAttributes>({
@@ -65,7 +66,18 @@ export default class ProductSpecificationValidator {
 
   create = (req: Request, res: Response, next: NextFunction) => {
     try {
-      req.body = validateSchema(this.createSchema, req.body);
+      const reqData = req.body;
+      const schema = { ...this.createSchema };
+
+      if (reqData.valueType === PRODUCT_SPECIFICATION_VALUE_TYPE.SINGLE) {
+        schema.value = schema.value.required();
+        delete schema.multipleValue;
+      } else {
+        schema.multipleValue = schema.multipleValue.required();
+        delete schema.value;
+      }
+
+      req.body = validateSchema(schema, req.body);
       next();
     } catch (err) {
       next(err);
@@ -75,7 +87,21 @@ export default class ProductSpecificationValidator {
   bulkCreate = (req: Request, res: Response, next: NextFunction) => {
     try {
       if (!Array.isArray(req.body)) throw new Error('Body must be an array');
-      req.body = req.body.map((item) => validateSchema(this.createSchema, item));
+
+      req.body = req.body.map((item) => {
+        const schema = { ...this.createSchema };
+
+        if (item.valueType === PRODUCT_SPECIFICATION_VALUE_TYPE.SINGLE) {
+          schema.value = schema.value.required();
+          delete schema.multipleValue;
+        } else {
+          schema.multipleValue = schema.multipleValue.required();
+          delete schema.value;
+        }
+
+        validateSchema(schema, item);
+        return item;
+      });
       next();
     } catch (err) {
       next(err);

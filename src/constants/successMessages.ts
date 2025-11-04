@@ -46,3 +46,17 @@ export enum STORE_SUCCESS_MESSAGES {
   UPDATE_SUCCESS = 'Store details updated successfully',
   DELETE_SUCCESS = 'Store deleted successfully',
 }
+
+export enum PRODUCT_SUCCESS_MESSAGES {
+  CREATE_SUCCESS = 'Product created successfully',
+  GET_SUCCESS = 'Product details retrieved successfully',
+  UPDATE_SUCCESS = 'Product details updated successfully',
+  DELETE_SUCCESS = 'Product deleted successfully',
+}
+
+export enum PRODUCT_SPECIFICATION_SUCCESS_MESSAGES {
+  CREATE_SUCCESS = 'Product specification created successfully',
+  GET_SUCCESS = 'Product specification details retrieved successfully',
+  UPDATE_SUCCESS = 'Product specification details updated successfully',
+  DELETE_SUCCESS = 'Product specification deleted successfully',
+}

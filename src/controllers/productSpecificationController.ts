@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { HTTP_STATUS_CODE, CATEGORY_SUCCESS_MESSAGES, CATEGORY_ERROR_MESSAGES } from '../constants';
+import { HTTP_STATUS_CODE, PRODUCT_SPECIFICATION_SUCCESS_MESSAGES, PRODUCT_SPECIFICATION_ERROR_MESSAGES } from '../constants';
 import { ProductSpecificationService } from '../services';
 import { IApiResponse, IProductSpecificationAttributes } from '../interfaces';
 import { TProductSpecificationListPaginationRes, TProductSpecificationListRes, TProductSpecificationRes } from '../types';
@@ -24,7 +24,7 @@ export default class ProductSpecificationController {
       const response: TProductSpecificationRes = {
         status: HTTP_STATUS_CODE.OK.STATUS,
         code: HTTP_STATUS_CODE.OK.CODE,
-        message: CATEGORY_SUCCESS_MESSAGES.GET_SUCCESS,
+        message: PRODUCT_SPECIFICATION_SUCCESS_MESSAGES.GET_SUCCESS,
         data: productSpecification,
       };
 
@@ -47,7 +47,7 @@ export default class ProductSpecificationController {
       const response: TProductSpecificationListRes = {
         status: HTTP_STATUS_CODE.OK.STATUS,
         code: HTTP_STATUS_CODE.OK.CODE,
-        message: CATEGORY_SUCCESS_MESSAGES.GET_SUCCESS,
+        message: PRODUCT_SPECIFICATION_SUCCESS_MESSAGES.GET_SUCCESS,
         data: productSpecificationList,
       };
       return res.status(response.status).json(response);
@@ -69,7 +69,7 @@ export default class ProductSpecificationController {
       const response: TProductSpecificationListPaginationRes = {
         status: HTTP_STATUS_CODE.OK.STATUS,
         code: HTTP_STATUS_CODE.OK.CODE,
-        message: CATEGORY_SUCCESS_MESSAGES.GET_SUCCESS,
+        message: PRODUCT_SPECIFICATION_SUCCESS_MESSAGES.GET_SUCCESS,
         data: productSpecificationList,
       };
 
@@ -93,7 +93,7 @@ export default class ProductSpecificationController {
         throw new ApiError(
           HTTP_STATUS_CODE.BAD_REQUEST.CODE,
           HTTP_STATUS_CODE.BAD_REQUEST.STATUS,
-          CATEGORY_ERROR_MESSAGES.EXIST
+          PRODUCT_SPECIFICATION_ERROR_MESSAGES.EXIST
         );
       }
       await this.productSpecificationService.bulkCreate(reqData, { userId: req.user.id });
@@ -101,7 +101,7 @@ export default class ProductSpecificationController {
       const response: IApiResponse = {
         status: HTTP_STATUS_CODE.CREATED.STATUS,
         code: HTTP_STATUS_CODE.CREATED.CODE,
-        message: CATEGORY_SUCCESS_MESSAGES.CREATE_SUCCESS,
+        message: PRODUCT_SPECIFICATION_SUCCESS_MESSAGES.CREATE_SUCCESS,
       };
       return res.status(response.status).json(response);
     } catch (err) {
@@ -123,7 +123,7 @@ export default class ProductSpecificationController {
       const response: IApiResponse = {
         status: HTTP_STATUS_CODE.OK.STATUS,
         code: HTTP_STATUS_CODE.OK.CODE,
-        message: CATEGORY_SUCCESS_MESSAGES.UPDATE_SUCCESS,
+        message: PRODUCT_SPECIFICATION_SUCCESS_MESSAGES.UPDATE_SUCCESS,
       };
       return res.status(response.status).json(response);
     } catch (err) {
@@ -142,7 +142,7 @@ export default class ProductSpecificationController {
       const response: IApiResponse = {
         status: HTTP_STATUS_CODE.OK.STATUS,
         code: HTTP_STATUS_CODE.OK.CODE,
-        message: CATEGORY_SUCCESS_MESSAGES.UPDATE_SUCCESS,
+        message: PRODUCT_SPECIFICATION_SUCCESS_MESSAGES.UPDATE_SUCCESS,
       };
       return res.status(response.status).json(response);
     } catch (err) {
@@ -163,7 +163,7 @@ export default class ProductSpecificationController {
       const response: IApiResponse = {
         status: HTTP_STATUS_CODE.OK.STATUS,
         code: HTTP_STATUS_CODE.OK.CODE,
-        message: CATEGORY_SUCCESS_MESSAGES.DELETE_SUCCESS,
+        message: PRODUCT_SPECIFICATION_SUCCESS_MESSAGES.DELETE_SUCCESS,
       };
       return res.status(response.status).json(response);
     } catch (err) {

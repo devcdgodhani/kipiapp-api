@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { HTTP_STATUS_CODE, STORE_SUCCESS_MESSAGES, STORE_ERROR_MESSAGES } from '../constants';
+import { HTTP_STATUS_CODE, PRODUCT_SUCCESS_MESSAGES, PRODUCT_ERROR_MESSAGES } from '../constants';
 import { MongooseTransactionService, ProductService } from '../services';
 import { IApiResponse, IProductAttributes } from '../interfaces';
 import { TProductListPaginationRes, TProductListRes, TProductRes } from '../types';
@@ -24,7 +24,7 @@ export default class ProductController {
       const response: TProductRes = {
         status: HTTP_STATUS_CODE.OK.STATUS,
         code: HTTP_STATUS_CODE.OK.CODE,
-        message: STORE_SUCCESS_MESSAGES.GET_SUCCESS,
+        message: PRODUCT_SUCCESS_MESSAGES.GET_SUCCESS,
         data: product,
       };
 
@@ -47,7 +47,7 @@ export default class ProductController {
       const response: TProductListRes = {
         status: HTTP_STATUS_CODE.OK.STATUS,
         code: HTTP_STATUS_CODE.OK.CODE,
-        message: STORE_SUCCESS_MESSAGES.GET_SUCCESS,
+        message: PRODUCT_SUCCESS_MESSAGES.GET_SUCCESS,
         data: productList,
       };
       return res.status(response.status).json(response);
@@ -69,7 +69,7 @@ export default class ProductController {
       const response: TProductListPaginationRes = {
         status: HTTP_STATUS_CODE.OK.STATUS,
         code: HTTP_STATUS_CODE.OK.CODE,
-        message: STORE_SUCCESS_MESSAGES.GET_SUCCESS,
+        message: PRODUCT_SUCCESS_MESSAGES.GET_SUCCESS,
         data: productList,
       };
 
@@ -99,7 +99,7 @@ export default class ProductController {
         throw new ApiError(
           HTTP_STATUS_CODE.BAD_REQUEST.CODE,
           HTTP_STATUS_CODE.BAD_REQUEST.STATUS,
-          STORE_ERROR_MESSAGES.EXIST
+          PRODUCT_ERROR_MESSAGES.EXIST
         );
       }
 
@@ -117,7 +117,7 @@ export default class ProductController {
       const response: IApiResponse = {
         status: HTTP_STATUS_CODE.CREATED.STATUS,
         code: HTTP_STATUS_CODE.CREATED.CODE,
-        message: STORE_SUCCESS_MESSAGES.CREATE_SUCCESS,
+        message: PRODUCT_SUCCESS_MESSAGES.CREATE_SUCCESS,
       };
       return res.status(response.status).json(response);
     } catch (err) {
@@ -147,7 +147,7 @@ export default class ProductController {
       const response: IApiResponse = {
         status: HTTP_STATUS_CODE.OK.STATUS,
         code: HTTP_STATUS_CODE.OK.CODE,
-        message: STORE_SUCCESS_MESSAGES.UPDATE_SUCCESS,
+        message: PRODUCT_SUCCESS_MESSAGES.UPDATE_SUCCESS,
       };
       await transaction.commit();
       return res.status(response.status).json(response);
@@ -173,7 +173,7 @@ export default class ProductController {
       const response: IApiResponse = {
         status: HTTP_STATUS_CODE.OK.STATUS,
         code: HTTP_STATUS_CODE.OK.CODE,
-        message: STORE_SUCCESS_MESSAGES.UPDATE_SUCCESS,
+        message: PRODUCT_SUCCESS_MESSAGES.UPDATE_SUCCESS,
       };
       await transaction.commit();
       return res.status(response.status).json(response);
@@ -198,7 +198,7 @@ export default class ProductController {
       const response: IApiResponse = {
         status: HTTP_STATUS_CODE.OK.STATUS,
         code: HTTP_STATUS_CODE.OK.CODE,
-        message: STORE_SUCCESS_MESSAGES.DELETE_SUCCESS,
+        message: PRODUCT_SUCCESS_MESSAGES.DELETE_SUCCESS,
       };
       await transaction.commit();
       return res.status(response.status).json(response);

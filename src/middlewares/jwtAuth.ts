@@ -7,20 +7,28 @@ import {
   TOKEN_TYPE,
   USER_ERROR_MESSAGES,
   OTP_ERROR_MESSAGES,
+  STORE_ERROR_MESSAGES,
 } from '../constants';
 import { ApiError } from '../helpers';
-import { UserService, AuthTokenService } from '../services';
+import { UserService, AuthTokenService, StoreService } from '../services';
 
 const userService = new UserService();
 const authTokenService = new AuthTokenService();
+const storeService = new StoreService();
 
 export const jwtAuth =
   (tokenType: TOKEN_TYPE = TOKEN_TYPE.ACCESS_TOKEN) =>
   async (req: Request, _res: Response, next: NextFunction) => {
     try {
+      const BY_PASS_TOKEN_TYPE_FOR_STORE = [
+        TOKEN_TYPE.OTP_TOKEN,
+        TOKEN_TYPE.FORGET_PASSWORD_TOKEN,
+        TOKEN_TYPE.REFRESH_TOKEN,
+      ];
       const { query, params, body } = req;
       const bodyData = { ...query, ...params, ...body };
       const authorization = req.headers.authorization || (req.headers.Authorization as string);
+      const storeId = req.headers.store_id;
 
       if (!bodyData.token && !bodyData.otp && tokenType === TOKEN_TYPE.OTP_TOKEN) {
         throw new ApiError(
@@ -94,6 +102,25 @@ export const jwtAuth =
           HTTP_STATUS_CODE.UNAUTHORIZED.STATUS,
           AUTH_ERROR_MESSAGES.PENDING_ACCOUNT_VERIFICATION
         );
+      }
+
+      if (BY_PASS_TOKEN_TYPE_FOR_STORE.includes(tokenType)) {
+        if (!storeId) {
+          throw new ApiError(
+            HTTP_STATUS_CODE.BAD_REQUEST.CODE,
+            HTTP_STATUS_CODE.BAD_REQUEST.STATUS,
+            STORE_ERROR_MESSAGES.NOT_FOUND
+          );
+        }
+        const store = await storeService.findOne({ id: storeId });
+        if (!store) {
+          throw new ApiError(
+            HTTP_STATUS_CODE.BAD_REQUEST.CODE,
+            HTTP_STATUS_CODE.BAD_REQUEST.STATUS,
+            STORE_ERROR_MESSAGES.NOT_FOUND
+          );
+        }
+        req.store = store;
       }
 
       delete user.password;

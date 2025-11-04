@@ -4,6 +4,7 @@ import {
   AUTH_SETTINGS_ALLOW_LOGIN_FOR,
   AUTH_SETTINGS_ALLOW_SIGN_UP_FOR,
   AUTH_SETTINGS_TYPE,
+  MONGOOSE_MODEL,
 } from '../../../constants';
 import { defaultAttributes } from '../plugins/baseSchema';
 
@@ -36,4 +37,7 @@ const AuthSettingsSchema = new Schema<IAuthSettingsDocument>(
 );
 
 // Model
-export const AuthSettingsModel = model<IAuthSettingsDocument>('auth_settings', AuthSettingsSchema);
+export const AuthSettingsModel = model<IAuthSettingsDocument>(
+  MONGOOSE_MODEL.AUTH_SETTINGS,
+  AuthSettingsSchema
+);

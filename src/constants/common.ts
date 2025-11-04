@@ -75,7 +75,9 @@ export enum PRODUCT_SPECIFICATION_QUANTITY_TYPE {
   INCH = 'inch',
   FOOT = 'foot',
   ML = 'ml',
-  COUNT = 'count',
+  UNIT = 'unit',
+  KG = 'kg',
+  GRAM = 'gram',
   NONE = 'none',
 }
 

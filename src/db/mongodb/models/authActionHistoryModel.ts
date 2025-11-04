@@ -1,12 +1,12 @@
 import { Schema, model } from 'mongoose';
 import { IAuthActionHistoryDocument } from '../../../interfaces';
-import { AUTH_ACTION_TYPE } from '../../../constants';
+import { AUTH_ACTION_TYPE, MONGOOSE_MODEL } from '../../../constants';
 import { defaultAttributes } from '../plugins/baseSchema';
 
 // Schema
 const AuthActionHistorySchema = new Schema<IAuthActionHistoryDocument>(
   {
-    userId: { type: Schema.Types.ObjectId, ref: 'users', required: false },
+    userId: { type: Schema.Types.ObjectId, ref: MONGOOSE_MODEL.USERS, required: false },
     type: { type: String, enum: Object.values(AUTH_ACTION_TYPE), required: false },
     actionAt: { type: Number, required: false },
     deviceId: { type: String, required: false },
@@ -21,6 +21,6 @@ const AuthActionHistorySchema = new Schema<IAuthActionHistoryDocument>(
 
 // Model
 export const AuthActionHistoryModel = model<IAuthActionHistoryDocument>(
-  'auth_action_histories',
+  MONGOOSE_MODEL.AUTH_ACTION_HISTORIES,
   AuthActionHistorySchema
 );

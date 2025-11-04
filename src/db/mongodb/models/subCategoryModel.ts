@@ -1,6 +1,6 @@
 import { Schema, Types, model } from 'mongoose';
 import { ISubCategoryDocument } from '../../../interfaces';
-import { COMMON_STATUS } from '../../../constants';
+import { COMMON_STATUS, MONGOOSE_MODEL } from '../../../constants';
 import { defaultAttributes } from '../plugins/baseSchema';
 
 export const SubCategorySchema = new Schema<ISubCategoryDocument>(
@@ -22,7 +22,7 @@ export const SubCategorySchema = new Schema<ISubCategoryDocument>(
     },
     categoryId: {
       type: Schema.Types.ObjectId,
-      ref: 'categories',
+      ref: MONGOOSE_MODEL.CATEGORIES,
       required: true,
     },
     status: {
@@ -32,7 +32,7 @@ export const SubCategorySchema = new Schema<ISubCategoryDocument>(
     },
     storeId: {
       type: Types.ObjectId,
-      ref: 'stores',
+      ref: MONGOOSE_MODEL.STORES,
     },
     ...defaultAttributes,
   },
@@ -43,4 +43,7 @@ export const SubCategorySchema = new Schema<ISubCategoryDocument>(
 );
 
 // Create model
-export const SubCategoryModel = model<ISubCategoryDocument>('sub_categories', SubCategorySchema);
+export const SubCategoryModel = model<ISubCategoryDocument>(
+  MONGOOSE_MODEL.SUB_CATEGORIES,
+  SubCategorySchema
+);

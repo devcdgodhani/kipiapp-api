@@ -1,6 +1,6 @@
 import { Schema, Types, model } from 'mongoose';
 import { ICategoryDocument } from '../../../interfaces';
-import { COMMON_STATUS } from '../../../constants';
+import { COMMON_STATUS, MONGOOSE_MODEL } from '../../../constants';
 import { defaultAttributes } from '../plugins/baseSchema';
 
 export const CategorySchema = new Schema<ICategoryDocument>(
@@ -27,7 +27,7 @@ export const CategorySchema = new Schema<ICategoryDocument>(
     },
     storeId: {
       type: Types.ObjectId,
-      ref: 'stores',
+      ref: MONGOOSE_MODEL.STORES,
     },
     ...defaultAttributes,
   },
@@ -38,4 +38,4 @@ export const CategorySchema = new Schema<ICategoryDocument>(
 );
 
 // Create model
-export const CategoryModel = model<ICategoryDocument>('categories', CategorySchema);
+export const CategoryModel = model<ICategoryDocument>(MONGOOSE_MODEL.CATEGORIES, CategorySchema);

@@ -61,3 +61,21 @@ export enum STORE_ERROR_MESSAGES {
   NOT_FOUND = 'Unable to find store details!',
   EXIST = 'Store is already exist!',
 }
+
+export enum PRODUCT_ERROR_MESSAGES {
+  CREATE_FAIL = 'Unable to create product!',
+  GET_FAIL = 'Unable to retrieve product details!',
+  UPDATE_FAIL = 'Unable to update product details!',
+  DELETE_FAIL = 'Unable to delete product details!',
+  NOT_FOUND = 'Unable to find product details!',
+  EXIST = 'Product is already exist!',
+}
+
+export enum PRODUCT_SPECIFICATION_ERROR_MESSAGES {
+  CREATE_FAIL = 'Unable to create product specification!',
+  GET_FAIL = 'Unable to retrieve product specification details!',
+  UPDATE_FAIL = 'Unable to update product specification details!',
+  DELETE_FAIL = 'Unable to delete product specification details!',
+  NOT_FOUND = 'Unable to find product specification details!',
+  EXIST = 'Product specification is already exist!',
+}

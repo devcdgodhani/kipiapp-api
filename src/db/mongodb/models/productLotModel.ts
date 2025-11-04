@@ -1,6 +1,7 @@
 import { Schema, Types, model } from 'mongoose';
 import { IProductLotDocument } from '../../../interfaces';
 import { defaultAttributes } from '../plugins/baseSchema';
+import { MONGOOSE_MODEL } from '../../../constants';
 
 export const ProductLotSchema = new Schema<IProductLotDocument>(
   {
@@ -21,7 +22,7 @@ export const ProductLotSchema = new Schema<IProductLotDocument>(
     },
     storeId: {
       type: Types.ObjectId,
-      ref: 'products',
+      ref: MONGOOSE_MODEL.STORES,
     },
     ...defaultAttributes,
   },
@@ -31,4 +32,7 @@ export const ProductLotSchema = new Schema<IProductLotDocument>(
   }
 );
 
-export const ProductLotModel = model<IProductLotDocument>('product_lots', ProductLotSchema);
+export const ProductLotModel = model<IProductLotDocument>(
+  MONGOOSE_MODEL.PRODUCT_LOTS,
+  ProductLotSchema
+);

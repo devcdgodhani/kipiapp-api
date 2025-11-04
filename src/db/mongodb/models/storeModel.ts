@@ -1,6 +1,7 @@
 import { Schema, Types, model } from 'mongoose';
 import { IStoreDocument } from '../../../interfaces';
 import { defaultAttributes } from '../plugins/baseSchema';
+import { MONGOOSE_MODEL } from '../../../constants';
 
 export const StoreSchema = new Schema<IStoreDocument>(
   {
@@ -16,7 +17,7 @@ export const StoreSchema = new Schema<IStoreDocument>(
     },
     userId: {
       type: Types.ObjectId,
-      ref: 'users',
+      ref: MONGOOSE_MODEL.USERS,
     },
     ...defaultAttributes,
   },
@@ -26,4 +27,4 @@ export const StoreSchema = new Schema<IStoreDocument>(
   }
 );
 
-export const StoreModel = model<IStoreDocument>('store', StoreSchema);
+export const StoreModel = model<IStoreDocument>(MONGOOSE_MODEL.STORES, StoreSchema);
