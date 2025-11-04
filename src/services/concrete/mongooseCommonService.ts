@@ -17,6 +17,7 @@ import {
 import { IMongooseCommonService } from '../../services';
 import { IPaginationData } from '../../interfaces';
 import { Schema } from 'mongoose';
+import { SearchField } from '../../types';
 
 export class MongooseCommonService<T, TDoc extends Document>
   implements IMongooseCommonService<T, TDoc>
@@ -42,7 +43,7 @@ export class MongooseCommonService<T, TDoc extends Document>
 
   generateFilter = (options: {
     filters?: Record<string, any>;
-    searchFields?: (keyof T)[];
+    searchFields?: SearchField<T>[];
   }): FilterQuery<T> => {
     const { filters = {}, searchFields = [] } = options;
 

@@ -14,7 +14,7 @@ export class ProductService
   generateUniqueSku = async (): Promise<string> => {
     let sku = PRODUCT_SKU_START;
     const exist = await this.findOne({}, { sort: { createdAt: -1 } });
-    if (exist) sku = Number(exist.sku);
-    return `sku${sku + 1}`;
+    if (exist) sku = Number(exist.sku.split('-')[1]);
+    return `SKU-${(sku + 1).toString()}`;
   };
 }

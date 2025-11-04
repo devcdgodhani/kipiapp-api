@@ -61,7 +61,7 @@ export default class ProductController {
       const reqData = req.body;
       const { filter, options } = this.productService.generateFilter({
         filters: reqData,
-        searchFields: ['title', 'enTitle'],
+        searchFields: ['title', 'enTitle', 'specifications.value', 'specifications.title'],
       });
 
       const productList = await this.productService.findAllWithPagination(filter, options);

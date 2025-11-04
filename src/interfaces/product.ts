@@ -7,6 +7,8 @@ export interface IProductAttributes extends IDefaultAttributes {
   id: ObjectId;
   title: string;
   sku: string;
+  vendorId: ObjectId;
+  lotId: ObjectId;
   categoryId: ObjectId;
   subCategoryId: ObjectId;
   enTitle: string;

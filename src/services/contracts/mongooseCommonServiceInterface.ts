@@ -12,12 +12,13 @@ import {
   ObjectId,
 } from 'mongoose';
 import { IPaginationData } from '../../interfaces';
+import { SearchField } from '../../types';
 
 export interface IReadService<T> {
   generateFilter(options: {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     filters?: Record<string, any>;
-    searchFields?: (keyof T)[];
+    searchFields?: SearchField<T>[];
   }): FilterQuery<T>;
 
   findAll(

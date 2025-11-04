@@ -31,7 +31,7 @@ router.use('/subCategory', jwtAuth(), subCategoryRoutes);
 
 router.use('/productLot', jwtAuth(), productLotRoutes);
 
-router.use('/store', jwtAuth(), storeRoutes);
+router.use('/store', jwtAuth({ byPassStoreValidation: true }), storeRoutes);
 
 router.use('/product', jwtAuth(), productRoutes);
 

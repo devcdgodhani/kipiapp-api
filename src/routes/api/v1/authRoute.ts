@@ -21,19 +21,21 @@ router.post(
 router.post('/sendOtp', authValidator.sendOtpValidator, authController.sendOtp);
 router.post(
   '/verifyOtp',
-  jwtAuth(TOKEN_TYPE.OTP_TOKEN),
+  jwtAuth({ tokenType: TOKEN_TYPE.OTP_TOKEN, byPassStoreValidation: true }),
   authValidator.verifyOtpValidator,
   authController.verifyOtp
 );
+
 router.get(
   '/verifyOtp',
-  jwtAuth(TOKEN_TYPE.OTP_TOKEN),
+  jwtAuth({ tokenType: TOKEN_TYPE.OTP_TOKEN, byPassStoreValidation: true }),
   authValidator.verifyOtpValidator,
   authController.verifyOtp
 );
+
 router.post(
   '/forgetPassword',
-  jwtAuth(TOKEN_TYPE.FORGET_PASSWORD_TOKEN),
+  jwtAuth({ tokenType: TOKEN_TYPE.FORGET_PASSWORD_TOKEN, byPassStoreValidation: true }),
   authValidator.forgetPasswordValidator,
   authController.forgetPassword
 );

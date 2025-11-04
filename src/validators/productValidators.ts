@@ -20,6 +20,8 @@ export default class ProductValidator {
       'totalUnit',
       'pricePerUnit',
       'specifications',
+      'lotId',
+      'vendorId',
     ],
     requiredFields: ['title', 'storeId', 'totalUnit', 'pricePerUnit', 'specifications'],
   });

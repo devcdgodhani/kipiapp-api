@@ -4,6 +4,7 @@ export enum USER_ERROR_MESSAGES {
   UPDATE_FAIL = 'Unable to update user details!',
   DELETE_FAIL = 'Unable to delete user details!',
   NOT_FOUND = 'Unable to find user details!',
+  VENDOR_NOT_FOUND = 'Unable to find vendor user details!',
   EXIST = 'User is already exist!',
 }
 

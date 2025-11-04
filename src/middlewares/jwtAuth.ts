@@ -11,20 +11,23 @@ import {
 } from '../constants';
 import { ApiError } from '../helpers';
 import { UserService, AuthTokenService, StoreService } from '../services';
+import { TJwtAuthParams } from '../types';
 
 const userService = new UserService();
 const authTokenService = new AuthTokenService();
 const storeService = new StoreService();
 
 export const jwtAuth =
-  (tokenType: TOKEN_TYPE = TOKEN_TYPE.ACCESS_TOKEN) =>
+  (
+    authParams: TJwtAuthParams = {
+      tokenType: TOKEN_TYPE.ACCESS_TOKEN,
+      byPassStoreValidation: false,
+    }
+  ) =>
   async (req: Request, _res: Response, next: NextFunction) => {
     try {
-      const BY_PASS_TOKEN_TYPE_FOR_STORE = [
-        TOKEN_TYPE.OTP_TOKEN,
-        TOKEN_TYPE.FORGET_PASSWORD_TOKEN,
-        TOKEN_TYPE.REFRESH_TOKEN,
-      ];
+      const tokenType = authParams.tokenType || TOKEN_TYPE.ACCESS_TOKEN;
+
       const { query, params, body } = req;
       const bodyData = { ...query, ...params, ...body };
       const authorization = req.headers.authorization || (req.headers.Authorization as string);
@@ -104,7 +107,7 @@ export const jwtAuth =
         );
       }
 
-      if (BY_PASS_TOKEN_TYPE_FOR_STORE.includes(tokenType)) {
+      if (!authParams.byPassStoreValidation) {
         if (!storeId) {
           throw new ApiError(
             HTTP_STATUS_CODE.BAD_REQUEST.CODE,
