@@ -9,3 +9,4 @@ export * from './subCategory';
 export * from './productLot';
 export * from './store';
 export * from './product';
+export * from './productSpecification';

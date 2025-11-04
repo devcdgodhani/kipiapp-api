@@ -64,8 +64,30 @@ export enum USER_STATUS {
   INACTIVE = 'INACTIVE',
 }
 
-
 export enum COMMON_STATUS {
   ACTIVE = 'ACTIVE',
   INACTIVE = 'INACTIVE',
 }
+
+export enum PRODUCT_SPECIFICATION_QUANTITY_TYPE {
+  CM = 'cm',
+  METER = 'meter',
+  INCH = 'inch',
+  FOOT = 'foot',
+  ML = 'ml',
+  COUNT = 'count',
+  NONE = 'none',
+}
+
+export enum PRODUCT_SPECIFICATION_VALUE_TYPE {
+  SINGLE = 'SINGLE',
+  MULTIPLE = 'MULTIPLE',
+}
+
+export enum PRODUCT_COMMON_STATUS {
+  ACTIVE = 'ACTIVE',
+  INACTIVE = 'INACTIVE',
+  OUT_OF_STOCK = 'OUT_OF_STOCK',
+}
+
+export const PRODUCT_SKU_START = 10000;

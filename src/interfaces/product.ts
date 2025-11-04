@@ -1,32 +1,23 @@
 import { ObjectId } from 'mongoose';
 import { IDefaultAttributes } from './common';
-// import {
-//   PRODUCT_SPECIFICATION_QUANTITY_TYPE,
-//   PRODUCT_SPECIFICATION_VALUE_TYPE,
-// } from '../constants';
-
-// export interface IProductSpecification {
-//   title: string;
-//   enTitle: string;
-//   valueType: PRODUCT_SPECIFICATION_VALUE_TYPE;
-//   value: string;
-//   multipleValue: string[];
-//   enValue: string;
-//   description: string;
-//   quantityType: PRODUCT_SPECIFICATION_QUANTITY_TYPE;
-// }
+import { IProductSpecificationAttributes } from './productSpecification';
+import { PRODUCT_COMMON_STATUS } from '../constants';
 
 export interface IProductAttributes extends IDefaultAttributes {
   id: ObjectId;
   title: string;
+  sku: string;
+  categoryId: ObjectId;
+  subCategoryId: ObjectId;
   enTitle: string;
   description: string;
   enDescription: string;
   storeId: ObjectId;
   totalUnit: number;
-  remainUnit: number;
+  soldUnit: number;
   pricePerUnit: number;
-  // specifications: IProductSpecification[];
+  specifications: IProductSpecificationAttributes[];
+  status: PRODUCT_COMMON_STATUS;
 }
 
 export interface IProductDocument extends Omit<IProductAttributes, 'id'>, Document {}

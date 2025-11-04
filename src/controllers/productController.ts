@@ -103,6 +103,13 @@ export default class ProductController {
         );
       }
 
+      reqData = await Promise.all(
+        reqData.map(async (product: IProductAttributes) => ({
+          ...product,
+          sku: await this.productService.generateUniqueSku(),
+        }))
+      );
+
       await this.productService.bulkCreate(reqData, { userId: req.user.id, session });
 
       await transaction.commit();

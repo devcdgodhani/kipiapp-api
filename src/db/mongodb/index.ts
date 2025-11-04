@@ -2,7 +2,7 @@ import mongoose, { ConnectOptions } from 'mongoose';
 import transformIdIdQueryPlugin from './plugins/transformIdInQueryPlugin';
 import transformIdInResponsePlugin from './plugins/transformIdInResponsePlugin';
 import { addDefaultAttributesPlugin } from './plugins/addDefaultAttributesPlugin';
-import { TMongoDbConfig } from '../../types'; 
+import { TMongoDbConfig } from '../../types';
 
 mongoose.plugin(transformIdIdQueryPlugin);
 mongoose.plugin(transformIdInResponsePlugin);
@@ -19,7 +19,6 @@ export const connectMongoDb = async (config: TMongoDbConfig) => {
   }
 };
 
-
 /****************** models import **********************/
 export * from './models/authActionHistoryModel';
 export * from './models/authSettingsModel';
@@ -31,3 +30,4 @@ export * from './models/subCategoryModel';
 export * from './models/productLotModel';
 export * from './models/storeModel';
 export * from './models/productModel';
+export * from './models/productSpecificationModel';

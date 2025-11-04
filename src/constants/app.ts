@@ -30,18 +30,3 @@ export const APP_DETAILS = {
 };
 
 export const MASTER_OTP = '55555555';
-
-export enum PRODUCT_SPECIFICATION_QUANTITY_TYPE {
-  CM = 'cm',
-  METER = 'meter',
-  INCH = 'inch',
-  FOOT = 'foot',
-  ML = 'ml',
-  COUNT = 'count',
-  NONE = 'none',
-}
-
-export enum PRODUCT_SPECIFICATION_VALUE_TYPE {
-  SINGLE = 'SINGLE',
-  MULTIPLE = 'MULTIPLE',
-}

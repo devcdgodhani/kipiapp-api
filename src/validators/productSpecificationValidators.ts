@@ -1,32 +1,31 @@
 import { Request, Response, NextFunction } from 'express';
-import { IProductAttributes } from '../interfaces';
-import { ProductSchema } from '../db/mongodb';
+import { IProductSpecificationAttributes } from '../interfaces';
+import { ProductSpecificationSchema } from '../db/mongodb';
 import { mongooseToJoi, validateSchema } from '../helpers/joiSchemaBuilder';
 
-export default class ProductValidator {
-  private filterSchema = mongooseToJoi<IProductAttributes>({
-    schema: ProductSchema,
+export default class ProductSpecificationValidator {
+  private filterSchema = mongooseToJoi<IProductSpecificationAttributes>({
+    schema: ProductSpecificationSchema,
     isFilterSchema: true,
   });
 
-  private createSchema = mongooseToJoi<IProductAttributes>({
-    schema: ProductSchema,
+  private createSchema = mongooseToJoi<IProductSpecificationAttributes>({
+    schema: ProductSpecificationSchema,
     includeFields: [
       'title',
-      'storeId',
       'description',
-      'categoryId',
-      'subCategoryId',
-      'totalUnit',
-      'pricePerUnit',
-      'specifications',
+      'valueType',
+      'value',
+      'multipleValue',
+      'quantityType',
+      'storeId',
     ],
-    requiredFields: ['title', 'storeId', 'totalUnit', 'pricePerUnit', 'specifications'],
+    requiredFields: ['title', 'valueType', 'quantityType', 'storeId'],
   });
 
-  private updateSchema = mongooseToJoi<IProductAttributes>({
-    schema: ProductSchema,
-    excludeFields: ['sku'],
+  private updateSchema = mongooseToJoi<IProductSpecificationAttributes>({
+    schema: ProductSpecificationSchema,
+    // excludeFields: ['title', 'status'],
   });
 
   getOne = (req: Request, res: Response, next: NextFunction) => {
