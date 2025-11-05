@@ -86,6 +86,8 @@ export interface IEnvVariables {
   FIREBASE_PRIVATE_KEY: string;
 
   SEND_GRID_API_KEY: string;
+  SEND_GRID_FROM_EMAIL: string;
+  SEND_GRID_FROM_NAME: string;
 }
 
 export interface IEmailOptions {

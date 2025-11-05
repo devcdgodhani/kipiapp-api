@@ -61,6 +61,8 @@ const envValidation = Joi.object({
   FIREBASE_CLIENT_EMAIL: Joi.string().required(),
   FIREBASE_PRIVATE_KEY: Joi.string().required(),
   SEND_GRID_API_KEY: Joi.string().required(),
+  SEND_GRID_FROM_EMAIL: Joi.string().required(),
+  SEND_GRID_FROM_NAME: Joi.string().required(),
 }).unknown();
 
 const { value, error } = envValidation.validate(process.env, {
@@ -126,4 +128,6 @@ export const ENV_VARIABLE: IEnvVariables = {
   FIREBASE_PRIVATE_KEY: value.FIREBASE_PRIVATE_KEY,
 
   SEND_GRID_API_KEY: value.SEND_GRID_API_KEY,
+  SEND_GRID_FROM_EMAIL: value.SEND_GRID_FROM_EMAIL,
+  SEND_GRID_FROM_NAME: value.SEND_GRID_FROM_NAME,
 };
