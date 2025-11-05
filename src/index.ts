@@ -9,16 +9,18 @@ const startServer = (): void => {
   server.listen(ENV_VARIABLE.PORT, async () => {
     await assertDatabaseConnection();
     console.log(`Server running on port ${ENV_VARIABLE.PORT}...`);
-    setInterval(
-      () => {
-        fetch(ENV_VARIABLE.SERVER_URL)
-          .then(() => {
-            console.log('Self ping completed:');
-          })
-          .catch((err) => console.error('❌ Self ping failed:', err.message));
-      },
-      1000 * 60 * 5
-    );
+    if(ENV_VARIABLE.NODE_ENV !== 'production'){
+      setInterval(
+        () => {
+          fetch(ENV_VARIABLE.SERVER_URL)
+            .then(() => {
+              console.log('Self ping completed:');
+            })
+            .catch((err) => console.error('❌ Self ping failed:', err.message));
+        },
+        1000 * 60 * 5
+      );
+    }
   });
 };
 
