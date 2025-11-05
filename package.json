@@ -4,7 +4,7 @@
   "main": "dist/index.js",
   "license": "MIT",
   "scripts": {
-    "build": "tsc -p tsconfig.json",
+    "build": "mkdir -p dist && find dist -mindepth 1 -not -path 'dist/public*' -exec rm -rf {} + && cp -R templates dist/templates && tsc",
     "update:core:packages": "npm uninstall core-db-models interface-types && npm install core-db-models interface-types",
     "start": "node dist/index.js",
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
