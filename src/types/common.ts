@@ -39,3 +39,10 @@ type NestedPaths<T, D extends number = 5> = [D] extends [never]
       : never;
 
 export type SearchField<T> = NestedPaths<T>;
+
+export type TCarrier = 'airtel' | 'jio' | 'vodafone' | 'bsnl' | 'idea';
+export interface TSendSMSParams {
+  phoneNumber: string; // e.g., "91XXXXXXXXXX"
+  carrier: TCarrier; // choose from Carrier type
+  message: string; // SMS content (preferably <160 chars)
+}

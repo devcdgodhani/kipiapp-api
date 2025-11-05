@@ -179,7 +179,11 @@ export class AuthService implements IAuthService {
         });
       }
       if (user.mobile) {
-        //
+        // await sendSMS({
+        //   phoneNumber: `${user.countryCode}${user.mobile}`,
+        //   carrier: 'idea',
+        //   message: `Your Verification otp is ${newOtp}`,
+        // });
       }
       return token;
     } catch (err) {

@@ -1,4 +1,5 @@
 import { ENV_VARIABLE } from '../configs';
+import { TCarrier } from '../types';
 import { TOKEN_TYPE } from './common';
 import path from 'path';
 
@@ -30,3 +31,11 @@ export const APP_DETAILS = {
 };
 
 export const MASTER_OTP = '55555555';
+
+export const CARRIER_DOMAIN: Record<TCarrier, string> = {
+  airtel: 'airtelmail.com',
+  jio: 'jio.com',
+  vodafone: 'vodafone.in',
+  bsnl: 'bsnl.in',
+  idea: 'ideacellular.net',
+};
