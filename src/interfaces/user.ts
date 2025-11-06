@@ -1,7 +1,6 @@
 import { GENDER, SIGN_UP_TYPE, USER_STATUS, USER_TYPE } from '../constants';
-import { IDefaultSequelizeAttributes } from './common';
-
-export interface IUserAttributes extends IDefaultSequelizeAttributes {
+import { IDefaultAttributes } from './common';
+export interface IUserAttributes extends IDefaultAttributes {
   id: string;
   firstName: string;
   lastName: string;
@@ -18,5 +17,3 @@ export interface IUserAttributes extends IDefaultSequelizeAttributes {
   isVerified: boolean;
   status: USER_STATUS;
 }
-
-export interface IUserDocument extends Omit<IUserAttributes, 'id'>, Document {}

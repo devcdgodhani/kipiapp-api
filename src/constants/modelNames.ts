@@ -25,6 +25,8 @@ export const POSTGRE_SQL_MODEL = {
     MODEL_NAME: 'UserModel',
     ASSOCIATIONS: {
       ...POSTGRE_SQL_MODEL_DEFAULT_ASSOCIATIONS,
+      USER_ACTION_LIST: 'actionList',
+      USER_TOKEN_LIST: 'tokenList',
     },
   },
   AUTH_ACTION_HISTORIES: {
@@ -33,7 +35,6 @@ export const POSTGRE_SQL_MODEL = {
     ASSOCIATIONS: {
       ...POSTGRE_SQL_MODEL_DEFAULT_ASSOCIATIONS,
       USER: 'user',
-      USER_ACTION_LIST: 'userActionList',
     },
   },
   AUTH_TOKENS: {
@@ -42,8 +43,23 @@ export const POSTGRE_SQL_MODEL = {
     ASSOCIATIONS: {
       ...POSTGRE_SQL_MODEL_DEFAULT_ASSOCIATIONS,
       USER: 'user',
-      USER_TOKEN_LIST: 'userTokenList',
       REFERENCE_TOKEN: 'referenceToken',
+    },
+  },
+  CATEGORIES: {
+    TABLE_NAME: 'categories',
+    MODEL_NAME: 'CategoryModel',
+    ASSOCIATIONS: {
+      ...POSTGRE_SQL_MODEL_DEFAULT_ASSOCIATIONS,
+      STORE: 'store',
+    },
+  },
+  STORES: {
+    TABLE_NAME: 'stores',
+    MODEL_NAME: 'StoreModel',
+    ASSOCIATIONS: {
+      ...POSTGRE_SQL_MODEL_DEFAULT_ASSOCIATIONS,
+      CATEGORY_LIST: 'categoryList',
     },
   },
 };

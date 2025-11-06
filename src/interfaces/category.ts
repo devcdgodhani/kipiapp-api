@@ -1,14 +1,11 @@
-import { ObjectId } from 'mongoose';
 import { COMMON_STATUS } from '../constants';
 import { IDefaultAttributes } from './common';
 
 export interface ICategoryAttributes extends IDefaultAttributes {
-  id: ObjectId;
+  id: string;
   title: string;
   description: string;
   enTitle: string;
   status: COMMON_STATUS;
-  storeId: ObjectId;
+  storeId: string;
 }
-
-export interface ICategoryDocument extends Omit<ICategoryAttributes, 'id'>, Document {}

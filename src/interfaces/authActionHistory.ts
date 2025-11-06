@@ -9,7 +9,3 @@ export interface IAuthActionHistoryAttributes extends IDefaultAttributes {
   deviceId: string;
   deviceIp: boolean;
 }
-
-export interface IAuthActionHistoryDocument
-  extends Omit<IAuthActionHistoryAttributes, 'id'>,
-    Document {}

@@ -9,5 +9,3 @@ export interface IAuthTokenAttributes extends IDefaultAttributes {
   expiredAt: number;
   referenceTokenId?: string;
 }
-
-export interface IAuthTokenDocument extends Omit<IAuthTokenAttributes, 'id'>, Document {}

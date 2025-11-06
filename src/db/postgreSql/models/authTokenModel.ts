@@ -33,7 +33,7 @@ export class AuthTokenModel
 
     UserModel.hasMany(UserModel, {
       foreignKey: { name: 'userId', allowNull: true },
-      as: POSTGRE_SQL_MODEL.AUTH_TOKENS.ASSOCIATIONS.USER_TOKEN_LIST,
+      as: POSTGRE_SQL_MODEL.USERS.ASSOCIATIONS.USER_TOKEN_LIST,
     });
 
     AuthTokenModel.belongsTo(AuthTokenModel, {
