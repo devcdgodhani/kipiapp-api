@@ -1,4 +1,4 @@
-import { Schema, Types, model } from 'mongoose';
+import { Schema, model } from 'mongoose';
 import { IProductDocument } from '../../../interfaces';
 import { defaultAttributes } from '../plugins/baseSchema';
 import { ProductSpecificationSchemaObject } from './productSpecificationModel';
@@ -12,11 +12,13 @@ import {
   USER_ERROR_MESSAGES,
   USER_TYPE,
 } from '../../../constants';
-import { SubCategoryModel } from './subCategoryModel';
-import { CategoryModel } from './categoryModel';
-import { StoreModel } from './storeModel';
-import { UserModel } from './userModel';
-import { ProductLotModel } from './productLotModel';
+import {
+  CategoryModel,
+  SubCategoryModel,
+  StoreModel,
+  UserModel,
+  ProductLotModel,
+} from '../../postgreSql';
 
 export const ProductSchema = new Schema<IProductDocument>(
   {
@@ -46,65 +48,60 @@ export const ProductSchema = new Schema<IProductDocument>(
       trim: true,
     },
     categoryId: {
-      type: Types.ObjectId,
-      ref: MONGOOSE_MODEL.CATEGORIES,
+      type: String,
       required: true,
       validate: {
-        validator: async function (value: Types.ObjectId) {
+        validator: async function (value: string) {
           if (!value) return true;
-          const exists = await CategoryModel.exists({ id: value });
+          const exists = await CategoryModel.count({ where: { id: value } });
           return !!exists;
         },
         message: CATEGORY_ERROR_MESSAGES.NOT_FOUND,
       },
     },
     subCategoryId: {
-      type: Types.ObjectId,
-      ref: MONGOOSE_MODEL.SUB_CATEGORIES,
+      type: String,
       required: true,
       validate: {
-        validator: async function (value: Types.ObjectId) {
+        validator: async function (value: string) {
           if (!value) return true;
-          const exists = await SubCategoryModel.exists({ id: value });
+          const exists = await SubCategoryModel.count({ where: { id: value } });
           return !!exists;
         },
         message: SUB_CATEGORY_ERROR_MESSAGES.NOT_FOUND,
       },
     },
     storeId: {
-      type: Types.ObjectId,
-      ref: MONGOOSE_MODEL.STORES,
+      type: String,
       required: true,
       validate: {
-        validator: async function (value: Types.ObjectId) {
+        validator: async function (value: string) {
           if (!value) return true;
-          const exists = await StoreModel.exists({ id: value });
+          const exists = await StoreModel.count({ where: { id: value } });
           return !!exists;
         },
         message: STORE_ERROR_MESSAGES.NOT_FOUND,
       },
     },
     vendorId: {
-      type: Types.ObjectId,
-      ref: MONGOOSE_MODEL.USERS,
+      type: String,
       required: false,
       validate: {
-        validator: async function (value: Types.ObjectId) {
+        validator: async function (value: string) {
           if (!value) return true;
-          const exists = await UserModel.exists({ id: value, type: USER_TYPE.VENDOR });
+          const exists = await UserModel.count({ where: { id: value, type: USER_TYPE.VENDOR } });
           return !!exists;
         },
         message: USER_ERROR_MESSAGES.VENDOR_NOT_FOUND,
       },
     },
     lotId: {
-      type: Types.ObjectId,
-      ref: MONGOOSE_MODEL.PRODUCT_LOTS,
+      type: String,
       required: false,
       validate: {
-        validator: async function (value: Types.ObjectId) {
+        validator: async function (value: string) {
           if (!value) return true;
-          const exists = await ProductLotModel.exists({ id: value });
+          const exists = await ProductLotModel.count({ where: { id: value } });
           return !!exists;
         },
         message: PRODUCT_LOT_ERROR_MESSAGES.NOT_FOUND,

@@ -1,11 +1,14 @@
-import { Schema, Types, model } from 'mongoose';
+import { Schema, model } from 'mongoose';
 import { IProductSpecificationDocument } from '../../../interfaces';
 import { defaultAttributes } from '../plugins/baseSchema';
 import {
   MONGOOSE_MODEL,
   PRODUCT_SPECIFICATION_QUANTITY_TYPE,
   PRODUCT_SPECIFICATION_VALUE_TYPE,
+  STORE_ERROR_MESSAGES,
+  USER_ERROR_MESSAGES,
 } from '../../../constants';
+import { StoreModel, UserModel } from '../../postgreSql';
 
 export const ProductSpecificationSchemaObject = {
   title: {
@@ -53,14 +56,28 @@ export const ProductSpecificationSchemaObject = {
     required: false,
   },
   userId: {
-    type: Types.ObjectId,
-    ref: MONGOOSE_MODEL.USERS,
+    type: String,
     required: false,
+    validate: {
+      validator: async function (value: string) {
+        if (!value) return true;
+        const exists = await UserModel.count({ where: { id: value } });
+        return !!exists;
+      },
+      message: USER_ERROR_MESSAGES.VENDOR_NOT_FOUND,
+    },
   },
   storeId: {
-    type: Types.ObjectId,
-    ref: MONGOOSE_MODEL.STORES,
+    type: String,
     required: false,
+    validate: {
+      validator: async function (value: string) {
+        if (!value) return true;
+        const exists = await StoreModel.count({ where: { id: value } });
+        return !!exists;
+      },
+      message: STORE_ERROR_MESSAGES.NOT_FOUND,
+    },
   },
   ...defaultAttributes,
 };
