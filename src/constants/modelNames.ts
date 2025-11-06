@@ -4,10 +4,10 @@ export enum MONGOOSE_MODEL {
   CONTACT_ADDRESSES = 'contact_addresses',
 }
 
-const POSTGRE_SQL_MODEL_DEFAULT_ASSOCIATIONS = {
-  CREATED_BY: 'createdBy',
-  UPDATED_BY: 'updatedBy',
-  DELETED_BY: 'deletedBy',
+export const POSTGRE_SQL_MODEL_DEFAULT_ASSOCIATIONS = {
+  CREATED_BY: 'createdByUser',
+  UPDATED_BY: 'updatedByUser',
+  DELETED_BY: 'deletedByUser',
 };
 
 export const POSTGRE_SQL_MODEL = {

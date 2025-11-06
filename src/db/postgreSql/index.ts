@@ -11,6 +11,7 @@ import {
 } from 'sequelize';
 import { config as dotenvConfig } from 'dotenv';
 import { ENV_VARIABLE } from '../../configs';
+import { POSTGRE_SQL_MODEL_DEFAULT_ASSOCIATIONS } from '../../constants';
 
 dotenvConfig();
 
@@ -66,16 +67,45 @@ export const db: Record<string, any> = {};
 
   // Run associate & hooks
   Object.keys(db).forEach((modelName) => {
+    /***************************************************************/
+    /* Default associations belong to user model for all models */
+    /***************************************************************/
+
+    db[modelName].belongsTo(db.UserModel, {
+      foreignKey: { name: 'createdBy', allowNull: true },
+      as: POSTGRE_SQL_MODEL_DEFAULT_ASSOCIATIONS.CREATED_BY,
+    });
+
+    db[modelName].belongsTo(db.UserModel, {
+      foreignKey: { name: 'updatedBy', allowNull: true },
+      as: POSTGRE_SQL_MODEL_DEFAULT_ASSOCIATIONS.UPDATED_BY,
+    });
+
+    db[modelName].belongsTo(db.UserModel, {
+      foreignKey: { name: 'deletedBy', allowNull: true },
+      as: POSTGRE_SQL_MODEL_DEFAULT_ASSOCIATIONS.DELETED_BY,
+    });
+    /*****************************************************/
+
+    /***************************************************************/
+    /* Other associations */
+    /***************************************************************/
+
     if (typeof db[modelName].associate === 'function') {
       db[modelName].associate(db);
     }
+
+    /***************************************************************/
+    /* Associate Hooks */
+    /***************************************************************/
+
     if (typeof db[modelName].addHooks === 'function') {
       db[modelName].addHooks(db);
     }
   });
 })();
 
-/* ------------------ Hooks ------------------ */
+/* ------------------ Global Hooks ------------------ */
 
 // Before soft-delete: record deletedBy
 sequelize.addHook('beforeBulkDestroy', async (options: DestroyOptions) => {
@@ -127,7 +157,6 @@ sequelize.addHook('beforeFind', (options) => {
     options.raw = false;
   }
 });
-
 
 export * from './models/userModel';
 export * from './models/authActionHistoryModel';

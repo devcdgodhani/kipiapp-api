@@ -36,20 +36,6 @@ export class AuthActionHistoryModel
       as: POSTGRE_SQL_MODEL.USERS.ASSOCIATIONS.USER_ACTION_LIST,
     });
 
-    AuthActionHistoryModel.belongsTo(UserModel, {
-      foreignKey: { name: 'createdBy', allowNull: true },
-      as: POSTGRE_SQL_MODEL.AUTH_ACTION_HISTORIES.ASSOCIATIONS.CREATED_BY,
-    });
-
-    AuthActionHistoryModel.belongsTo(UserModel, {
-      foreignKey: { name: 'updatedBy', allowNull: true },
-      as: POSTGRE_SQL_MODEL.AUTH_ACTION_HISTORIES.ASSOCIATIONS.UPDATED_BY,
-    });
-
-    AuthActionHistoryModel.belongsTo(UserModel, {
-      foreignKey: { name: 'deletedBy', allowNull: true },
-      as: POSTGRE_SQL_MODEL.AUTH_ACTION_HISTORIES.ASSOCIATIONS.DELETED_BY,
-    });
   };
 }
 
