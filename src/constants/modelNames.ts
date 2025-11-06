@@ -54,6 +54,7 @@ export const POSTGRE_SQL_MODEL = {
     ASSOCIATIONS: {
       ...POSTGRE_SQL_MODEL_DEFAULT_ASSOCIATIONS,
       STORE: 'store',
+      SUB_CATEGORY_LIST: 'subCategoryList',
     },
   },
   STORES: {
@@ -62,6 +63,7 @@ export const POSTGRE_SQL_MODEL = {
     ASSOCIATIONS: {
       USER: 'user',
       CATEGORY_LIST: 'categoryList',
+      SUB_CATEGORY_LIST: 'storeSubCategoryList',
     },
   },
   OTPS: {
@@ -69,6 +71,15 @@ export const POSTGRE_SQL_MODEL = {
     MODEL_NAME: 'OtpModel',
     ASSOCIATIONS: {
       USER: 'user',
+    },
+  },
+
+  SUB_CATEGORIES: {
+    TABLE_NAME: 'sub_categories',
+    MODEL_NAME: 'SubCategoryModel',
+    ASSOCIATIONS: {
+      CATEGORY: 'category',
+      STORE: 'store',
     },
   },
 };

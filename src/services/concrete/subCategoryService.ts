@@ -1,10 +1,9 @@
-import { SubCategoryModel } from '../../db/mongodb';
-import { ISubCategoryAttributes, ISubCategoryDocument } from '../../interfaces';
+import { SubCategoryModel } from '../../db/postgreSql';
 import { ISubCategoryService } from '../contracts';
-import { MongooseCommonService } from './mongooseCommonService';
+import { SequelizeCommonService } from './sequelizeCommonService';
 
 export class SubCategoryService
-  extends MongooseCommonService<ISubCategoryAttributes, ISubCategoryDocument>
+  extends SequelizeCommonService<SubCategoryModel>
   implements ISubCategoryService
 {
   constructor() {
