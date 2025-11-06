@@ -137,7 +137,7 @@ export default class CategoryController {
       const { filter } = this.categoryService.generateFilter({
         filters: reqData.filter,
       });
-      await this.categoryService.updateOne(filter, reqData.update, { userId: req.user.id });
+      await this.categoryService.update(filter, reqData.update, { userId: req.user.id });
 
       const response: IApiResponse = {
         status: HTTP_STATUS_CODE.OK.STATUS,

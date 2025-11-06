@@ -331,7 +331,7 @@ export default class AuthController {
         updateData.isMobileVerified = true;
       }
       await this.userService.update({ id: req.user.id }, updateData, { userId: req.user.id });
-      await this.otpService.updateOne(
+      await this.otpService.update(
         { id: otp.id },
         { usesCount: (otp.usesCount || 0) + 1 },
         { userId: req.user.id }

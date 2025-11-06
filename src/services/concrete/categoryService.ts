@@ -1,10 +1,9 @@
-import { CategoryModel } from '../../db/mongodb';
-import { ICategoryAttributes, ICategoryDocument } from '../../interfaces';
+import { CategoryModel } from '../../db/postgreSql';
 import { ICategoryService } from '../contracts';
-import { MongooseCommonService } from './mongooseCommonService';
+import { SequelizeCommonService } from './sequelizeCommonService';
 
 export class CategoryService
-  extends MongooseCommonService<ICategoryAttributes, ICategoryDocument>
+  extends SequelizeCommonService<CategoryModel>
   implements ICategoryService
 {
   constructor() {
