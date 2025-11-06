@@ -1,38 +1,85 @@
-import { Schema, Types, model } from 'mongoose';
-import { IProductLotDocument } from '../../../interfaces';
-import { defaultAttributes } from '../plugins/baseSchema';
-import { MONGOOSE_MODEL } from '../../../constants';
+import { DataTypes, Model, ModelStatic } from 'sequelize';
+import { sequelize } from '../index';
+import { POSTGRE_SQL_MODEL } from '../../../constants';
+import { IProductLotAttributes } from '../../../interfaces';
+import { TProductLotCreate } from '../../../types';
 
-export const ProductLotSchema = new Schema<IProductLotDocument>(
+export class ProductLotModel
+  extends Model<IProductLotAttributes, TProductLotCreate>
+  implements IProductLotAttributes
+{
+  declare id: string;
+  declare title: string;
+  declare enTitle: string;
+  declare sequence: number;
+  declare storeId: string;
+
+  declare createdBy?: string;
+  declare updatedBy?: string;
+  declare deletedBy?: string;
+
+  declare readonly createdAt: Date;
+  declare readonly updatedAt: Date;
+  declare readonly deletedAt: Date;
+
+  static associate(models: Record<string, ModelStatic<Model>>) {
+    const { ProductLotModel, StoreModel } = models;
+
+    // ProductLot belongs to a Store
+    ProductLotModel.belongsTo(StoreModel, {
+      foreignKey: { name: 'storeId', allowNull: true },
+      as: POSTGRE_SQL_MODEL.PRODUCT_LOTS.ASSOCIATIONS.STORE,
+    });
+
+    // Store has many ProductLots
+    StoreModel.hasMany(ProductLotModel, {
+      foreignKey: { name: 'storeId', allowNull: true },
+      as: POSTGRE_SQL_MODEL.STORES.ASSOCIATIONS.PRODUCT_LOT_LIST,
+    });
+  }
+}
+
+ProductLotModel.init(
   {
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
+    },
     title: {
-      type: String,
-      required: true,
-      trim: true,
+      type: DataTypes.STRING(255),
+      allowNull: false,
     },
     enTitle: {
-      type: String,
-      required: false,
-      trim: true,
+      type: DataTypes.STRING(255),
+      allowNull: true,
     },
     sequence: {
-      type: Number,
-      required: true,
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      autoIncrement: true,
       unique: true,
     },
     storeId: {
-      type: Types.ObjectId,
-      ref: MONGOOSE_MODEL.STORES,
+      type: DataTypes.UUID,
+      allowNull: true,
     },
-    ...defaultAttributes,
+    createdBy: {
+      type: DataTypes.UUID,
+      allowNull: true,
+    },
+    updatedBy: {
+      type: DataTypes.UUID,
+      allowNull: true,
+    },
+    deletedBy: {
+      type: DataTypes.UUID,
+      allowNull: true,
+    },
   },
   {
-    timestamps: true,
-    versionKey: false,
+    sequelize,
+    tableName: POSTGRE_SQL_MODEL.PRODUCT_LOTS.TABLE_NAME,
+    modelName: POSTGRE_SQL_MODEL.PRODUCT_LOTS.MODEL_NAME,
   }
-);
-
-export const ProductLotModel = model<IProductLotDocument>(
-  MONGOOSE_MODEL.PRODUCT_LOTS,
-  ProductLotSchema
 );

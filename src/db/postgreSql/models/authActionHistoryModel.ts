@@ -33,7 +33,7 @@ export class AuthActionHistoryModel
 
     UserModel.hasMany(UserModel, {
       foreignKey: { name: 'userId', allowNull: true },
-      as: POSTGRE_SQL_MODEL.AUTH_ACTION_HISTORIES.ASSOCIATIONS.USER_ACTION_LIST,
+      as: POSTGRE_SQL_MODEL.USERS.ASSOCIATIONS.USER_ACTION_LIST,
     });
 
     AuthActionHistoryModel.belongsTo(UserModel, {
@@ -65,7 +65,10 @@ AuthActionHistoryModel.init(
       allowNull: true,
     },
     type: {
-      type: DataTypes.ENUM(...Object.values(AUTH_ACTION_TYPE)),
+      type: DataTypes.STRING,
+      validate: {
+        isIn: [Object.values(AUTH_ACTION_TYPE)],
+      },
       allowNull: true,
     },
     actionAt: {
@@ -78,18 +81,6 @@ AuthActionHistoryModel.init(
     },
     deviceIp: {
       type: DataTypes.BOOLEAN,
-      allowNull: true,
-    },
-    createdBy: {
-      type: DataTypes.UUID,
-      allowNull: true,
-    },
-    updatedBy: {
-      type: DataTypes.UUID,
-      allowNull: true,
-    },
-    deletedBy: {
-      type: DataTypes.UUID,
       allowNull: true,
     },
   },

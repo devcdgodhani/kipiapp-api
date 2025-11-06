@@ -64,6 +64,7 @@ export const POSTGRE_SQL_MODEL = {
       USER: 'user',
       CATEGORY_LIST: 'categoryList',
       SUB_CATEGORY_LIST: 'storeSubCategoryList',
+      PRODUCT_LOT_LIST: 'productLotList',
     },
   },
   OTPS: {
@@ -73,12 +74,18 @@ export const POSTGRE_SQL_MODEL = {
       USER: 'user',
     },
   },
-
   SUB_CATEGORIES: {
     TABLE_NAME: 'sub_categories',
     MODEL_NAME: 'SubCategoryModel',
     ASSOCIATIONS: {
       CATEGORY: 'category',
+      STORE: 'store',
+    },
+  },
+  PRODUCT_LOTS: {
+    TABLE_NAME: 'product_lots',
+    MODEL_NAME: 'ProductLotModel',
+    ASSOCIATIONS: {
       STORE: 'store',
     },
   },
