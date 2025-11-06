@@ -22,6 +22,7 @@ import {
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import { IApiResponse, IAuthTokenAttributes, IUserAttributes } from '../interfaces';
 import { getTime } from 'date-fns';
+import { Op } from 'sequelize';
 
 export default class AuthController {
   private userService = new UserService();
@@ -45,7 +46,7 @@ export default class AuthController {
 
       reqData.password = await this.authService.generateHashPassword(reqData.password);
       reqData.username = await this.authService.generateUniqueUsername(reqData.email);
-      
+
       const user = await this.userService.create(reqData);
       if (!user) {
         throw new ApiError(
@@ -250,7 +251,7 @@ export default class AuthController {
         );
       }
       const newPassword = await this.authService.generateHashPassword(bodyData.newPassword);
-      await this.userService.updateOne(
+      await this.userService.update(
         { id: user.id },
         { password: newPassword },
         { userId: req.user.id }
@@ -272,7 +273,7 @@ export default class AuthController {
       const reqData = req.body;
 
       const user = await this.userService.findOne({
-        $or: [
+        [Op.or]: [
           { email: reqData.username },
           { mobile: reqData.username },
           { username: reqData.username },
@@ -329,7 +330,7 @@ export default class AuthController {
       } else {
         updateData.isMobileVerified = true;
       }
-      await this.userService.updateOne({ id: req.user.id }, updateData, { userId: req.user.id });
+      await this.userService.update({ id: req.user.id }, updateData, { userId: req.user.id });
       await this.otpService.updateOne(
         { id: otp.id },
         { usesCount: (otp.usesCount || 0) + 1 },
@@ -387,7 +388,7 @@ export default class AuthController {
       const reqData = req.body;
 
       const newPassword = await this.authService.generateHashPassword(reqData.newPassword);
-      await this.userService.updateOne(
+      await this.userService.update(
         { id: req.user.id },
         { password: newPassword },
         { userId: req.user.id }

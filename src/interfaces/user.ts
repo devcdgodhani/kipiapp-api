@@ -1,9 +1,8 @@
-import { ObjectId } from 'mongoose';
 import { GENDER, SIGN_UP_TYPE, USER_STATUS, USER_TYPE } from '../constants';
-import { IDefaultAttributes } from './common';
+import { IDefaultSequelizeAttributes } from './common';
 
-export interface IUserAttributes extends IDefaultAttributes {
-  id: ObjectId;
+export interface IUserAttributes extends IDefaultSequelizeAttributes {
+  id: string;
   firstName: string;
   lastName: string;
   username: string;

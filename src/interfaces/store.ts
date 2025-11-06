@@ -5,7 +5,7 @@ export interface IStoreAttributes extends IDefaultAttributes {
   id: ObjectId;
   title: string;
   enTitle: string;
-  userId: ObjectId;
+  userId: string;
 }
 
 export interface IStoreDocument extends Omit<IStoreAttributes, 'id'>, Document {}

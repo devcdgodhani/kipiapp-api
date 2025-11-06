@@ -12,3 +12,19 @@ export enum MONGOOSE_MODEL {
   USERS = 'users',
   CONTACT_ADDRESSES = 'contact_addresses',
 }
+
+const POSTGRE_SQL_MODEL_DEFAULT_ASSOCIATIONS = {
+  CREATED_BY: 'createdBy',
+  UPDATED_BY: 'updatedBy',
+  DELETED_BY: 'deletedBy',
+};
+
+export const POSTGRE_SQL_MODEL = {
+  USERS: {
+    TABLE_NAME: 'users',
+    MODEL_NAME: 'UserModel',
+    ASSOCIATIONS: {
+      ...POSTGRE_SQL_MODEL_DEFAULT_ASSOCIATIONS,
+    },
+  },
+};

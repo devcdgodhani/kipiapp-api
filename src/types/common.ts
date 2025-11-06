@@ -12,7 +12,7 @@ export type TJwtAuthParams = {
 };
 
 export type TGenerateTokenParams = {
-  userId: ObjectId;
+  userId: string;
   tokenType: TOKEN_TYPE;
   expiredAt: number;
   referenceTokenId?: ObjectId | null;

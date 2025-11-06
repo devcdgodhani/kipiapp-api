@@ -54,31 +54,31 @@ export interface IWriteService<T, TDoc> {
   update(
     filter: FilterQuery<T>,
     updateData: UpdateQuery<TDoc>,
-    options?: MongooseUpdateQueryOptions<T> & { userId?: ObjectId; session?: ClientSession }
+    options?: MongooseUpdateQueryOptions<T> & { userId?: string; session?: ClientSession }
   ): Promise<UpdateWriteOpResult | null>;
 
   updateOne(
     filter: FilterQuery<T>,
     updateData: UpdateQuery<TDoc>,
-    options?: MongooseUpdateQueryOptions<T> & { userId?: ObjectId; session?: ClientSession }
+    options?: MongooseUpdateQueryOptions<T> & { userId?: string; session?: ClientSession }
   ): Promise<UpdateWriteOpResult | null>;
 
   upsert(
     filter: FilterQuery<T>,
     updateData: UpdateQuery<TDoc>,
-    options?: QueryOptions & { userId?: ObjectId; session?: ClientSession }
+    options?: QueryOptions & { userId?: string; session?: ClientSession }
   ): Promise<T | null>;
 
   create(
     createData: Partial<T>,
-    options?: CreateOptions & { userId?: ObjectId; session?: ClientSession }
+    options?: CreateOptions & { userId?: string; session?: ClientSession }
   ): Promise<T>;
 }
 
 export interface IDeleteService<T> {
   softDelete(
     filter: FilterQuery<T>,
-    options?: MongooseUpdateQueryOptions<T> & { userId?: ObjectId; session?: ClientSession }
+    options?: MongooseUpdateQueryOptions<T> & { userId?: string; session?: ClientSession }
   ): Promise<UpdateWriteOpResult | null>;
 
   delete(filter: FilterQuery<T>): Promise<DeleteResult | null>;
@@ -87,54 +87,54 @@ export interface IDeleteService<T> {
 export interface IHookService<T> {
   beforeCreate(
     createData: Partial<T>,
-    options?: CreateOptions & { userId?: ObjectId; session?: ClientSession }
+    options?: CreateOptions & { userId?: string; session?: ClientSession }
   ): Promise<T>;
 
   afterCreate(
     createData: Partial<T>,
-    options?: CreateOptions & { userId?: ObjectId; session?: ClientSession }
+    options?: CreateOptions & { userId?: string; session?: ClientSession }
   ): Promise<T>;
 
   beforeBulkCreate(
     createData: Partial<T>[],
-    options?: CreateOptions & { userId?: ObjectId; session?: ClientSession }
+    options?: CreateOptions & { userId?: string; session?: ClientSession }
   ): Promise<T[]>;
 
   afterBulkCreate(
     createData: Partial<T>[],
-    options?: CreateOptions & { userId?: ObjectId; session?: ClientSession }
+    options?: CreateOptions & { userId?: string; session?: ClientSession }
   ): Promise<T[]>;
 
   beforeUpdate(
     filter: FilterQuery<T>,
     updateData: UpdateQuery<T>,
-    options?: MongooseUpdateQueryOptions<T> & { userId?: ObjectId; session?: ClientSession }
+    options?: MongooseUpdateQueryOptions<T> & { userId?: string; session?: ClientSession }
   ): Promise<UpdateWriteOpResult | null>;
 
   afterUpdate(
     filter: FilterQuery<T>,
     updateData: UpdateQuery<T>,
-    options?: MongooseUpdateQueryOptions<T> & { userId?: ObjectId; session?: ClientSession }
+    options?: MongooseUpdateQueryOptions<T> & { userId?: string; session?: ClientSession }
   ): Promise<UpdateWriteOpResult | null>;
 
   beforeDelete(
     filter: FilterQuery<T>,
-    options?: { userId?: ObjectId; session?: ClientSession }
+    options?: { userId?: string; session?: ClientSession }
   ): Promise<T | null>;
 
   afterDelete(
     filter: FilterQuery<T>,
-    options?: { userId?: ObjectId; session?: ClientSession }
+    options?: { userId?: string; session?: ClientSession }
   ): Promise<T | null>;
 
   beforeSoftDelete(
     filter: FilterQuery<T>,
-    options?: { userId?: ObjectId; session?: ClientSession }
+    options?: { userId?: string; session?: ClientSession }
   ): Promise<T | null>;
 
   afterSoftDelete(
     filter: FilterQuery<T>,
-    options?: { userId?: ObjectId; session?: ClientSession }
+    options?: { userId?: string; session?: ClientSession }
   ): Promise<T | null>;
 }
 

@@ -4,7 +4,7 @@ import { IDefaultAttributes } from './common';
 
 export interface IAuthActionHistoryAttributes extends IDefaultAttributes {
   id: ObjectId;
-  userId: ObjectId;
+  userId: string;
   type: AUTH_ACTION_TYPE;
   actionAt: number;
   deviceId: string;

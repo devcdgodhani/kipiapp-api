@@ -23,6 +23,7 @@ import { TOtpCreate } from '../../types/otp';
 import { addMinutes, getTime, getUnixTime } from 'date-fns';
 import { TAuthTokenCreate } from '../../types/authToken';
 import { TGenerateTokenParams } from '../../types';
+import { Op } from 'sequelize';
 
 export class AuthService implements IAuthService {
   private userService = new UserService();
@@ -81,7 +82,7 @@ export class AuthService implements IAuthService {
   ): Promise<Omit<IUserAttributes, 'password'>> => {
     try {
       const user = await this.userService.findOne({
-        $or: [
+        [Op.or]: [
           { email: loginData.username.toLowerCase() },
           { mobile: loginData.username },
           { username: loginData.username },

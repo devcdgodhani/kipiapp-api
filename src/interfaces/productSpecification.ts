@@ -14,7 +14,7 @@ export interface IProductSpecificationAttributes extends IDefaultAttributes {
   enValue: string;
   description: string;
   quantityType: PRODUCT_SPECIFICATION_QUANTITY_TYPE;
-  userId: ObjectId;
+  userId: string;
   storeId: ObjectId;
   uuid: string; // if specification direct added from product. then uuid will be generated from frontend
 }

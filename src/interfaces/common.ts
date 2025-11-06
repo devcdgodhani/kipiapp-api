@@ -33,6 +33,14 @@ export interface IDefaultAttributes {
   deletedBy?: ObjectId;
 }
 
+export interface IDefaultSequelizeAttributes {
+  createdAt?: Date;
+  updatedAt?: Date;
+  deletedAt?: Date;
+  createdBy?: string;
+  updatedBy?: string;
+  deletedBy?: string;
+}
 export interface IEnvVariables {
   NODE_ENV: 'local' | 'development' | 'production' | 'test';
   PORT: number;

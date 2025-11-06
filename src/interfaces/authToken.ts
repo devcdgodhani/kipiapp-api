@@ -6,7 +6,7 @@ export interface IAuthTokenAttributes extends IDefaultAttributes {
   id: ObjectId;
   token: string;
   type: TOKEN_TYPE;
-  userId: ObjectId;
+  userId: string;
   expiredAt: number;
   referenceTokenId?: ObjectId;
 }
