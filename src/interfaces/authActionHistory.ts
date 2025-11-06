@@ -1,7 +1,7 @@
 import { AUTH_ACTION_TYPE } from '../constants';
-import { IDefaultSequelizeAttributes } from './common';
+import { IDefaultAttributes } from './common';
 
-export interface IAuthActionHistoryAttributes extends IDefaultSequelizeAttributes {
+export interface IAuthActionHistoryAttributes extends IDefaultAttributes {
   id: string;
   userId: string;
   type: AUTH_ACTION_TYPE;

@@ -136,7 +136,7 @@ export default class AuthController {
       const existAccessToken = await this.authTokenService.findOne({
         token: accessToken,
         type: TOKEN_TYPE.ACCESS_TOKEN,
-        userId: decoded.sub,
+        userId: decoded.sub as string,
       });
 
       if (!existAccessToken || !existAccessToken.referenceTokenId) {
@@ -150,7 +150,7 @@ export default class AuthController {
       const existRefreshToken = await this.authTokenService.findOne({
         token: bodyData.refreshToken,
         type: TOKEN_TYPE.REFRESH_TOKEN,
-        userId: decoded.sub,
+        userId: decoded.sub as string,
         id: existAccessToken.referenceTokenId,
       });
 

@@ -36,4 +36,14 @@ export const POSTGRE_SQL_MODEL = {
       USER_ACTION_LIST: 'userActionList',
     },
   },
+  AUTH_TOKENS: {
+    TABLE_NAME: 'auth_action_histories',
+    MODEL_NAME: 'AuthActionHistoryModel',
+    ASSOCIATIONS: {
+      ...POSTGRE_SQL_MODEL_DEFAULT_ASSOCIATIONS,
+      USER: 'user',
+      USER_TOKEN_LIST: 'userTokenList',
+      REFERENCE_TOKEN: 'referenceToken',
+    },
+  },
 };

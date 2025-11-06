@@ -1,4 +1,4 @@
-import { IAuthTokenAttributes, IAuthTokenDocument } from '../../interfaces';
-import { IMongooseCommonService } from './mongooseCommonServiceInterface';
+import { AuthTokenModel } from '../../db/postgreSql';
+import { SequelizeCommonService } from '../concrete/sequelizeCommonService';
 
-export interface IAuthTokenService extends IMongooseCommonService<IAuthTokenAttributes, IAuthTokenDocument> {}
+export interface IAuthTokenService extends SequelizeCommonService<AuthTokenModel> {}

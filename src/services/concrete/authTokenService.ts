@@ -1,10 +1,9 @@
-import { AuthTokenModel } from '../../db/mongodb';
-import { IAuthTokenAttributes, IAuthTokenDocument } from '../../interfaces';
+import { AuthTokenModel } from '../../db/postgreSql';
 import { IAuthTokenService } from '../contracts';
-import { MongooseCommonService } from './mongooseCommonService';
+import { SequelizeCommonService } from './sequelizeCommonService';
 
 export class AuthTokenService
-  extends MongooseCommonService<IAuthTokenAttributes, IAuthTokenDocument>
+  extends SequelizeCommonService<AuthTokenModel>
   implements IAuthTokenService
 {
   constructor() {
