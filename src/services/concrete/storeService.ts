@@ -1,10 +1,9 @@
-import { StoreModel } from '../../db/mongodb';
-import { IStoreAttributes, IStoreDocument } from '../../interfaces';
-import { IStoreService } from '../contracts';
-import { MongooseCommonService } from './mongooseCommonService';
+import { StoreModel } from "../../db/postgreSql";
+import { IStoreService } from "../contracts";
+import { SequelizeCommonService } from "./sequelizeCommonService";
 
 export class StoreService
-  extends MongooseCommonService<IStoreAttributes, IStoreDocument>
+  extends SequelizeCommonService<StoreModel>
   implements IStoreService
 {
   constructor() {

@@ -1,9 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
 import { HTTP_STATUS_CODE, STORE_SUCCESS_MESSAGES, STORE_ERROR_MESSAGES } from '../constants';
-import { MongooseTransactionService, StoreService } from '../services';
+import { StoreService } from '../services';
 import { IApiResponse, IStoreAttributes } from '../interfaces';
 import { TStoreListPaginationRes, TStoreListRes, TStoreRes } from '../types';
 import { ApiError } from '../helpers';
+import { Op } from 'sequelize';
+import { sequelize } from '../db/postgreSql';
 
 export default class StoreController {
   storeService = new StoreService();
@@ -81,15 +83,13 @@ export default class StoreController {
 
   /*********** Create store ***********/
   create = async (req: Request, res: Response, next: NextFunction) => {
-    const transaction = new MongooseTransactionService();
+    const transaction = await sequelize.transaction();
     try {
-      const session = await transaction.start();
-
       let reqData = req.body;
       if (!Array.isArray(reqData)) reqData = [reqData];
 
       const existSubCategory = await this.storeService.findOne({
-        $or: reqData.map((subCategory: IStoreAttributes) => ({
+        [Op.or]: reqData.map((subCategory: IStoreAttributes) => ({
           userId: subCategory.userId,
           title: subCategory.title,
         })),
@@ -103,7 +103,7 @@ export default class StoreController {
         );
       }
 
-      await this.storeService.bulkCreate(reqData, { userId: req.user.id, session });
+      await this.storeService.bulkCreate(reqData, { userId: req.user.id, transaction });
 
       await transaction.commit();
 
@@ -121,11 +121,9 @@ export default class StoreController {
 
   /*********** Update store ***********/
   updateManyByFilter = async (req: Request, res: Response, next: NextFunction) => {
-    const transaction = new MongooseTransactionService();
+    const transaction = await sequelize.transaction();
 
     try {
-      const session = await transaction.start();
-
       let reqData = req.body;
       if (!Array.isArray(reqData)) reqData = [reqData];
       for (const updateData of reqData) {
@@ -134,7 +132,7 @@ export default class StoreController {
         });
         await this.storeService.update(filter, updateData.update, {
           userId: req.user.id,
-          session,
+          transaction,
         });
       }
       const response: IApiResponse = {
@@ -151,16 +149,15 @@ export default class StoreController {
   };
 
   updateOneByFilter = async (req: Request, res: Response, next: NextFunction) => {
-    const transaction = new MongooseTransactionService();
+    const transaction = await sequelize.transaction();
     try {
-      const session = await transaction.start();
       const reqData = req.body;
       const { filter } = this.storeService.generateFilter({
         filters: reqData.filter,
       });
-      await this.storeService.updateOne(filter, reqData.update, {
+      await this.storeService.update(filter, reqData.update, {
         userId: req.user.id,
-        session,
+        transaction,
       });
 
       const response: IApiResponse = {
@@ -178,15 +175,14 @@ export default class StoreController {
 
   /*********** Delete store ***********/
   deleteByFilter = async (req: Request, res: Response, next: NextFunction) => {
-    const transaction = new MongooseTransactionService();
+    const transaction = await sequelize.transaction();
     try {
-      const session = await transaction.start();
       const reqData = req.body;
       const { filter } = this.storeService.generateFilter({
         filters: reqData,
       });
 
-      await this.storeService.softDelete(filter, { userId: req.user.id, session });
+      await this.storeService.softDelete(filter, { userId: req.user.id, transaction });
 
       const response: IApiResponse = {
         status: HTTP_STATUS_CODE.OK.STATUS,

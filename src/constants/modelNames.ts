@@ -28,6 +28,7 @@ export const POSTGRE_SQL_MODEL = {
       USER_ACTION_LIST: 'actionList',
       USER_TOKEN_LIST: 'tokenList',
       OTP_LIST: 'otpList',
+      STORE_LIST: 'userStoreList',
     },
   },
   AUTH_ACTION_HISTORIES: {
@@ -59,7 +60,7 @@ export const POSTGRE_SQL_MODEL = {
     TABLE_NAME: 'stores',
     MODEL_NAME: 'StoreModel',
     ASSOCIATIONS: {
-      ...POSTGRE_SQL_MODEL_DEFAULT_ASSOCIATIONS,
+      USER: 'user',
       CATEGORY_LIST: 'categoryList',
     },
   },
