@@ -130,3 +130,11 @@ sequelize.addHook('beforeFind', (options) => {
 
 
 export * from './models/userModel';
+export * from './models/authActionHistoryModel';
+export * from './models/authSettingsModel';
+export * from './models/authTokenModel';
+export * from './models/otpModel';
+export * from './models/categoryModel';
+export * from './models/subCategoryModel';
+export * from './models/productLotModel';
+export * from './models/storeModel';

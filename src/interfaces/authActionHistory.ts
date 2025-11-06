@@ -1,9 +1,8 @@
-import { ObjectId } from 'mongoose';
 import { AUTH_ACTION_TYPE } from '../constants';
-import { IDefaultAttributes } from './common';
+import { IDefaultSequelizeAttributes } from './common';
 
-export interface IAuthActionHistoryAttributes extends IDefaultAttributes {
-  id: ObjectId;
+export interface IAuthActionHistoryAttributes extends IDefaultSequelizeAttributes {
+  id: string;
   userId: string;
   type: AUTH_ACTION_TYPE;
   actionAt: number;

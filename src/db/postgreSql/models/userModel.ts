@@ -7,11 +7,11 @@ import {
   USER_STATUS,
   POSTGRE_SQL_MODEL,
 } from '../../../constants';
-import { UserCreationAttributes } from '../../../types';
+import { TUserCreationAttributes } from '../../../types';
 import { IUserAttributes } from '../../../interfaces';
 
 export class UserModel
-  extends Model<IUserAttributes, UserCreationAttributes>
+  extends Model<IUserAttributes, TUserCreationAttributes>
   implements IUserAttributes
 {
   declare id: string;
@@ -38,30 +38,28 @@ export class UserModel
   declare readonly updatedAt: Date;
   declare readonly deletedAt: Date;
 
-  static associate(models: Record<string, ModelStatic<Model>>) {
-    // Cast to concrete UserModel type
-    const User = models[POSTGRE_SQL_MODEL.USERS.MODEL_NAME] as typeof UserModel;
+  static associate = (models: Record<string, ModelStatic<Model>>) => {
+    const { UserModel } = models;
 
-    User.belongsTo(User, {
+    UserModel.belongsTo(UserModel, {
       foreignKey: { name: 'createdBy', allowNull: true },
       as: POSTGRE_SQL_MODEL.USERS.ASSOCIATIONS.CREATED_BY,
     });
 
-    User.belongsTo(User, {
+    UserModel.belongsTo(UserModel, {
       foreignKey: { name: 'updatedBy', allowNull: true },
       as: POSTGRE_SQL_MODEL.USERS.ASSOCIATIONS.UPDATED_BY,
     });
 
-    User.belongsTo(User, {
+    UserModel.belongsTo(UserModel, {
       foreignKey: { name: 'deletedBy', allowNull: true },
       as: POSTGRE_SQL_MODEL.USERS.ASSOCIATIONS.DELETED_BY,
     });
-  }
+  };
 
   // static addHooks(models) {}
 }
 
-// ✅ Sequelize initialization
 UserModel.init(
   {
     id: {
@@ -144,7 +142,7 @@ UserModel.init(
   },
   {
     sequelize,
-    tableName: 'users',
-    modelName: 'UserModel',
+    tableName: POSTGRE_SQL_MODEL.USERS.TABLE_NAME,
+    modelName: POSTGRE_SQL_MODEL.USERS.MODEL_NAME,
   }
 );
