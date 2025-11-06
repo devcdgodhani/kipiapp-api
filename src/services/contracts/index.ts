@@ -12,3 +12,4 @@ export * from './mongooseCommonServiceInterface';
 export * from './storeServiceInterface';
 export * from './productServiceInterface';
 export * from './productSpecificationServiceInterface';
+export * from './contactAddressServiceInterface';

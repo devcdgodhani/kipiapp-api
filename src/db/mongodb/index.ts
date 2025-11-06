@@ -31,3 +31,4 @@ export * from './models/productLotModel';
 export * from './models/storeModel';
 export * from './models/productModel';
 export * from './models/productSpecificationModel';
+export * from './models/contactAddressModel';

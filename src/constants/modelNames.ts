@@ -10,4 +10,5 @@ export enum MONGOOSE_MODEL {
   STORES = 'stores',
   SUB_CATEGORIES = 'sub_categories',
   USERS = 'users',
+  CONTACT_ADDRESSES = 'contact_addresses',
 }
