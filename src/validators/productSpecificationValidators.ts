@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 import { IProductSpecificationAttributes } from '../interfaces';
 import { ProductSpecificationSchema } from '../db/mongodb';
-import { mongooseToJoi, validateSchema } from '../helpers/joiSchemaBuilder';
 import { PRODUCT_SPECIFICATION_VALUE_TYPE } from '../constants';
+import { mongooseToJoi, validateSchema } from '../helpers';
 
 export default class ProductSpecificationValidator {
   private filterSchema = mongooseToJoi<IProductSpecificationAttributes>({
