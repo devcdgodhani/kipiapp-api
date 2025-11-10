@@ -1,22 +1,22 @@
 import { Request, Response, NextFunction } from 'express';
 import { ISubCategoryAttributes } from '../interfaces';
-import { SubCategorySchema } from '../db/mongodb';
-import { mongooseToJoi, validateSchema } from '../helpers/joiSchemaBuilder';
+import { SubCategoryModel } from '../db/postgreSql';
+import { sequelizeToJoi, validateSchema } from '../helpers';
 
 export default class SubCategoryValidator {
-  private filterSchema = mongooseToJoi<ISubCategoryAttributes>({
-    schema: SubCategorySchema,
+  private filterSchema = sequelizeToJoi<ISubCategoryAttributes>({
+    schema: SubCategoryModel,
     isFilterSchema: true,
   });
 
-  private createSchema = mongooseToJoi<ISubCategoryAttributes>({
-    schema: SubCategorySchema,
+  private createSchema = sequelizeToJoi<ISubCategoryAttributes>({
+    schema: SubCategoryModel,
     includeFields: ['title', 'categoryId', 'description', 'storeId'],
     requiredFields: ['title', 'categoryId', 'storeId'],
   });
 
-  private updateSchema = mongooseToJoi<ISubCategoryAttributes>({
-    schema: SubCategorySchema,
+  private updateSchema = sequelizeToJoi<ISubCategoryAttributes>({
+    schema: SubCategoryModel,
     // excludeFields: ['title', 'status'],
   });
 

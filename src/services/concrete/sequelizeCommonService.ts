@@ -71,6 +71,12 @@ export class SequelizeCommonService<T extends Model> implements ISequelizeCommon
       filterOptions.order = filters.order;
     }
 
+    delete rawWhere.limit;
+    delete rawWhere.page;
+    delete rawWhere.order;
+    delete rawWhere.search;
+    delete rawWhere.isPaginate;
+
     return { filter: rawWhere, options: filterOptions };
   };
 
@@ -124,6 +130,7 @@ export class SequelizeCommonService<T extends Model> implements ISequelizeCommon
       const page = options?.page || 1;
       const limit = options?.limit || 10;
       const offset = (page - 1) * limit;
+      delete options?.page;
 
       const totalRecords = await this.model.count({ where, include: options?.include });
       const totalPages = Math.ceil(totalRecords / limit);

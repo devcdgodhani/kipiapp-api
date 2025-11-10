@@ -2,20 +2,25 @@
 import fs from 'fs';
 import Joi from 'joi';
 import crypto from 'crypto';
+import { HTTP_STATUS_CODE } from '../constants';
+import { ApiError } from './apiError';
 
 const PASSWORD_REGEX = new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!.@#$%^&*])(?=.{8,})');
 
 export const pick = <T extends object, K extends keyof T>(
   objOrArray: T | T[],
-  keys: K[],
+  keys: K[]
 ): Pick<T, K> | Pick<T, K>[] => {
   const pickObject = (obj: T): Pick<T, K> =>
-    keys.reduce((acc, key) => {
-      if (key in obj) {
-        acc[key] = obj[key];
-      }
-      return acc;
-    }, {} as Pick<T, K>);
+    keys.reduce(
+      (acc, key) => {
+        if (key in obj) {
+          acc[key] = obj[key];
+        }
+        return acc;
+      },
+      {} as Pick<T, K>
+    );
 
   // Check if input is an array
   if (Array.isArray(objOrArray)) {
@@ -35,17 +40,20 @@ export const isValidMongoDbId = Joi.string()
 
 export const omit = <T extends object, K extends keyof T>(
   objOrArray: T | T[],
-  keys: K[],
+  keys: K[]
 ): Omit<T, K> | Omit<T, K>[] => {
   const omitObject = (obj: T): Omit<T, K> =>
-    Object.keys(obj).reduce((acc, key) => {
-      // Check if the key is not in the list of keys to omit
-      if (!keys.includes(key as K)) {
-        // Assert the correct key type and assign the value
-        (acc as any)[key] = obj[key as keyof T];
-      }
-      return acc;
-    }, {} as Omit<T, K>);
+    Object.keys(obj).reduce(
+      (acc, key) => {
+        // Check if the key is not in the list of keys to omit
+        if (!keys.includes(key as K)) {
+          // Assert the correct key type and assign the value
+          (acc as any)[key] = obj[key as keyof T];
+        }
+        return acc;
+      },
+      {} as Omit<T, K>
+    );
 
   // Check if the input is an array
   if (Array.isArray(objOrArray)) {
@@ -147,16 +155,19 @@ export const getUniqueArrayByFields: UniqueByFields<any> = (array, fields) => {
 
 export const keyByFieldOrFields = <T>(
   array: T[],
-  fields: keyof T | (keyof T)[],
+  fields: keyof T | (keyof T)[]
 ): Record<string, T> => {
-  return array.reduce((result, item) => {
-    const key = Array.isArray(fields)
-      ? fields.map((field) => item[field]).join('-') // Composite key for multiple fields
-      : item[fields]; // Single field key
+  return array.reduce(
+    (result, item) => {
+      const key = Array.isArray(fields)
+        ? fields.map((field) => item[field]).join('-') // Composite key for multiple fields
+        : item[fields]; // Single field key
 
-    result[key as string] = item; // Type assertion to ensure the key is string
-    return result;
-  }, {} as Record<string, T>);
+      result[key as string] = item; // Type assertion to ensure the key is string
+      return result;
+    },
+    {} as Record<string, T>
+  );
 };
 
 /**
@@ -168,7 +179,7 @@ export const keyByFieldOrFields = <T>(
  */
 export function groupByFieldOrFields<T>(
   array: T[],
-  fields: keyof T | (keyof T)[],
+  fields: keyof T | (keyof T)[]
 ): Record<string, T[]> {
   return array.reduce<Record<string, T[]>>((result, item) => {
     const key = Array.isArray(fields)
@@ -189,7 +200,7 @@ export function groupByFieldOrFields<T>(
 export const isDateWithinRange = (
   date: Date | string,
   rangeStart: Date | string,
-  rangeEnd: Date | string,
+  rangeEnd: Date | string
 ): boolean => {
   const dateValue = new Date(date).getTime();
   const startValue = new Date(rangeStart).getTime();
@@ -252,8 +263,8 @@ export const sortArray = <T>(array: T[], fields: SortField<T> | SortField<T>[]):
         typeof valueA === 'string' && typeof valueB === 'string'
           ? valueA.localeCompare(valueB)
           : valueA > valueB
-          ? 1
-          : -1;
+            ? 1
+            : -1;
 
       if (comparison !== 0) return order === 'asc' ? comparison : -comparison;
     }
@@ -273,7 +284,7 @@ export const sortArray = <T>(array: T[], fields: SortField<T> | SortField<T>[]):
 export const getChildrenByParentId = <T extends Record<string, any>>(
   array: T[],
   parentIds: string | string[],
-  parentIdKey: keyof T,
+  parentIdKey: keyof T
 ): T[] => {
   const parentIdList = Array.isArray(parentIds) ? parentIds : [parentIds]; // Normalize parentIds to an array
   const result: T[] = array.filter((one) => parentIds.includes(one.id));
@@ -314,7 +325,7 @@ export const getChildrenByParentId = <T extends Record<string, any>>(
 export const getParentsByChildrenId = <T extends Record<string, any>>(
   array: T[],
   childIds: string | string[],
-  parentIdKey: keyof T,
+  parentIdKey: keyof T
 ): T[] => {
   const childIdList = Array.isArray(childIds) ? childIds : [childIds]; // Normalize childIds to an array
   const result: T[] = [];
@@ -357,7 +368,7 @@ export const getParentsByChildrenId = <T extends Record<string, any>>(
 export const buildNestedStructure = <T extends Record<string, any>>(
   items: T[],
   parentIdKey: keyof T,
-  nestedListKey: string,
+  nestedListKey: string
 ): T[] => {
   // Clone the items to avoid modifying the original array
   const clonedItems = JSON.parse(JSON.stringify(items));
@@ -410,7 +421,7 @@ export const buildNestedStructure = <T extends Record<string, any>>(
 export const flattenNestedStructure = <T extends Record<string, any>>(
   items: T[],
   parentIdKey: keyof T,
-  nestedListKey: string,
+  nestedListKey: string
 ): Omit<T, typeof nestedListKey>[] => {
   const flatArray: Omit<T, typeof nestedListKey>[] = [];
 
@@ -457,4 +468,49 @@ export const generateVoucherCode = (format = 'XXXX-XXXX-XXXX-XXXX') => {
     .split('-')
     .map((part) => generateSegment(part.length))
     .join('-');
+};
+
+export const validateSchema = (
+  schema: {
+    [x: string]: Joi.Schema;
+  },
+  data: Record<string, any>,
+  options = {
+    abortEarly: false, // include all errors
+    allowUnknown: false, // ignore unknown props
+    // stripUnknown: true, // remove unknown props
+  }
+) => {
+  if (data.isPaginate) {
+    schema = {
+      ...schema,
+      page: Joi.number().min(1).default(1),
+      isPaginate: Joi.boolean(),
+      limit: Joi.number().min(1).default(10),
+      order: Joi.object().pattern(
+        Joi.string().trim(), // field name
+        Joi.number().valid(1, -1) // sorting direction
+      ),
+    };
+  }
+  const validSchema = Joi.object(schema);
+
+  const { error, value: validData } = validSchema.validate(data, options);
+
+  if (error) {
+    const errorMessage = error.details
+      .map((detail) => {
+        if (detail.context?.message) {
+          return `${detail.message}${detail.context.message}`;
+        }
+        return detail.message;
+      })
+      .join(', ');
+    throw new ApiError(
+      HTTP_STATUS_CODE.BAD_REQUEST.CODE,
+      HTTP_STATUS_CODE.BAD_REQUEST.STATUS,
+      errorMessage
+    );
+  }
+  return validData;
 };

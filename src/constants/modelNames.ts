@@ -31,7 +31,7 @@ export const POSTGRE_SQL_MODEL = {
     },
   },
   AUTH_TOKENS: {
-    TABLE_NAME: 'auth_action_histories',
+    TABLE_NAME: 'auth_tokens',
     MODEL_NAME: 'AuthActionHistoryModel',
     ASSOCIATIONS: {
       ...POSTGRE_SQL_MODEL_DEFAULT_ASSOCIATIONS,

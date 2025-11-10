@@ -65,7 +65,7 @@ OtpModel.init(
       allowNull: true,
     },
     expiredAt: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.BIGINT,
       allowNull: true,
     },
     maxUses: {

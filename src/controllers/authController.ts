@@ -195,7 +195,7 @@ export default class AuthController {
       });
 
       await this.authTokenService.delete({
-        id: { $in: [existAccessToken?.id, existAccessToken?.referenceTokenId] },
+        id: { [Op.in]: [existAccessToken?.id || '', existAccessToken?.referenceTokenId || ''] },
       });
 
       const response: IApiResponse = {
@@ -223,7 +223,7 @@ export default class AuthController {
       });
 
       await this.authTokenService.delete({
-        id: { $nin: [existAccessToken?.id, existAccessToken?.referenceTokenId] },
+        id: { [Op.notIn]: [existAccessToken?.id || '', existAccessToken?.referenceTokenId || ''] },
         userId: req.user.id,
       });
 
@@ -312,7 +312,7 @@ export default class AuthController {
         userId: req.user.id,
         code: reqData.otp,
         type: req.token.otpType,
-        expiredAt: { $gt: getTime(new Date()) },
+        expiredAt: { [Op.gt]: getTime(new Date()) },
       });
       if (!otp || otp.usesCount === otp.maxUses) {
         throw new ApiError(

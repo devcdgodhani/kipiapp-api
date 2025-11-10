@@ -1,4 +1,3 @@
-import { ObjectId } from 'mongoose';
 import { IDefaultAttributes } from './common';
 import {
   PRODUCT_SPECIFICATION_QUANTITY_TYPE,
@@ -15,7 +14,7 @@ export interface IProductSpecificationAttributes extends IDefaultAttributes {
   description: string;
   quantityType: PRODUCT_SPECIFICATION_QUANTITY_TYPE;
   userId: string;
-  storeId: ObjectId;
+  storeId: string;
   uuid: string; // if specification direct added from product. then uuid will be generated from frontend
 }
 

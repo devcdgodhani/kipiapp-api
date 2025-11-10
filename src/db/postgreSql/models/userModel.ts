@@ -1,4 +1,4 @@
-import { DataTypes, Model, ModelStatic } from 'sequelize';
+import { DataTypes, Model } from 'sequelize';
 import { sequelize } from '../index';
 import {
   USER_TYPE,
@@ -38,24 +38,24 @@ export class UserModel
   declare readonly updatedAt: Date;
   declare readonly deletedAt: Date;
 
-  static associate = (models: Record<string, ModelStatic<Model>>) => {
-    const { UserModel } = models;
+  // static associate = (models: Record<string, ModelStatic<Model>>) => {
+  //   // const { UserModel } = models;
 
-    UserModel.belongsTo(UserModel, {
-      foreignKey: { name: 'createdBy', allowNull: true },
-      as: POSTGRE_SQL_MODEL.USERS.ASSOCIATIONS.CREATED_BY,
-    });
+  //   // UserModel.belongsTo(UserModel, {
+  //   //   foreignKey: { name: 'createdBy', allowNull: true },
+  //   //   as: POSTGRE_SQL_MODEL.USERS.ASSOCIATIONS.CREATED_BY,
+  //   // });
 
-    UserModel.belongsTo(UserModel, {
-      foreignKey: { name: 'updatedBy', allowNull: true },
-      as: POSTGRE_SQL_MODEL.USERS.ASSOCIATIONS.UPDATED_BY,
-    });
+  //   // UserModel.belongsTo(UserModel, {
+  //   //   foreignKey: { name: 'updatedBy', allowNull: true },
+  //   //   as: POSTGRE_SQL_MODEL.USERS.ASSOCIATIONS.UPDATED_BY,
+  //   // });
 
-    UserModel.belongsTo(UserModel, {
-      foreignKey: { name: 'deletedBy', allowNull: true },
-      as: POSTGRE_SQL_MODEL.USERS.ASSOCIATIONS.DELETED_BY,
-    });
-  };
+  //   // UserModel.belongsTo(UserModel, {
+  //   //   foreignKey: { name: 'deletedBy', allowNull: true },
+  //   //   as: POSTGRE_SQL_MODEL.USERS.ASSOCIATIONS.DELETED_BY,
+  //   // });
+  // };
 
   // static addHooks(models) {}
 }

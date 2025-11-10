@@ -1,22 +1,22 @@
 import { Request, Response, NextFunction } from 'express';
 import { IUserAttributes } from '../interfaces';
-import { UserSchema } from '../db/mongodb';
-import { mongooseToJoi, validateSchema } from '../helpers/joiSchemaBuilder';
+import { UserModel } from '../db/postgreSql';
+import { sequelizeToJoi, validateSchema } from '../helpers';
 
 export default class UserValidator {
-  private filterSchema = mongooseToJoi<IUserAttributes>({
-    schema: UserSchema,
+  private filterSchema = sequelizeToJoi<IUserAttributes>({
+    schema: UserModel,
     isFilterSchema: true,
   });
 
-  private createSchema = mongooseToJoi<IUserAttributes>({
-    schema: UserSchema,
+  private createSchema = sequelizeToJoi<IUserAttributes>({
+    schema: UserModel,
     includeFields: ['email', 'mobile', 'password', 'firstName', 'lastName', 'countryCode'],
     requiredFields: ['email', 'mobile', 'password', 'firstName', 'lastName', 'countryCode'],
   });
 
-  private updateSchema = mongooseToJoi<IUserAttributes>({
-    schema: UserSchema,
+  private updateSchema = sequelizeToJoi<IUserAttributes>({
+    schema: UserModel,
     includeFields: ['firstName', 'lastName', 'mobile', 'countryCode', 'gender', 'status'],
     excludeFields: ['email', 'password', 'mobile', 'countryCode'],
   });

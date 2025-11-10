@@ -20,7 +20,7 @@ export class StoreModel extends Model<IStoreAttributes, TStoreCreate> implements
   declare readonly deletedAt: Date;
 
   static associate(models: Record<string, ModelStatic<Model>>) {
-    const { StoreModel, UserModel, CategoryModel } = models;
+    const { UserModel } = models;
 
     // Each store belongs to a user
     StoreModel.belongsTo(UserModel, {
@@ -31,19 +31,8 @@ export class StoreModel extends Model<IStoreAttributes, TStoreCreate> implements
     // A user can have many stores
     UserModel.hasMany(StoreModel, {
       foreignKey: { name: 'userId', allowNull: true },
+      sourceKey: 'id',
       as: POSTGRE_SQL_MODEL.USERS.ASSOCIATIONS.STORE_LIST,
-    });
-
-    // A store can have many categories
-    StoreModel.hasMany(CategoryModel, {
-      foreignKey: { name: 'storeId', allowNull: true },
-      as: POSTGRE_SQL_MODEL.STORES.ASSOCIATIONS.CATEGORY_LIST,
-    });
-
-    // A category belongs to a store
-    CategoryModel.belongsTo(StoreModel, {
-      foreignKey: { name: 'storeId', allowNull: true },
-      as: POSTGRE_SQL_MODEL.CATEGORIES.ASSOCIATIONS.STORE,
     });
   }
 }

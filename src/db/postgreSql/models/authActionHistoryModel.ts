@@ -31,7 +31,7 @@ export class AuthActionHistoryModel
       as: POSTGRE_SQL_MODEL.AUTH_ACTION_HISTORIES.ASSOCIATIONS.USER,
     });
 
-    UserModel.hasMany(UserModel, {
+    UserModel.hasMany(AuthActionHistoryModel, {
       foreignKey: { name: 'userId', allowNull: true },
       as: POSTGRE_SQL_MODEL.USERS.ASSOCIATIONS.USER_ACTION_LIST,
     });
@@ -58,7 +58,7 @@ AuthActionHistoryModel.init(
       allowNull: true,
     },
     actionAt: {
-      type: DataTypes.BIGINT, // stores timestamp as number
+      type: DataTypes.BIGINT,
       allowNull: true,
     },
     deviceId: {

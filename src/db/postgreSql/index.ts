@@ -11,7 +11,7 @@ import {
 } from 'sequelize';
 import { config as dotenvConfig } from 'dotenv';
 import { ENV_VARIABLE } from '../../configs';
-import { POSTGRE_SQL_MODEL_DEFAULT_ASSOCIATIONS } from '../../constants';
+import { POSTGRE_SQL_MODEL, POSTGRE_SQL_MODEL_DEFAULT_ASSOCIATIONS } from '../../constants';
 
 dotenvConfig();
 
@@ -25,9 +25,9 @@ const dbLogging = ENV_VARIABLE.NODE_ENV !== 'production';
 // const dialectOptions = {
 //   ssl: ENV_VARIABLE.DB_SSL === 'true' ? { require: true, rejectUnauthorized: false } : {},
 // };
-const dialectOptions = {
-  ssl: {},
-};
+// const dialectOptions = {
+//   ssl: {},
+// };
 
 /* ------------------ Sequelize Instance ------------------ */
 export const sequelize = new Sequelize(database, username, password, {
@@ -40,14 +40,19 @@ export const sequelize = new Sequelize(database, username, password, {
     underscored: true,
     paranoid: true,
   },
-  dialectOptions,
+  dialectOptions: {
+    ssl: {
+      require: true,
+      rejectUnauthorized: false, // <--- allow self-signed
+    },
+  },
 });
 
 /* ------------------ Dynamic Model Loading ------------------ */
-export const db: Record<string, any> = {};
 
 (async () => {
-  const modelsDir = path.join(__dirname, '../models');
+  const db: Record<string, any> = {};
+  const modelsDir = path.join(process.cwd(), 'src/db/postgreSql/models');
   const files = (await fs.readdir(modelsDir)).filter(
     (file) => file.endsWith('.ts') || file.endsWith('.js')
   );
@@ -66,41 +71,50 @@ export const db: Record<string, any> = {};
   db.Sequelize = Sequelize;
 
   // Run associate & hooks
-  Object.keys(db).forEach((modelName) => {
+  Object.keys(db.sequelize.models).forEach((modelName) => {
     /***************************************************************/
     /* Default associations belong to user model for all models */
     /***************************************************************/
 
-    db[modelName].belongsTo(db.UserModel, {
-      foreignKey: { name: 'createdBy', allowNull: true },
-      as: POSTGRE_SQL_MODEL_DEFAULT_ASSOCIATIONS.CREATED_BY,
-    });
+    db.sequelize.models[modelName].belongsTo(
+      db.sequelize.models[POSTGRE_SQL_MODEL.USERS.MODEL_NAME],
+      {
+        foreignKey: { name: 'createdBy', allowNull: true },
+        as: POSTGRE_SQL_MODEL_DEFAULT_ASSOCIATIONS.CREATED_BY,
+      }
+    );
 
-    db[modelName].belongsTo(db.UserModel, {
-      foreignKey: { name: 'updatedBy', allowNull: true },
-      as: POSTGRE_SQL_MODEL_DEFAULT_ASSOCIATIONS.UPDATED_BY,
-    });
+    db.sequelize.models[modelName].belongsTo(
+      db.sequelize.models[POSTGRE_SQL_MODEL.USERS.MODEL_NAME],
+      {
+        foreignKey: { name: 'updatedBy', allowNull: true },
+        as: POSTGRE_SQL_MODEL_DEFAULT_ASSOCIATIONS.UPDATED_BY,
+      }
+    );
 
-    db[modelName].belongsTo(db.UserModel, {
-      foreignKey: { name: 'deletedBy', allowNull: true },
-      as: POSTGRE_SQL_MODEL_DEFAULT_ASSOCIATIONS.DELETED_BY,
-    });
+    db.sequelize.models[modelName].belongsTo(
+      db.sequelize.models[POSTGRE_SQL_MODEL.USERS.MODEL_NAME],
+      {
+        foreignKey: { name: 'deletedBy', allowNull: true },
+        as: POSTGRE_SQL_MODEL_DEFAULT_ASSOCIATIONS.DELETED_BY,
+      }
+    );
     /*****************************************************/
 
     /***************************************************************/
     /* Other associations */
     /***************************************************************/
 
-    if (typeof db[modelName].associate === 'function') {
-      db[modelName].associate(db);
+    if (typeof db.sequelize.models[modelName].associate === 'function') {
+      db.sequelize.models[modelName].associate(db.sequelize.models);
     }
 
     /***************************************************************/
     /* Associate Hooks */
     /***************************************************************/
 
-    if (typeof db[modelName].addHooks === 'function') {
-      db[modelName].addHooks(db);
+    if (typeof db[modelName]?.addHooks === 'function') {
+      db.sequelize.models[modelName].addHooks(db.sequelize.models);
     }
   });
 })();
@@ -155,6 +169,8 @@ sequelize.addHook('beforeBulkUpdate', async (options: UpdateOptions) => {
 sequelize.addHook('beforeFind', (options) => {
   if (options.include) {
     options.raw = false;
+  } else {
+    options.raw = true;
   }
 });
 

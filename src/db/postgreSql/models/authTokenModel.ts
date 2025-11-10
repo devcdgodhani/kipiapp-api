@@ -24,14 +24,14 @@ export class AuthTokenModel
   declare readonly deletedAt: Date;
 
   static associate(models: Record<string, ModelStatic<Model>>) {
-    const { AuthTokenModel, UserModel } = models;
+    const { UserModel } = models;
 
     AuthTokenModel.belongsTo(UserModel, {
       foreignKey: { name: 'userId', allowNull: true },
       as: POSTGRE_SQL_MODEL.AUTH_TOKENS.ASSOCIATIONS.USER,
     });
 
-    UserModel.hasMany(UserModel, {
+    UserModel.hasMany(AuthTokenModel, {
       foreignKey: { name: 'userId', allowNull: true },
       as: POSTGRE_SQL_MODEL.USERS.ASSOCIATIONS.USER_TOKEN_LIST,
     });
@@ -66,7 +66,7 @@ AuthTokenModel.init(
       allowNull: true,
     },
     expiredAt: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.BIGINT,
       allowNull: true,
     },
     referenceTokenId: {

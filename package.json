@@ -9,7 +9,14 @@
     "start": "node dist/index.js",
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
     "lint": "eslint . --ext .ts",
-    "format": "prettier --write \"**/*.{ts,js,json,md}\""
+    "format": "prettier --write \"**/*.{ts,js,json,md}\"",
+    "pgdb:make:migration": "bash -c 'npx sequelize-cli migration:generate --name \"$0\" && node src/scripts/renameMigrationAndSeeder'",
+    "pgdb:make:seeder": "bash -c 'npx sequelize-cli seed:generate --name \"$0\" && node src/scripts/renameMigrationAndSeeder'",
+    "pgdb:migrate": "ts-node -r tsconfig-paths/register node_modules/.bin/sequelize db:migrate",
+    "pgdb:migrate:undo": "ts-node -r tsconfig-paths/register node_modules/.bin/sequelize db:migrate:undo",
+    "pgdb:migrate:undo:all": "ts-node -r tsconfig-paths/register node_modules/.bin/sequelize db:migrate:undo:all",
+    "pgdb:seed": "ts-node -r tsconfig-paths/register node_modules/.bin/sequelize db:seed:all",
+    "pgdb:seed:undo": "ts-node -r tsconfig-paths/register node_modules/.bin/sequelize db:seed:undo:all"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.910.0",
