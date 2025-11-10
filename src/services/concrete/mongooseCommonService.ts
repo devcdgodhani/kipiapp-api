@@ -12,7 +12,6 @@ import {
   PipelineStage,
   ProjectionType,
   DeleteResult,
-  ObjectId,
 } from 'mongoose';
 import { IMongooseCommonService } from '../../services';
 import { IPaginationData } from '../../interfaces';
@@ -29,6 +28,10 @@ export class MongooseCommonService<T, TDoc extends Document>
     this.model = model;
     this.schema = model.schema;
   }
+
+  /* -------------------------------------------------------------------------- */
+  /*                             Generate Filters                            */
+  /* -------------------------------------------------------------------------- */
 
   //const filter = userFilterService.generateFilter({
   //   searchFields: ['firstName', 'lastName', 'email'],
@@ -223,7 +226,7 @@ export class MongooseCommonService<T, TDoc extends Document>
   update = async (
     filter: FilterQuery<T>,
     updateData: UpdateQuery<TDoc>,
-    options: MongooseUpdateQueryOptions<T> & { userId?: ObjectId; session?: ClientSession } = {}
+    options: MongooseUpdateQueryOptions<T> & { userId?: string; session?: ClientSession } = {}
   ): Promise<UpdateWriteOpResult | null> => {
     return this.model.updateMany(filter, updateData, options).exec();
   };
@@ -231,7 +234,7 @@ export class MongooseCommonService<T, TDoc extends Document>
   updateOne = async (
     filter: FilterQuery<T>,
     updateData: UpdateQuery<TDoc>,
-    options: MongooseUpdateQueryOptions<T> & { userId?: ObjectId; session?: ClientSession } = {}
+    options: MongooseUpdateQueryOptions<T> & { userId?: string; session?: ClientSession } = {}
   ): Promise<UpdateWriteOpResult | null> => {
     return this.model.updateOne(filter, updateData, options).exec();
   };
@@ -239,7 +242,7 @@ export class MongooseCommonService<T, TDoc extends Document>
   upsert = async (
     filter: FilterQuery<T>,
     updateData: UpdateQuery<TDoc>,
-    options: QueryOptions & { userId?: ObjectId; session?: ClientSession } = {}
+    options: QueryOptions & { userId?: string; session?: ClientSession } = {}
   ): Promise<T | null> => {
     return this.model
       .findOneAndUpdate(filter, updateData, {
@@ -253,7 +256,7 @@ export class MongooseCommonService<T, TDoc extends Document>
 
   create = async (
     createData: Partial<T>,
-    options: CreateOptions & { userId?: ObjectId; session?: ClientSession } = {}
+    options: CreateOptions & { userId?: string; session?: ClientSession } = {}
   ): Promise<T> => {
     const payload = { ...createData, createdBy: options.userId } as Partial<T>;
     const [createdDoc] = await this.model.create([payload], { ordered: true, ...options });
@@ -262,7 +265,7 @@ export class MongooseCommonService<T, TDoc extends Document>
 
   bulkCreate = async (
     createData: Partial<T>[],
-    options: CreateOptions & { userId?: ObjectId; session?: ClientSession } = {}
+    options: CreateOptions & { userId?: string; session?: ClientSession } = {}
   ): Promise<T[]> => {
     const payload = createData.map((data) => ({
       ...data,
@@ -278,7 +281,7 @@ export class MongooseCommonService<T, TDoc extends Document>
 
   softDelete = async (
     filter: FilterQuery<T>,
-    options: MongooseUpdateQueryOptions<T> & { userId?: ObjectId; session?: ClientSession } = {}
+    options: MongooseUpdateQueryOptions<T> & { userId?: string; session?: ClientSession } = {}
   ): Promise<UpdateWriteOpResult | null> => {
     return this.model
       .updateMany(

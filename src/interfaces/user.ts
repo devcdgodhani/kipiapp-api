@@ -1,9 +1,7 @@
-import { ObjectId } from 'mongoose';
 import { GENDER, SIGN_UP_TYPE, USER_STATUS, USER_TYPE } from '../constants';
 import { IDefaultAttributes } from './common';
-
 export interface IUserAttributes extends IDefaultAttributes {
-  id: ObjectId;
+  id: string;
   firstName: string;
   lastName: string;
   username: string;
@@ -19,5 +17,3 @@ export interface IUserAttributes extends IDefaultAttributes {
   isVerified: boolean;
   status: USER_STATUS;
 }
-
-export interface IUserDocument extends Omit<IUserAttributes, 'id'>, Document {}

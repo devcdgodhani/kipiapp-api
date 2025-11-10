@@ -1,22 +1,22 @@
 import { Request, Response, NextFunction } from 'express';
 import { IProductLotAttributes } from '../interfaces';
-import { ProductLotSchema } from '../db/mongodb';
-import { mongooseToJoi, validateSchema } from '../helpers/joiSchemaBuilder';
+import { sequelizeToJoi, validateSchema } from '../helpers';
+import { ProductLotModel } from '../db/postgreSql';
 
 export default class ProductLotValidator {
-  private filterSchema = mongooseToJoi<IProductLotAttributes>({
-    schema: ProductLotSchema,
+  private filterSchema = sequelizeToJoi<IProductLotAttributes>({
+    schema: ProductLotModel,
     isFilterSchema: true,
   });
 
-  private createSchema = mongooseToJoi<IProductLotAttributes>({
-    schema: ProductLotSchema,
+  private createSchema = sequelizeToJoi<IProductLotAttributes>({
+    schema: ProductLotModel,
     includeFields: ['title', 'storeId'],
     requiredFields: ['title', 'storeId'],
   });
 
-  private updateSchema = mongooseToJoi<IProductLotAttributes>({
-    schema: ProductLotSchema,
+  private updateSchema = sequelizeToJoi<IProductLotAttributes>({
+    schema: ProductLotModel,
     // excludeFields: ['title'],
   });
 

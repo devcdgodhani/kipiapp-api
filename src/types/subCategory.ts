@@ -1,5 +1,8 @@
+import { Optional } from 'sequelize';
 import { IApiResponse, IPaginationApiResponse } from '../interfaces';
 import { ISubCategoryAttributes } from '../interfaces';
+
+export type TSubCategoryCreate = Optional<ISubCategoryAttributes, 'id'>;
 
 export type TSubCategoryRes = IApiResponse<ISubCategoryAttributes | null>;
 

@@ -1,5 +1,3 @@
-import { ObjectId } from 'mongoose';
-
 export interface IApiResponse<T = undefined> {
   code: string;
   status: number;
@@ -28,11 +26,10 @@ export interface IDefaultAttributes {
   createdAt?: Date;
   updatedAt?: Date;
   deletedAt?: Date;
-  createdBy?: ObjectId;
-  updatedBy?: ObjectId;
-  deletedBy?: ObjectId;
+  createdBy?: string;
+  updatedBy?: string;
+  deletedBy?: string;
 }
-
 export interface IEnvVariables {
   NODE_ENV: 'local' | 'development' | 'production' | 'test';
   PORT: number;

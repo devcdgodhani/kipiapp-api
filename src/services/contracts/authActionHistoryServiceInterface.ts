@@ -1,5 +1,4 @@
-import { IAuthActionHistoryAttributes, IAuthActionHistoryDocument } from '../../interfaces';
-import { IMongooseCommonService } from './mongooseCommonServiceInterface';
+import { AuthActionHistoryModel } from '../../db/postgreSql';
+import { SequelizeCommonService } from '../concrete/sequelizeCommonService';
 
-export interface IAuthActionHistoryService
-  extends IMongooseCommonService<IAuthActionHistoryAttributes, IAuthActionHistoryDocument> {}
+export interface IAuthActionHistoryService extends SequelizeCommonService<AuthActionHistoryModel> {}

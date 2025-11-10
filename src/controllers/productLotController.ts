@@ -4,10 +4,12 @@ import {
   PRODUCT_LOT_SUCCESS_MESSAGES,
   PRODUCT_LOT_ERROR_MESSAGES,
 } from '../constants';
-import { MongooseTransactionService, ProductLotService } from '../services';
+import { ProductLotService } from '../services';
 import { IApiResponse, IProductLotAttributes } from '../interfaces';
 import { TProductLotListPaginationRes, TProductLotListRes, TProductLotRes } from '../types';
 import { ApiError } from '../helpers';
+import { sequelize } from '../db/postgreSql';
+import { Op } from 'sequelize';
 
 export default class ProductLotController {
   productLotService = new ProductLotService();
@@ -85,17 +87,16 @@ export default class ProductLotController {
 
   /*********** Create productLot ***********/
   create = async (req: Request, res: Response, next: NextFunction) => {
-    const transaction = new MongooseTransactionService();
+    const transaction = await sequelize.transaction();
     try {
-      const session = await transaction.start();
-
       let reqData = req.body;
       if (!Array.isArray(reqData)) reqData = [reqData];
 
       const existProductLot = await this.productLotService.findOne({
-        title: { $in: reqData.map((productLot: IProductLotAttributes) => productLot.title) },
+        title: { [Op.in]: reqData.map((productLot: IProductLotAttributes) => productLot.title) },
         storeId: req.store.id,
       });
+
       if (existProductLot) {
         throw new ApiError(
           HTTP_STATUS_CODE.BAD_REQUEST.CODE,
@@ -103,19 +104,8 @@ export default class ProductLotController {
           PRODUCT_LOT_ERROR_MESSAGES.EXIST
         );
       }
-      let sequence = 0;
-      const lastProductLot = await this.productLotService.findOne({}, { sort: { sequence: -1 } });
-      if (lastProductLot) sequence = lastProductLot.sequence;
 
-      reqData = reqData.map((productLot: IProductLotAttributes) => {
-        sequence = sequence + 1;
-        return {
-          ...productLot,
-          sequence,
-        };
-      });
-
-      await this.productLotService.bulkCreate(reqData, { userId: req.user.id, session });
+      await this.productLotService.bulkCreate(reqData, { userId: req.user.id, transaction });
 
       await transaction.commit();
 
@@ -133,11 +123,9 @@ export default class ProductLotController {
 
   /*********** Update productLot ***********/
   updateManyByFilter = async (req: Request, res: Response, next: NextFunction) => {
-    const transaction = new MongooseTransactionService();
+    const transaction = await sequelize.transaction();
 
     try {
-      const session = await transaction.start();
-
       let reqData = req.body;
       if (!Array.isArray(reqData)) reqData = [reqData];
       for (const updateData of reqData) {
@@ -146,7 +134,7 @@ export default class ProductLotController {
         });
         await this.productLotService.update(filter, updateData.update, {
           userId: req.user.id,
-          session,
+          transaction,
         });
       }
       const response: IApiResponse = {
@@ -163,16 +151,15 @@ export default class ProductLotController {
   };
 
   updateOneByFilter = async (req: Request, res: Response, next: NextFunction) => {
-    const transaction = new MongooseTransactionService();
+    const transaction = await sequelize.transaction();
     try {
-      const session = await transaction.start();
       const reqData = req.body;
       const { filter } = this.productLotService.generateFilter({
         filters: reqData.filter,
       });
-      await this.productLotService.updateOne(filter, reqData.update, {
+      await this.productLotService.update(filter, reqData.update, {
         userId: req.user.id,
-        session,
+        transaction,
       });
 
       const response: IApiResponse = {
@@ -190,15 +177,14 @@ export default class ProductLotController {
 
   /*********** Delete productLot ***********/
   deleteByFilter = async (req: Request, res: Response, next: NextFunction) => {
-    const transaction = new MongooseTransactionService();
+    const transaction = await sequelize.transaction();
     try {
-      const session = await transaction.start();
       const reqData = req.body;
       const { filter } = this.productLotService.generateFilter({
         filters: reqData,
       });
 
-      await this.productLotService.softDelete(filter, { userId: req.user.id, session });
+      await this.productLotService.softDelete(filter, { userId: req.user.id, transaction });
 
       const response: IApiResponse = {
         status: HTTP_STATUS_CODE.OK.STATUS,

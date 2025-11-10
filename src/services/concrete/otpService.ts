@@ -1,10 +1,9 @@
-import { OtpModel } from '../../db/mongodb';
-import { IOtpAttributes, IOtpDocument } from '../../interfaces';
+import { OtpModel } from '../../db/postgreSql';
 import { IOtpService } from '../contracts';
-import { MongooseCommonService } from './mongooseCommonService';
+import { SequelizeCommonService } from './sequelizeCommonService';
 
 export class OtpService
-  extends MongooseCommonService<IOtpAttributes, IOtpDocument>
+  extends SequelizeCommonService<OtpModel>
   implements IOtpService
 {
   constructor() {

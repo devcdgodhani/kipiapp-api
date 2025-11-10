@@ -1,8 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import mongoose, { Schema } from 'mongoose';
 import Joi, { NumberSchema, StringSchema, Schema as JoiSchema, AlternativesSchema } from 'joi';
-import { ApiError } from './apiError';
-import { HTTP_STATUS_CODE } from '../constants';
 import { isValidMongoDbId } from './utils';
 
 /* ---------------------- Types ---------------------- */
@@ -341,47 +339,3 @@ export interface IUserDocument extends Omit<IUserAttributes, 'id'>, Document {}
 // console.log(result.includedFields, result.requiredFields);
 */
 
-export const validateSchema = (
-  schema: {
-    [x: string]: Joi.Schema;
-  },
-  data: Record<string, any>,
-  options = {
-    abortEarly: false, // include all errors
-    allowUnknown: false, // ignore unknown props
-    // stripUnknown: true, // remove unknown props
-  }
-) => {
-  if (data.isPaginate) {
-    schema = {
-      ...schema,
-      page: Joi.number().min(1).default(1),
-      isPaginate: Joi.boolean(),
-      limit: Joi.number().min(1).default(10),
-      order: Joi.object().pattern(
-        Joi.string().trim(), // field name
-        Joi.number().valid(1, -1) // sorting direction
-      ),
-    };
-  }
-  const validSchema = Joi.object(schema);
-
-  const { error, value: validData } = validSchema.validate(data, options);
-
-  if (error) {
-    const errorMessage = error.details
-      .map((detail) => {
-        if (detail.context?.message) {
-          return `${detail.message}${detail.context.message}`;
-        }
-        return detail.message;
-      })
-      .join(', ');
-    throw new ApiError(
-      HTTP_STATUS_CODE.BAD_REQUEST.CODE,
-      HTTP_STATUS_CODE.BAD_REQUEST.STATUS,
-      errorMessage
-    );
-  }
-  return validData;
-};

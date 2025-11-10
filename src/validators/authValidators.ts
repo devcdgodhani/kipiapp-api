@@ -1,9 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
 import Joi from 'joi';
-import { ApiError, mongooseToJoi } from '../helpers';
+import { ApiError } from '../helpers';
 import { HTTP_STATUS_CODE, OTP_TYPE, USER_TYPE } from '../constants';
-import { UserSchema } from '../db/mongodb';
-import { IUserAttributes } from '../interfaces';
+import { sequelizeToJoi } from '../helpers/sequelizeTojoiSchemaBuilder';
+import { UserModel } from '../db/postgreSql';
 
 const options = {
   abortEarly: false, // include all errors
@@ -39,8 +39,7 @@ export default class AuthValidator {
 
   /*********************** register ***********************/
   registerValidator = (req: Request, res: Response, next: NextFunction) => {
-    const createSchema = mongooseToJoi<IUserAttributes>({
-      schema: UserSchema,
+    const createSchema = sequelizeToJoi(UserModel, {
       includeFields: [
         'email',
         'mobile',

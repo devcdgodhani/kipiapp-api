@@ -5,7 +5,7 @@ export interface IContactAddressAttributes extends IDefaultAttributes {
   id: ObjectId;
   title: string;
   enTitle: string;
-  userId: ObjectId;
+  userId: string;
 }
 
 export interface IContactAddressDocument extends Omit<IContactAddressAttributes, 'id'>, Document {}

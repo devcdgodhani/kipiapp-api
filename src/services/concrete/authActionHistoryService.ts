@@ -1,10 +1,9 @@
-import { MongooseCommonService } from './mongooseCommonService';
+import { AuthActionHistoryModel } from '../../db/postgreSql';
 import { IAuthActionHistoryService } from '../contracts/authActionHistoryServiceInterface';
-import { IAuthActionHistoryAttributes, IAuthActionHistoryDocument } from '../../interfaces';
-import { AuthActionHistoryModel } from '../../db/mongodb';
+import { SequelizeCommonService } from './sequelizeCommonService';
 
 export class AuthActionHistoryService
-  extends MongooseCommonService<IAuthActionHistoryAttributes, IAuthActionHistoryDocument>
+  extends SequelizeCommonService<AuthActionHistoryModel>
   implements IAuthActionHistoryService
 {
   constructor() {

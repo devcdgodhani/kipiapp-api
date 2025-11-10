@@ -1,4 +1,4 @@
-import { Schema, Types, model } from 'mongoose';
+import { Schema, model } from 'mongoose';
 import { IContactAddressDocument } from '../../../interfaces';
 import { defaultAttributes } from '../plugins/baseSchema';
 import { MONGOOSE_MODEL } from '../../../constants';
@@ -16,8 +16,7 @@ export const ContactAddressSchema = new Schema<IContactAddressDocument>(
       trim: true,
     },
     userId: {
-      type: Types.ObjectId,
-      ref: MONGOOSE_MODEL.USERS,
+      type: String,
     },
     ...defaultAttributes,
   },
@@ -27,4 +26,7 @@ export const ContactAddressSchema = new Schema<IContactAddressDocument>(
   }
 );
 
-export const ContactAddressModel = model<IContactAddressDocument>(MONGOOSE_MODEL.CONTACT_ADDRESSES, ContactAddressSchema);
+export const ContactAddressModel = model<IContactAddressDocument>(
+  MONGOOSE_MODEL.CONTACT_ADDRESSES,
+  ContactAddressSchema
+);

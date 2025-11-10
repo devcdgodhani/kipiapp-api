@@ -1,4 +1,4 @@
-import { IStoreAttributes, IStoreDocument } from '../../interfaces';
-import { IMongooseCommonService } from './mongooseCommonServiceInterface';
+import { StoreModel } from '../../db/postgreSql';
+import { SequelizeCommonService } from '../concrete/sequelizeCommonService';
 
-export interface IStoreService extends IMongooseCommonService<IStoreAttributes, IStoreDocument> {}
+export interface IStoreService extends SequelizeCommonService<StoreModel> {}

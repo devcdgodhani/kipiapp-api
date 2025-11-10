@@ -12,4 +12,4 @@ RUN npm run build
 
 EXPOSE 3000
 
-CMD ["sh", "-c", "yarn start"]
+CMD ["sh", "-c", "yarn run pgdb:migrate && yarn start"]

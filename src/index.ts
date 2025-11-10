@@ -2,6 +2,7 @@ import { createServer } from 'http';
 import app from './server';
 import { ENV_VARIABLE } from './configs';
 import { connectMongoDb } from './db/mongodb';
+import { sequelize } from './db/postgreSql';
 
 const server = createServer(app);
 
@@ -9,7 +10,7 @@ const startServer = (): void => {
   server.listen(ENV_VARIABLE.PORT, async () => {
     await assertDatabaseConnection();
     console.log(`Server running on port ${ENV_VARIABLE.PORT}...`);
-    if(ENV_VARIABLE.NODE_ENV !== 'production'){
+    if (ENV_VARIABLE.NODE_ENV !== 'production') {
       setInterval(
         () => {
           fetch(ENV_VARIABLE.SERVER_URL)
@@ -26,8 +27,13 @@ const startServer = (): void => {
 
 export const assertDatabaseConnection = async (): Promise<void> => {
   try {
+    /***** PostgreSQL Database Authentication *****/
+
+    await sequelize.authenticate();
+    console.log('PostgreSQL database connection has been established successfully.');
+
     /***** MongoDB Database Authentication *****/
-    console.log();
+
     await connectMongoDb({
       connectionUrl: ENV_VARIABLE.MONGO_DB_CONNECTION_URL as string,
       dbName: ENV_VARIABLE.MONGO_DB_NAME as string,
@@ -35,6 +41,7 @@ export const assertDatabaseConnection = async (): Promise<void> => {
     console.log('MongoDB database connection has been established successfully.');
 
     /***** Redis  Authentication *****/
+
     //await connectRedis();
     // console.log('Redis connection has been established successfully.');
   } catch (err) {

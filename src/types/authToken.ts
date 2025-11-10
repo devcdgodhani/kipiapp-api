@@ -1,7 +1,8 @@
+import { Optional } from 'sequelize';
 import { IApiResponse, IPaginationApiResponse } from '../interfaces';
 import { IAuthTokenAttributes } from '../interfaces';
 
-export type TAuthTokenCreate = Omit<IAuthTokenAttributes, 'id'>;
+export type TAuthTokenCreate = Optional<IAuthTokenAttributes, 'id'>;
 
 export type TAuthTokenRes = IApiResponse<IAuthTokenAttributes>;
 

@@ -1,14 +1,11 @@
-import { ObjectId } from 'mongoose';
 import { TOKEN_TYPE } from '../constants';
 import { IDefaultAttributes } from './common';
 
 export interface IAuthTokenAttributes extends IDefaultAttributes {
-  id: ObjectId;
+  id: string;
   token: string;
   type: TOKEN_TYPE;
-  userId: ObjectId;
+  userId: string;
   expiredAt: number;
-  referenceTokenId?: ObjectId;
+  referenceTokenId?: string;
 }
-
-export interface IAuthTokenDocument extends Omit<IAuthTokenAttributes, 'id'>, Document {}

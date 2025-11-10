@@ -1,22 +1,22 @@
 import { Request, Response, NextFunction } from 'express';
 import { ICategoryAttributes } from '../interfaces';
-import { CategorySchema } from '../db/mongodb';
-import { mongooseToJoi, validateSchema } from '../helpers/joiSchemaBuilder';
+import { sequelizeToJoi, validateSchema } from '../helpers';
+import { CategoryModel } from '../db/postgreSql';
 
 export default class CategoryValidator {
-  private filterSchema = mongooseToJoi<ICategoryAttributes>({
-    schema: CategorySchema,
+  private filterSchema = sequelizeToJoi({
+    schema: CategoryModel,
     isFilterSchema: true,
   });
 
-  private createSchema = mongooseToJoi<ICategoryAttributes>({
-    schema: CategorySchema,
-    includeFields: ['title', 'description', 'storeId'],
+  private createSchema = sequelizeToJoi<ICategoryAttributes>({
+    schema: CategoryModel,
+    includeFields: ['title', 'description', 'storeId',],
     requiredFields: ['title', 'storeId'],
   });
 
-  private updateSchema = mongooseToJoi<ICategoryAttributes>({
-    schema: CategorySchema,
+  private updateSchema = sequelizeToJoi<ICategoryAttributes>({
+    schema: CategoryModel,
     // excludeFields: ['title', 'status'],
   });
 

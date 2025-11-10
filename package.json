@@ -9,13 +9,19 @@
     "start": "node dist/index.js",
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
     "lint": "eslint . --ext .ts",
-    "format": "prettier --write \"**/*.{ts,js,json,md}\""
+    "format": "prettier --write \"**/*.{ts,js,json,md}\"",
+    "pgdb:make:migration": "bash -c 'npx sequelize-cli migration:generate --name \"$0\" && node src/scripts/renameMigrationAndSeeder'",
+    "pgdb:make:seeder": "bash -c 'npx sequelize-cli seed:generate --name \"$0\" && node src/scripts/renameMigrationAndSeeder'",
+    "pgdb:migrate": "ts-node -r tsconfig-paths/register node_modules/.bin/sequelize db:migrate",
+    "pgdb:migrate:undo": "ts-node -r tsconfig-paths/register node_modules/.bin/sequelize db:migrate:undo",
+    "pgdb:migrate:undo:all": "ts-node -r tsconfig-paths/register node_modules/.bin/sequelize db:migrate:undo:all",
+    "pgdb:seed": "ts-node -r tsconfig-paths/register node_modules/.bin/sequelize db:seed:all",
+    "pgdb:seed:undo": "ts-node -r tsconfig-paths/register node_modules/.bin/sequelize db:seed:undo:all"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.910.0",
     "@aws-sdk/s3-request-presigner": "^3.910.0",
     "@sendgrid/mail": "^8.1.6",
-    "@socket.io/redis-adapter": "^8.3.0",
     "bcrypt": "^6.0.0",
     "compression": "^1.8.1",
     "date-fns": "^4.1.0",
@@ -29,7 +35,11 @@
     "mongoose": "^8.19.0",
     "morgan": "^1.10.1",
     "nodemailer": "^7.0.9",
+    "pg": "^8.16.3",
+    "pg-hstore": "^2.3.4",
     "reflect-metadata": "^0.1.14",
+    "sequelize": "^6.37.7",
+    "sequelize-typescript": "^2.1.6",
     "socket.io": "^4.8.1",
     "typedi": "^0.10.0",
     "winston": "^3.18.3",
@@ -41,6 +51,7 @@
     "@types/ejs": "^3.1.5",
     "@types/express": "^5.0.3",
     "@types/jsonwebtoken": "^9.0.10",
+    "@types/node": "^24.10.0",
     "@types/nodemailer": "^7.0.2",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
     "@typescript-eslint/parser": "^6.21.0",
@@ -48,7 +59,10 @@
     "eslint-config-prettier": "^9.1.2",
     "eslint-plugin-import": "^2.32.0",
     "prettier": "^3.6.2",
+    "sequelize-cli": "^6.6.3",
+    "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^5.9.3"
   }
 }

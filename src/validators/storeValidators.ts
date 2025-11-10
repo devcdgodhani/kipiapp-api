@@ -1,22 +1,22 @@
 import { Request, Response, NextFunction } from 'express';
 import { IStoreAttributes } from '../interfaces';
-import { StoreSchema } from '../db/mongodb';
-import { mongooseToJoi, validateSchema } from '../helpers/joiSchemaBuilder';
+import { StoreModel } from '../db/postgreSql';
+import { sequelizeToJoi, validateSchema } from '../helpers';
 
 export default class StoreValidator {
-  private filterSchema = mongooseToJoi<IStoreAttributes>({
-    schema: StoreSchema,
+  private filterSchema = sequelizeToJoi<IStoreAttributes>({
+    schema: StoreModel,
     isFilterSchema: true,
   });
 
-  private createSchema = mongooseToJoi<IStoreAttributes>({
-    schema: StoreSchema,
+  private createSchema = sequelizeToJoi<IStoreAttributes>({
+    schema: StoreModel,
     includeFields: ['title', 'userId'],
     requiredFields: ['title', 'userId'],
   });
 
-  private updateSchema = mongooseToJoi<IStoreAttributes>({
-    schema: StoreSchema,
+  private updateSchema = sequelizeToJoi<IStoreAttributes>({
+    schema: StoreModel,
     // excludeFields: ['title'],
   });
 

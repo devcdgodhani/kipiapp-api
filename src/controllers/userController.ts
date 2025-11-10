@@ -119,7 +119,7 @@ export default class UserController {
       const { filter } = this.userService.generateFilter({
         filters: reqData.filter,
       });
-      await this.userService.updateOne(filter, reqData.update, { userId: req.user.id });
+      await this.userService.update(filter, reqData.update, { userId: req.user.id });
 
       const response: IApiResponse = {
         status: HTTP_STATUS_CODE.OK.STATUS,

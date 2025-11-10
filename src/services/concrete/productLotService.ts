@@ -1,10 +1,9 @@
-import { ProductLotModel } from '../../db/mongodb';
-import { IProductLotAttributes, IProductLotDocument } from '../../interfaces';
+import { ProductLotModel } from '../../db/postgreSql';
 import { IProductLotService } from '../contracts';
-import { MongooseCommonService } from './mongooseCommonService';
+import { SequelizeCommonService } from './sequelizeCommonService';
 
 export class ProductLotService
-  extends MongooseCommonService<IProductLotAttributes, IProductLotDocument>
+  extends SequelizeCommonService<ProductLotModel>
   implements IProductLotService
 {
   constructor() {

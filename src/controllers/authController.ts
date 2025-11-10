@@ -22,6 +22,7 @@ import {
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import { IApiResponse, IAuthTokenAttributes, IUserAttributes } from '../interfaces';
 import { getTime } from 'date-fns';
+import { Op } from 'sequelize';
 
 export default class AuthController {
   private userService = new UserService();
@@ -45,7 +46,7 @@ export default class AuthController {
 
       reqData.password = await this.authService.generateHashPassword(reqData.password);
       reqData.username = await this.authService.generateUniqueUsername(reqData.email);
-      
+
       const user = await this.userService.create(reqData);
       if (!user) {
         throw new ApiError(
@@ -135,7 +136,7 @@ export default class AuthController {
       const existAccessToken = await this.authTokenService.findOne({
         token: accessToken,
         type: TOKEN_TYPE.ACCESS_TOKEN,
-        userId: decoded.sub,
+        userId: decoded.sub as string,
       });
 
       if (!existAccessToken || !existAccessToken.referenceTokenId) {
@@ -149,7 +150,7 @@ export default class AuthController {
       const existRefreshToken = await this.authTokenService.findOne({
         token: bodyData.refreshToken,
         type: TOKEN_TYPE.REFRESH_TOKEN,
-        userId: decoded.sub,
+        userId: decoded.sub as string,
         id: existAccessToken.referenceTokenId,
       });
 
@@ -194,7 +195,7 @@ export default class AuthController {
       });
 
       await this.authTokenService.delete({
-        id: { $in: [existAccessToken?.id, existAccessToken?.referenceTokenId] },
+        id: { [Op.in]: [existAccessToken?.id || '', existAccessToken?.referenceTokenId || ''] },
       });
 
       const response: IApiResponse = {
@@ -222,7 +223,7 @@ export default class AuthController {
       });
 
       await this.authTokenService.delete({
-        id: { $nin: [existAccessToken?.id, existAccessToken?.referenceTokenId] },
+        id: { [Op.notIn]: [existAccessToken?.id || '', existAccessToken?.referenceTokenId || ''] },
         userId: req.user.id,
       });
 
@@ -250,7 +251,7 @@ export default class AuthController {
         );
       }
       const newPassword = await this.authService.generateHashPassword(bodyData.newPassword);
-      await this.userService.updateOne(
+      await this.userService.update(
         { id: user.id },
         { password: newPassword },
         { userId: req.user.id }
@@ -272,7 +273,7 @@ export default class AuthController {
       const reqData = req.body;
 
       const user = await this.userService.findOne({
-        $or: [
+        [Op.or]: [
           { email: reqData.username },
           { mobile: reqData.username },
           { username: reqData.username },
@@ -311,7 +312,7 @@ export default class AuthController {
         userId: req.user.id,
         code: reqData.otp,
         type: req.token.otpType,
-        expiredAt: { $gt: getTime(new Date()) },
+        expiredAt: { [Op.gt]: getTime(new Date()) },
       });
       if (!otp || otp.usesCount === otp.maxUses) {
         throw new ApiError(
@@ -329,8 +330,8 @@ export default class AuthController {
       } else {
         updateData.isMobileVerified = true;
       }
-      await this.userService.updateOne({ id: req.user.id }, updateData, { userId: req.user.id });
-      await this.otpService.updateOne(
+      await this.userService.update({ id: req.user.id }, updateData, { userId: req.user.id });
+      await this.otpService.update(
         { id: otp.id },
         { usesCount: (otp.usesCount || 0) + 1 },
         { userId: req.user.id }
@@ -387,7 +388,7 @@ export default class AuthController {
       const reqData = req.body;
 
       const newPassword = await this.authService.generateHashPassword(reqData.newPassword);
-      await this.userService.updateOne(
+      await this.userService.update(
         { id: req.user.id },
         { password: newPassword },
         { userId: req.user.id }

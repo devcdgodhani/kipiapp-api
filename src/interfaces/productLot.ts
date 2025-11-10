@@ -1,12 +1,9 @@
-import { ObjectId } from 'mongoose';
 import { IDefaultAttributes } from './common';
 
 export interface IProductLotAttributes extends IDefaultAttributes {
-  id: ObjectId;
+  id: string;
   title: string;
   enTitle: string;
   sequence: number;
-  storeId: ObjectId;
+  storeId: string;
 }
-
-export interface IProductLotDocument extends Omit<IProductLotAttributes, 'id'>, Document {}

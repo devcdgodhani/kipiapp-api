@@ -1,7 +1,8 @@
+import { Optional } from 'sequelize';
 import { IApiResponse, IPaginationApiResponse } from '../interfaces';
 import { IOtpAttributes } from '../interfaces';
 
-export type TOtpCreate = Omit<IOtpAttributes, 'id'>;
+export type TOtpCreate = Optional<IOtpAttributes, 'id'>;
 
 export type TOtpRes = IApiResponse<IOtpAttributes>;
 

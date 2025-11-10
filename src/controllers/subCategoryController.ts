@@ -8,6 +8,8 @@ import { SubCategoryService } from '../services';
 import { IApiResponse, ISubCategoryAttributes } from '../interfaces';
 import { TSubCategoryListPaginationRes, TSubCategoryListRes, TSubCategoryRes } from '../types';
 import { ApiError } from '../helpers';
+import { Op } from 'sequelize';
+import { sequelize } from '../db/postgreSql';
 
 export default class SubCategoryController {
   subSubCategoryService = new SubCategoryService();
@@ -88,12 +90,13 @@ export default class SubCategoryController {
 
   /*********** Create subSubCategory ***********/
   create = async (req: Request, res: Response, next: NextFunction) => {
+    const transaction = await sequelize.transaction();
     try {
       let reqData = req.body;
       if (!Array.isArray(reqData)) reqData = [reqData];
 
       const existSubCategory = await this.subSubCategoryService.findOne({
-        $or: reqData.map((subCategory: ISubCategoryAttributes) => ({
+        [Op.or]: reqData.map((subCategory: ISubCategoryAttributes) => ({
           categoryId: subCategory.categoryId,
           title: subCategory.title,
           storeId: subCategory.storeId,
@@ -108,21 +111,24 @@ export default class SubCategoryController {
         );
       }
 
-      await this.subSubCategoryService.bulkCreate(reqData, { userId: req.user.id });
-
+      await this.subSubCategoryService.bulkCreate(reqData, { userId: req.user.id, transaction });
+      await transaction.commit();
       const response: IApiResponse = {
         status: HTTP_STATUS_CODE.CREATED.STATUS,
         code: HTTP_STATUS_CODE.CREATED.CODE,
         message: SUB_CATEGORY_SUCCESS_MESSAGES.CREATE_SUCCESS,
       };
+
       return res.status(response.status).json(response);
     } catch (err) {
+      await transaction.rollback();
       return next(err);
     }
   };
 
   /*********** Update subSubCategory ***********/
   updateManyByFilter = async (req: Request, res: Response, next: NextFunction) => {
+    const transaction = await sequelize.transaction();
     try {
       let reqData = req.body;
       if (!Array.isArray(reqData)) reqData = [reqData];
@@ -130,55 +136,71 @@ export default class SubCategoryController {
         const { filter } = this.subSubCategoryService.generateFilter({
           filters: updateData.filter,
         });
-        await this.subSubCategoryService.update(filter, updateData.update, { userId: req.user.id });
+        await this.subSubCategoryService.update(filter, updateData.update, {
+          userId: req.user.id,
+          transaction,
+        });
       }
       const response: IApiResponse = {
         status: HTTP_STATUS_CODE.OK.STATUS,
         code: HTTP_STATUS_CODE.OK.CODE,
         message: SUB_CATEGORY_SUCCESS_MESSAGES.UPDATE_SUCCESS,
       };
+      await transaction.commit();
       return res.status(response.status).json(response);
     } catch (err) {
+      await transaction.rollback();
       return next(err);
     }
   };
 
   updateOneByFilter = async (req: Request, res: Response, next: NextFunction) => {
+    const transaction = await sequelize.transaction();
     try {
       const reqData = req.body;
       const { filter } = this.subSubCategoryService.generateFilter({
         filters: reqData.filter,
       });
-      await this.subSubCategoryService.updateOne(filter, reqData.update, { userId: req.user.id });
+      await this.subSubCategoryService.update(filter, reqData.update, {
+        userId: req.user.id,
+        transaction,
+      });
 
       const response: IApiResponse = {
         status: HTTP_STATUS_CODE.OK.STATUS,
         code: HTTP_STATUS_CODE.OK.CODE,
         message: SUB_CATEGORY_SUCCESS_MESSAGES.UPDATE_SUCCESS,
       };
+      await transaction.commit();
       return res.status(response.status).json(response);
     } catch (err) {
+      await transaction.rollback();
       return next(err);
     }
   };
 
   /*********** Delete subSubCategory ***********/
   deleteByFilter = async (req: Request, res: Response, next: NextFunction) => {
+    const transaction = await sequelize.transaction();
     try {
       const reqData = req.body;
       const { filter } = this.subSubCategoryService.generateFilter({
         filters: reqData,
       });
 
-      await this.subSubCategoryService.softDelete(filter, { userId: req.user.id });
+      await this.subSubCategoryService.softDelete(filter, { userId: req.user.id, transaction });
 
       const response: IApiResponse = {
         status: HTTP_STATUS_CODE.OK.STATUS,
         code: HTTP_STATUS_CODE.OK.CODE,
         message: SUB_CATEGORY_SUCCESS_MESSAGES.DELETE_SUCCESS,
       };
+
+      await transaction.commit();
       return res.status(response.status).json(response);
     } catch (err) {
+      await transaction.rollback();
+
       return next(err);
     }
   };

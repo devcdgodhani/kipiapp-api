@@ -4,6 +4,7 @@ import { CategoryService } from '../services';
 import { IApiResponse, ICategoryAttributes } from '../interfaces';
 import { TCategoryListPaginationRes, TCategoryListRes, TCategoryRes } from '../types';
 import { ApiError } from '../helpers';
+import { Op } from 'sequelize';
 
 export default class CategoryController {
   categoryService = new CategoryService();
@@ -86,7 +87,7 @@ export default class CategoryController {
       if (!Array.isArray(reqData)) reqData = [reqData];
 
       const existCategory = await this.categoryService.findOne({
-        title: { $in: reqData.map((category: ICategoryAttributes) => category.title) },
+        title: { [Op.in]: reqData.map((category: ICategoryAttributes) => category.title) },
         storeId: req.store.id,
       });
       if (existCategory) {
@@ -137,7 +138,7 @@ export default class CategoryController {
       const { filter } = this.categoryService.generateFilter({
         filters: reqData.filter,
       });
-      await this.categoryService.updateOne(filter, reqData.update, { userId: req.user.id });
+      await this.categoryService.update(filter, reqData.update, { userId: req.user.id });
 
       const response: IApiResponse = {
         status: HTTP_STATUS_CODE.OK.STATUS,

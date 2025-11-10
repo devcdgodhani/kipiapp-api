@@ -1,4 +1,4 @@
-import { IOtpAttributes, IOtpDocument } from '../../interfaces';
-import { IMongooseCommonService } from './mongooseCommonServiceInterface';
+import { OtpModel } from "../../db/postgreSql";
+import { SequelizeCommonService } from "../concrete/sequelizeCommonService";
 
-export interface IOtpService extends IMongooseCommonService<IOtpAttributes, IOtpDocument> {}
+export interface IOtpService extends SequelizeCommonService<OtpModel> {}

@@ -1,12 +1,8 @@
-import { UserModel } from '../../db/mongodb';
-import { IUserAttributes, IUserDocument } from '../../interfaces';
+import { UserModel } from '../../db/postgreSql';
 import { IUserService } from '../contracts';
-import { MongooseCommonService } from './mongooseCommonService';
+import { SequelizeCommonService } from './sequelizeCommonService';
 
-export class UserService
-  extends MongooseCommonService<IUserAttributes, IUserDocument>
-  implements IUserService
-{
+export class UserService extends SequelizeCommonService<UserModel> implements IUserService {
   constructor() {
     super(UserModel);
   }
