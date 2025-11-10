@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { IContactAddressAttributes } from '../interfaces';
 import { ContactAddressSchema } from '../db/mongodb';
-import { mongooseToJoi, validateSchema } from '../helpers/joiSchemaBuilder';
+import { mongooseToJoi, validateSchema } from '../helpers';
 
 export default class ContactAddressValidator {
   private filterSchema = mongooseToJoi<IContactAddressAttributes>({

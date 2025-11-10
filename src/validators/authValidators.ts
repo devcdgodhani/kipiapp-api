@@ -4,6 +4,7 @@ import { ApiError } from '../helpers';
 import { HTTP_STATUS_CODE, OTP_TYPE, USER_TYPE } from '../constants';
 import { sequelizeToJoi } from '../helpers/sequelizeTojoiSchemaBuilder';
 import { UserModel } from '../db/postgreSql';
+import { IUserAttributes } from '../interfaces';
 
 const options = {
   abortEarly: false, // include all errors
@@ -39,7 +40,8 @@ export default class AuthValidator {
 
   /*********************** register ***********************/
   registerValidator = (req: Request, res: Response, next: NextFunction) => {
-    const createSchema = sequelizeToJoi(UserModel, {
+    const createSchema = sequelizeToJoi<IUserAttributes>({
+      schema: UserModel,
       includeFields: [
         'email',
         'mobile',
