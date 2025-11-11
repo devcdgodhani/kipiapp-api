@@ -8,8 +8,8 @@ RUN yarn install --production
 
 COPY . .
 
-RUN npm run build
+RUN yarn run build
 
 EXPOSE 3000
 
-CMD ["sh", "-c", "yarn run pgdb:migrate && yarn start"]
+CMD ["sh", "-c", "yarn run pgdb:migrate && yarn run start"]
