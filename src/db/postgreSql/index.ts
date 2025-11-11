@@ -21,7 +21,7 @@ const username = ENV_VARIABLE.PG_DB_USER as string;
 const password = ENV_VARIABLE.PG_DB_PASSWORD as string;
 const host = ENV_VARIABLE.PG_DB_HOST || 'localhost';
 const port = Number(ENV_VARIABLE.PG_DB_PORT) || 5432;
-const dbLogging = ENV_VARIABLE.NODE_ENV !== 'production';
+const dbLogging = () => ENV_VARIABLE.NODE_ENV !== 'production';
 // const dialectOptions = {
 //   ssl: ENV_VARIABLE.DB_SSL === 'true' ? { require: true, rejectUnauthorized: false } : {},
 // };
