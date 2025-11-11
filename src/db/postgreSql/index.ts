@@ -52,7 +52,7 @@ export const sequelize = new Sequelize(database, username, password, {
 
 (async () => {
   const db: Record<string, any> = {};
-  const modelsDir = path.join(process.cwd(), 'src/db/postgreSql/models');
+  const modelsDir = path.join(__dirname, 'models');
   const files = (await fs.readdir(modelsDir)).filter(
     (file) => file.endsWith('.ts') || file.endsWith('.js')
   );
