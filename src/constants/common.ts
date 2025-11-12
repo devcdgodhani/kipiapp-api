@@ -31,7 +31,6 @@ export enum OTP_TYPE {
   FORGET_PASSWORD = 'FORGET_PASSWORD',
 }
 
-
 export enum AUTH_ACTION_TYPE {
   SIGN_IN = 'SIGN_IN',
   SIGN_OUT = 'SIGN_OUT',
@@ -79,3 +78,8 @@ export enum PRODUCT_COMMON_STATUS {
 }
 
 export const PRODUCT_SKU_START = 10000;
+
+export enum PRODUCT_LOT_TYPE {
+  SELL = 'SELL',
+  PURCHASE = 'PURCHASE',
+}

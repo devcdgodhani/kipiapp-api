@@ -32,6 +32,12 @@ export const assertDatabaseConnection = async (): Promise<void> => {
     await sequelize.authenticate();
     console.log('PostgreSQL database connection has been established successfully.');
 
+    //sync postgre sql table
+    try {
+      await sequelize.sync();
+    } catch (err) {
+      console.log('error while sync table', err);
+    }
     /***** MongoDB Database Authentication *****/
 
     await connectMongoDb({
