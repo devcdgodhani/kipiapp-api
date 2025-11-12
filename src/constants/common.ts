@@ -82,4 +82,5 @@ export const PRODUCT_SKU_START = 10000;
 export enum PRODUCT_LOT_TYPE {
   SELL = 'SELL',
   PURCHASE = 'PURCHASE',
+  TRANSFER = 'TRANSFER',
 }
