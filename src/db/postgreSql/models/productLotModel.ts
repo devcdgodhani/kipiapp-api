@@ -1,6 +1,6 @@
 import { DataTypes, Model, ModelStatic } from 'sequelize';
 import { sequelize } from '../index';
-import { POSTGRE_SQL_MODEL } from '../../../constants';
+import { POSTGRE_SQL_MODEL, PRODUCT_LOT_TYPE } from '../../../constants';
 import { IProductLotAttributes } from '../../../interfaces';
 import { TProductLotCreate } from '../../../types';
 
@@ -13,6 +13,11 @@ export class ProductLotModel
   declare enTitle: string;
   declare sequence: number;
   declare storeId: string;
+  declare amount: number;
+  declare vendorId: string;
+  declare type: PRODUCT_LOT_TYPE;
+  declare parentLotId: string;
+  declare date: Date;
 
   declare createdBy?: string;
   declare updatedBy?: string;
@@ -23,7 +28,7 @@ export class ProductLotModel
   declare readonly deletedAt: Date;
 
   static associate(models: Record<string, ModelStatic<Model>>) {
-    const { ProductLotModel, StoreModel } = models;
+    const { ProductLotModel, StoreModel, UserModel } = models;
 
     // ProductLot belongs to a Store
     ProductLotModel.belongsTo(StoreModel, {
@@ -35,6 +40,30 @@ export class ProductLotModel
     StoreModel.hasMany(ProductLotModel, {
       foreignKey: { name: 'storeId', allowNull: true },
       as: POSTGRE_SQL_MODEL.STORES.ASSOCIATIONS.PRODUCT_LOT_LIST,
+    });
+
+    // ProductLot belongs to a Parent ProductLot
+    ProductLotModel.belongsTo(ProductLotModel, {
+      foreignKey: { name: 'parentLotId', allowNull: true },
+      as: POSTGRE_SQL_MODEL.PRODUCT_LOTS.ASSOCIATIONS.PARENT_LOT,
+    });
+
+    // ProductLots has many Child ProductLots
+    ProductLotModel.hasMany(ProductLotModel, {
+      foreignKey: { name: 'parentLotId', allowNull: true },
+      as: POSTGRE_SQL_MODEL.PRODUCT_LOTS.ASSOCIATIONS.CHILD_LOT_LIST,
+    });
+
+    // ProductLot belongs to a User(vendor)
+    ProductLotModel.belongsTo(UserModel, {
+      foreignKey: { name: 'vendorId', allowNull: true },
+      as: POSTGRE_SQL_MODEL.PRODUCT_LOTS.ASSOCIATIONS.VENDOR,
+    });
+
+    //  User(vendor) has many ProductLots
+    UserModel.hasMany(ProductLotModel, {
+      foreignKey: { name: 'vendorId', allowNull: true },
+      as: POSTGRE_SQL_MODEL.USERS.ASSOCIATIONS.PRODUCT_LOT_LIST,
     });
   }
 }
@@ -64,17 +93,29 @@ ProductLotModel.init(
       type: DataTypes.UUID,
       allowNull: true,
     },
-    createdBy: {
+    amount: {
+      type: DataTypes.FLOAT,
+      allowNull: true,
+    },
+    vendorId: {
       type: DataTypes.UUID,
       allowNull: true,
     },
-    updatedBy: {
+    type: {
+      type: DataTypes.STRING,
+      validate: {
+        isIn: [Object.values(PRODUCT_LOT_TYPE)],
+      },
+      allowNull: false,
+    },
+    parentLotId: {
       type: DataTypes.UUID,
       allowNull: true,
     },
-    deletedBy: {
-      type: DataTypes.UUID,
-      allowNull: true,
+    date: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: Date.now(),
     },
   },
   {

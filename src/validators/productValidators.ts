@@ -22,8 +22,16 @@ export default class ProductValidator {
       'specifications',
       'lotId',
       'vendorId',
+      'basePricePerUnit',
     ],
-    requiredFields: ['title', 'storeId', 'totalUnit', 'pricePerUnit', 'specifications'],
+    requiredFields: [
+      'title',
+      'storeId',
+      'totalUnit',
+      'pricePerUnit',
+      'specifications',
+      'basePricePerUnit',
+    ],
   });
 
   private updateSchema = mongooseToJoi<IProductAttributes>({

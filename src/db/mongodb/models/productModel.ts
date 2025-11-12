@@ -19,6 +19,7 @@ import {
   UserModel,
   ProductLotModel,
 } from '../../postgreSql';
+import { Op } from 'sequelize';
 
 export const ProductSchema = new Schema<IProductDocument>(
   {
@@ -96,12 +97,13 @@ export const ProductSchema = new Schema<IProductDocument>(
       },
     },
     lotId: {
-      type: String,
+      type: [String],
       required: false,
+      default: [],
       validate: {
-        validator: async function (value: string) {
-          if (!value) return true;
-          const exists = await ProductLotModel.count({ where: { id: value } });
+        validator: async function (value: string[]) {
+          if (!value || !value.length) return true;
+          const exists = await ProductLotModel.count({ where: { id: { [Op.in]: value } } });
           return !!exists;
         },
         message: PRODUCT_LOT_ERROR_MESSAGES.NOT_FOUND,
@@ -118,6 +120,10 @@ export const ProductSchema = new Schema<IProductDocument>(
       default: 0,
     },
     pricePerUnit: {
+      type: Number,
+      required: true,
+    },
+    basePricePerUnit: {
       type: Number,
       required: true,
     },

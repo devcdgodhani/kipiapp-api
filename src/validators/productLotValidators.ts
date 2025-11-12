@@ -11,8 +11,8 @@ export default class ProductLotValidator {
 
   private createSchema = sequelizeToJoi<IProductLotAttributes>({
     schema: ProductLotModel,
-    includeFields: ['title', 'storeId'],
-    requiredFields: ['title', 'storeId'],
+    includeFields: ['title', 'storeId', 'amount', 'parentLotId', 'date', 'type', 'vendorId'],
+    requiredFields: ['title', 'type'],
   });
 
   private updateSchema = sequelizeToJoi<IProductLotAttributes>({

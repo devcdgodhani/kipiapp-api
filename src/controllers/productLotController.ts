@@ -105,14 +105,18 @@ export default class ProductLotController {
         );
       }
 
-      await this.productLotService.bulkCreate(reqData, { userId: req.user.id, transaction });
+      const productLot = await this.productLotService.bulkCreate(reqData, {
+        userId: req.user.id,
+        transaction,
+      });
 
       await transaction.commit();
 
-      const response: IApiResponse = {
+      const response: IApiResponse<IProductLotAttributes[]> = {
         status: HTTP_STATUS_CODE.CREATED.STATUS,
         code: HTTP_STATUS_CODE.CREATED.CODE,
         message: PRODUCT_LOT_SUCCESS_MESSAGES.CREATE_SUCCESS,
+        data: productLot,
       };
       return res.status(response.status).json(response);
     } catch (err) {

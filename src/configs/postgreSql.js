@@ -24,7 +24,12 @@ const postgresConfig = {
     paranoid: true,
   },
   dialect: 'postgres',
-  dialectOptions: {},
+  dialectOptions: {
+    ssl: {
+      require: true,
+      rejectUnauthorized: false, // <--- allow self-signed
+    },
+  },
 };
 
 if (['production'].includes(process.env.NODE_ENV)) {

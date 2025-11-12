@@ -8,7 +8,7 @@ export interface IProductAttributes extends IDefaultAttributes {
   title: string;
   sku: string;
   vendorId: string;
-  lotId: string;
+  lotId: string[];
   categoryId: string;
   subCategoryId: string;
   enTitle: string;
@@ -18,6 +18,7 @@ export interface IProductAttributes extends IDefaultAttributes {
   totalUnit: number;
   soldUnit: number;
   pricePerUnit: number;
+  basePricePerUnit: number;
   specifications: IProductSpecificationAttributes[];
   status: PRODUCT_COMMON_STATUS;
 }
