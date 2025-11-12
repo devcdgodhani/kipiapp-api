@@ -277,7 +277,7 @@ export default class AuthController {
           { email: reqData.username },
           { mobile: reqData.username },
           { username: reqData.username },
-          { id: reqData.username },
+          // { id: reqData.username },
         ],
         type: reqData.type,
       });
