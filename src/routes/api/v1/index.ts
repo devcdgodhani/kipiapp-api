@@ -10,6 +10,7 @@ import productLotRoutes from './productLotRoutes';
 import storeRoutes from './storeRoutes';
 import productRoutes from './productRoutes';
 import productSpecificationRoutes from './productSpecificationRoutes';
+import openRoutes from './openRoutes';
 
 router.get('/healthCheck', (req, res) => {
   const now = new Date();
@@ -36,5 +37,7 @@ router.use('/store', jwtAuth({ byPassStoreValidation: true }), storeRoutes);
 router.use('/product', jwtAuth(), productRoutes);
 
 router.use('/productSpecification', jwtAuth(), productSpecificationRoutes);
+
+router.use('/open', openRoutes);
 
 export default router;

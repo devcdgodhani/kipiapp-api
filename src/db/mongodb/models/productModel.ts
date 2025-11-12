@@ -1,8 +1,9 @@
-import { Schema, model } from 'mongoose';
+import { CallbackError, HydratedDocument, Schema, model } from 'mongoose';
 import { IProductDocument } from '../../../interfaces';
 import { defaultAttributes } from '../plugins/baseSchema';
 import { ProductSpecificationSchemaObject } from './productSpecificationModel';
 import {
+  API_BASE_URL,
   CATEGORY_ERROR_MESSAGES,
   MONGOOSE_MODEL,
   PRODUCT_COMMON_STATUS,
@@ -20,6 +21,7 @@ import {
   ProductLotModel,
 } from '../../postgreSql';
 import { Op } from 'sequelize';
+import { generateQRWithUrl } from '../../../helpers';
 
 export const ProductSchema = new Schema<IProductDocument>(
   {
@@ -137,6 +139,10 @@ export const ProductSchema = new Schema<IProductDocument>(
       required: true,
       default: PRODUCT_COMMON_STATUS.ACTIVE,
     },
+    qrCode: {
+      type: String,
+      required: false,
+    },
     ...defaultAttributes,
   },
   {
@@ -144,5 +150,18 @@ export const ProductSchema = new Schema<IProductDocument>(
     versionKey: false,
   }
 );
+
+ProductSchema.pre('save', async function (next) {
+  const doc = this as HydratedDocument<IProductDocument>;
+  if (doc.isNew || doc.isModified('title')) {
+    try {
+      const url = `${API_BASE_URL}/open/product/getOne?id=${doc.id.toString()}`;
+      doc.qrCode = await generateQRWithUrl(url);
+    } catch (err) {
+      return next(err as CallbackError);
+    }
+  }
+  next();
+});
 
 export const ProductModel = model<IProductDocument>(MONGOOSE_MODEL.PRODUCTS, ProductSchema);

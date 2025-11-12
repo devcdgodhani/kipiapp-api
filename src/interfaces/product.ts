@@ -21,6 +21,7 @@ export interface IProductAttributes extends IDefaultAttributes {
   basePricePerUnit: number;
   specifications: IProductSpecificationAttributes[];
   status: PRODUCT_COMMON_STATUS;
+  qrCode: string;
 }
 
 export interface IProductDocument extends Omit<IProductAttributes, 'id'>, Document {}
