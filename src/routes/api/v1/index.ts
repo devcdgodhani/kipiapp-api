@@ -11,6 +11,7 @@ import storeRoutes from './storeRoutes';
 import productRoutes from './productRoutes';
 import productSpecificationRoutes from './productSpecificationRoutes';
 import openRoutes from './openRoutes';
+import orderRoutes from './orderRoutes';
 
 router.get('/healthCheck', (req, res) => {
   const now = new Date();
@@ -21,6 +22,8 @@ router.get('/healthCheck', (req, res) => {
     date: now.toISOString().split('T')[0],
   });
 });
+
+router.use('/open', openRoutes);
 
 router.use('/auth', authRoute);
 
@@ -38,6 +41,6 @@ router.use('/product', jwtAuth(), productRoutes);
 
 router.use('/productSpecification', jwtAuth(), productSpecificationRoutes);
 
-router.use('/open', openRoutes);
+router.use('/order', jwtAuth(), orderRoutes);
 
 export default router;

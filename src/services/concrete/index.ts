@@ -12,3 +12,4 @@ export * from './storeService';
 export * from './productService';
 export * from './productSpecificationService';
 export * from './contactAddressService';
+export * from './orderService';

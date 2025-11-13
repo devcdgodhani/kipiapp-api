@@ -23,3 +23,4 @@ export const connectMongoDb = async (config: TMongoDbConfig) => {
 export * from './models/productModel';
 export * from './models/productSpecificationModel';
 export * from './models/contactAddressModel';
+export * from './models/orderModel';
