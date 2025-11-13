@@ -52,6 +52,7 @@ export class MongooseCommonService<T, TDoc extends Document>
 
     const filter: Record<string, any> = {};
     const schemaPaths = this.schema.paths;
+    schemaPaths.id = schemaPaths._id;
     const filterOptions: QueryOptions = {};
 
     // 🔍 Handle search keyword (from filters.search)

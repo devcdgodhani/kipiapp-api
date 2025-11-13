@@ -2,6 +2,7 @@ export enum MONGOOSE_MODEL {
   PRODUCTS = 'products',
   PRODUCT_SPECIFICATIONS = 'product_specifications',
   CONTACT_ADDRESSES = 'contact_addresses',
+  ORDERS = 'orders',
 }
 
 export const POSTGRE_SQL_MODEL_DEFAULT_ASSOCIATIONS = {

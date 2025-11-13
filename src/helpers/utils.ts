@@ -2,6 +2,7 @@
 import fs from 'fs';
 import Joi from 'joi';
 import crypto from 'crypto';
+import qrCode from 'qrcode';
 import { HTTP_STATUS_CODE } from '../constants';
 import { ApiError } from './apiError';
 
@@ -513,4 +514,9 @@ export const validateSchema = (
     );
   }
   return validData;
+};
+
+export const generateQRWithUrl = async (url: string): Promise<string> => {
+  const qrCodeBase64 = await qrCode.toDataURL(url);
+  return qrCodeBase64;
 };
