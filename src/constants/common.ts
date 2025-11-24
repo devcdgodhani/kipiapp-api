@@ -92,3 +92,9 @@ export enum ORDER_STATUS {
   CONFIRMED = 'CONFIRMED',
   CANCELLED = 'CANCELLED',
 }
+
+export enum ORDER_TYPE {
+  SELL = 'SELL',
+  PURCHASE = 'PURCHASE',
+  RETURN = 'RETURN',
+}

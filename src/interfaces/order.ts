@@ -1,6 +1,6 @@
 import { ObjectId } from 'mongoose';
 import { IDefaultAttributes } from './common';
-import { ORDER_STATUS } from '../constants';
+import { ORDER_STATUS, ORDER_TYPE } from '../constants';
 
 export interface IOrderItem {
   productId: ObjectId;
@@ -30,6 +30,7 @@ export interface IOrderAttributes extends IDefaultAttributes {
   expiredAt?: Date | null;
   additionalDetails: string[];
   status: ORDER_STATUS;
+  type: ORDER_TYPE;
 }
 
 export interface IOrderDocument extends Omit<IOrderAttributes, 'id'>, Document {}
