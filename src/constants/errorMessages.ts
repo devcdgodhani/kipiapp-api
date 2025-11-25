@@ -81,11 +81,20 @@ export enum PRODUCT_SPECIFICATION_ERROR_MESSAGES {
   EXIST = 'Product specification is already exist!',
 }
 
-export enum DAILY_TRANSACTION_ERROR_MESSAGES {
+export enum TRANSACTION_ERROR_MESSAGES {
   CREATE_FAIL = 'Unable to create transaction!',
   GET_FAIL = 'Unable to retrieve transaction details!',
   UPDATE_FAIL = 'Unable to update transaction details!',
   DELETE_FAIL = 'Unable to delete transaction details!',
   NOT_FOUND = 'Unable to find transaction details!',
   EXIST = 'Transaction is already exist!',
+}
+
+export enum ORDER_ERROR_MESSAGES {
+  CREATE_FAIL = 'Unable to create order!',
+  GET_FAIL = 'Unable to retrieve order details!',
+  UPDATE_FAIL = 'Unable to update order details!',
+  DELETE_FAIL = 'Unable to delete order details!',
+  NOT_FOUND = 'Unable to find order details!',
+  EXIST = 'Order is already exist!',
 }

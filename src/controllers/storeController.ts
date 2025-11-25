@@ -89,9 +89,9 @@ export default class StoreController {
       if (!Array.isArray(reqData)) reqData = [reqData];
 
       const existSubCategory = await this.storeService.findOne({
-        [Op.or]: reqData.map((subCategory: IStoreAttributes) => ({
-          userId: subCategory.userId,
-          title: subCategory.title,
+        [Op.or]: reqData.map((store: IStoreAttributes) => ({
+          userId: store.userId,
+          title: store.title,
         })),
       });
 

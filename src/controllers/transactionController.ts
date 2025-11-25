@@ -1,30 +1,30 @@
 import { Request, Response, NextFunction } from 'express';
-import { HTTP_STATUS_CODE, ORDER_SUCCESS_MESSAGES } from '../constants';
-import { MongooseTransactionService, OrderService } from '../services';
-import { IApiResponse, IOrderAttributes } from '../interfaces';
-import { TOrderListPaginationRes, TOrderListRes, TOrderRes } from '../types';
+import { HTTP_STATUS_CODE, TRANSACTION_SUCCESS_MESSAGES } from '../constants';
+import { MongooseTransactionService, TransactionService } from '../services';
+import { IApiResponse } from '../interfaces';
+import { TTransactionListPaginationRes, TTransactionListRes, TTransactionRes } from '../types';
 
-export default class OrderController {
-  orderService = new OrderService();
+export default class TransactionController {
+  transactionService = new TransactionService();
 
   constructor() {}
 
-  /*********** Fetch order ***********/
+  /*********** Fetch transaction ***********/
   getOne = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const reqData = req.body;
-      const { filter, options } = this.orderService.generateFilter({
+      const { filter, options } = this.transactionService.generateFilter({
         filters: reqData,
         // searchFields: ['email'],
       });
 
-      const order = await this.orderService.findOne(filter, options);
+      const transaction = await this.transactionService.findOne(filter, options);
 
-      const response: TOrderRes = {
+      const response: TTransactionRes = {
         status: HTTP_STATUS_CODE.OK.STATUS,
         code: HTTP_STATUS_CODE.OK.CODE,
-        message: ORDER_SUCCESS_MESSAGES.GET_SUCCESS,
-        data: order,
+        message: TRANSACTION_SUCCESS_MESSAGES.GET_SUCCESS,
+        data: transaction,
       };
 
       return res.status(response.status).json(response);
@@ -36,18 +36,18 @@ export default class OrderController {
   getAll = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const reqData = req.body;
-      const { filter, options } = this.orderService.generateFilter({
+      const { filter, options } = this.transactionService.generateFilter({
         filters: reqData,
         // searchFields: ['email'],
       });
 
-      const orderList = await this.orderService.findAll(filter, options);
+      const transactionList = await this.transactionService.findAll(filter, options);
 
-      const response: TOrderListRes = {
+      const response: TTransactionListRes = {
         status: HTTP_STATUS_CODE.OK.STATUS,
         code: HTTP_STATUS_CODE.OK.CODE,
-        message: ORDER_SUCCESS_MESSAGES.GET_SUCCESS,
-        data: orderList,
+        message: TRANSACTION_SUCCESS_MESSAGES.GET_SUCCESS,
+        data: transactionList,
       };
       return res.status(response.status).json(response);
     } catch (err) {
@@ -58,18 +58,17 @@ export default class OrderController {
   getWithPagination = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const reqData = req.body;
-      const { filter, options } = this.orderService.generateFilter({
+      const { filter, options } = this.transactionService.generateFilter({
         filters: reqData,
-        searchFields: [],
       });
 
-      const orderList = await this.orderService.findAllWithPagination(filter, options);
+      const transactionList = await this.transactionService.findAllWithPagination(filter, options);
 
-      const response: TOrderListPaginationRes = {
+      const response: TTransactionListPaginationRes = {
         status: HTTP_STATUS_CODE.OK.STATUS,
         code: HTTP_STATUS_CODE.OK.CODE,
-        message: ORDER_SUCCESS_MESSAGES.GET_SUCCESS,
-        data: orderList,
+        message: TRANSACTION_SUCCESS_MESSAGES.GET_SUCCESS,
+        data: transactionList,
       };
 
       return res.status(response.status).json(response);
@@ -78,7 +77,7 @@ export default class OrderController {
     }
   };
 
-  /*********** Create order ***********/
+  /*********** Create transaction ***********/
   create = async (req: Request, res: Response, next: NextFunction) => {
     const transaction = new MongooseTransactionService();
     try {
@@ -87,25 +86,14 @@ export default class OrderController {
       let reqData = req.body;
       if (!Array.isArray(reqData)) reqData = [reqData];
 
-      reqData = await Promise.all(
-        reqData.map(async (product: IOrderAttributes) => ({
-          ...product,
-          number: await this.orderService.generateUniqueOrderNumber(),
-        }))
-      );
-
-      const createdOrder = await this.orderService.bulkCreate(reqData, {
-        userId: req.user.id,
-        session,
-      });
+      await this.transactionService.bulkCreate(reqData, { userId: req.user.id, session });
 
       await transaction.commit();
 
-      const response: IApiResponse<IOrderAttributes | IOrderAttributes[]> = {
+      const response: IApiResponse = {
         status: HTTP_STATUS_CODE.CREATED.STATUS,
         code: HTTP_STATUS_CODE.CREATED.CODE,
-        message: ORDER_SUCCESS_MESSAGES.CREATE_SUCCESS,
-        data: Array.isArray(req.body) ? createdOrder : (createdOrder.pop() as IOrderAttributes),
+        message: TRANSACTION_SUCCESS_MESSAGES.CREATE_SUCCESS,
       };
       return res.status(response.status).json(response);
     } catch (err) {
@@ -114,7 +102,7 @@ export default class OrderController {
     }
   };
 
-  /*********** Update order ***********/
+  /*********** Update transaction ***********/
   updateManyByFilter = async (req: Request, res: Response, next: NextFunction) => {
     const transaction = new MongooseTransactionService();
 
@@ -124,10 +112,10 @@ export default class OrderController {
       let reqData = req.body;
       if (!Array.isArray(reqData)) reqData = [reqData];
       for (const updateData of reqData) {
-        const { filter } = this.orderService.generateFilter({
+        const { filter } = this.transactionService.generateFilter({
           filters: updateData.filter,
         });
-        await this.orderService.update(filter, updateData.update, {
+        await this.transactionService.update(filter, updateData.update, {
           userId: req.user.id,
           session,
         });
@@ -135,7 +123,7 @@ export default class OrderController {
       const response: IApiResponse = {
         status: HTTP_STATUS_CODE.OK.STATUS,
         code: HTTP_STATUS_CODE.OK.CODE,
-        message: ORDER_SUCCESS_MESSAGES.UPDATE_SUCCESS,
+        message: TRANSACTION_SUCCESS_MESSAGES.UPDATE_SUCCESS,
       };
       await transaction.commit();
       return res.status(response.status).json(response);
@@ -150,10 +138,10 @@ export default class OrderController {
     try {
       const session = await transaction.start();
       const reqData = req.body;
-      const { filter } = this.orderService.generateFilter({
+      const { filter } = this.transactionService.generateFilter({
         filters: reqData.filter,
       });
-      await this.orderService.updateOne(filter, reqData.update, {
+      await this.transactionService.updateOne(filter, reqData.update, {
         userId: req.user.id,
         session,
       });
@@ -161,7 +149,7 @@ export default class OrderController {
       const response: IApiResponse = {
         status: HTTP_STATUS_CODE.OK.STATUS,
         code: HTTP_STATUS_CODE.OK.CODE,
-        message: ORDER_SUCCESS_MESSAGES.UPDATE_SUCCESS,
+        message: TRANSACTION_SUCCESS_MESSAGES.UPDATE_SUCCESS,
       };
       await transaction.commit();
       return res.status(response.status).json(response);
@@ -171,22 +159,22 @@ export default class OrderController {
     }
   };
 
-  /*********** Delete order ***********/
+  /*********** Delete transaction ***********/
   deleteByFilter = async (req: Request, res: Response, next: NextFunction) => {
     const transaction = new MongooseTransactionService();
     try {
       const session = await transaction.start();
       const reqData = req.body;
-      const { filter } = this.orderService.generateFilter({
+      const { filter } = this.transactionService.generateFilter({
         filters: reqData,
       });
 
-      await this.orderService.softDelete(filter, { userId: req.user.id, session });
+      await this.transactionService.softDelete(filter, { userId: req.user.id, session });
 
       const response: IApiResponse = {
         status: HTTP_STATUS_CODE.OK.STATUS,
         code: HTTP_STATUS_CODE.OK.CODE,
-        message: ORDER_SUCCESS_MESSAGES.DELETE_SUCCESS,
+        message: TRANSACTION_SUCCESS_MESSAGES.DELETE_SUCCESS,
       };
       await transaction.commit();
       return res.status(response.status).json(response);

@@ -2,6 +2,7 @@ export enum MONGOOSE_MODEL {
   PRODUCTS = 'products',
   PRODUCT_SPECIFICATIONS = 'product_specifications',
   CONTACT_ADDRESSES = 'contact_addresses',
+  TRANSACTION = 'transactions',
   ORDERS = 'orders',
 }
 
