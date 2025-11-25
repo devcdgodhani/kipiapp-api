@@ -1,6 +1,6 @@
 import { ObjectId } from 'mongoose';
 import { IDefaultAttributes } from './common';
-import { ORDER_STATUS } from '../constants';
+import { ORDER_STATUS, ORDER_TYPE } from '../constants';
 
 export interface IOrderItem {
   productId: ObjectId;
@@ -18,6 +18,7 @@ export interface IOrderItem {
 
 export interface IOrderAttributes extends IDefaultAttributes {
   id: ObjectId;
+  number: string;
   items: IOrderItem[];
   amount: number;
   payableAmount: number;
@@ -30,6 +31,8 @@ export interface IOrderAttributes extends IDefaultAttributes {
   expiredAt?: Date | null;
   additionalDetails: string[];
   status: ORDER_STATUS;
+  type: ORDER_TYPE;
+  referenceId: ObjectId; // self reference id for return
 }
 
 export interface IOrderDocument extends Omit<IOrderAttributes, 'id'>, Document {}

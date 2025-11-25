@@ -12,7 +12,7 @@ export default class OrderValidator {
   private createSchema = mongooseToJoi<IOrderAttributes>({
     schema: OrderSchema,
     // includeFields: ['userId'],
-    requiredFields: ['userId', 'storeId'],
+    requiredFields: ['userId', 'storeId','type'],
     excludeFields: ['expiredAt'],
   });
 

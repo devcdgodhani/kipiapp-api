@@ -6,6 +6,7 @@ import {
   AUTH_TOKEN_EXPIRATION_IN_MINUTES,
   MONGOOSE_MODEL,
   ORDER_STATUS,
+  ORDER_TYPE,
   PRODUCT_ERROR_MESSAGES,
   STORE_ERROR_MESSAGES,
   USER_ERROR_MESSAGES,
@@ -74,6 +75,10 @@ const OrderItemSchema = {
 
 export const OrderSchema = new Schema<IOrderDocument>(
   {
+    number: {
+      type: String,
+      required: true,
+    },
     items: {
       type: [OrderItemSchema],
       required: true,
@@ -146,6 +151,15 @@ export const OrderSchema = new Schema<IOrderDocument>(
       enum: Object.values(ORDER_STATUS),
       required: true,
       default: ORDER_STATUS.PENDING,
+    },
+    type: {
+      type: String,
+      enum: Object.values(ORDER_TYPE),
+      required: true,
+    },
+    referenceId: {
+      type: Types.ObjectId,
+      required: false,
     },
     ...defaultAttributes,
   },

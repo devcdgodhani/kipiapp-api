@@ -60,3 +60,10 @@ export enum PRODUCT_SPECIFICATION_SUCCESS_MESSAGES {
   UPDATE_SUCCESS = 'Product specification details updated successfully',
   DELETE_SUCCESS = 'Product specification deleted successfully',
 }
+
+export enum DAILY_TRANSACTION_SUCCESS_MESSAGES {
+  CREATE_SUCCESS = 'Transaction created successfully',
+  GET_SUCCESS = 'Transaction details retrieved successfully',
+  UPDATE_SUCCESS = 'Transaction details updated successfully',
+  DELETE_SUCCESS = 'Transaction deleted successfully',
+}
