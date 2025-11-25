@@ -80,6 +80,8 @@ export enum PRODUCT_COMMON_STATUS {
 
 export const PRODUCT_SKU_START = 10000;
 
+export const ORDER_NUMBER_START = 10000;
+
 export enum PRODUCT_LOT_TYPE {
   SELL = 'SELL',
   PURCHASE = 'PURCHASE',
@@ -96,5 +98,6 @@ export enum ORDER_STATUS {
 export enum ORDER_TYPE {
   SELL = 'SELL',
   PURCHASE = 'PURCHASE',
-  RETURN = 'RETURN',
+  SELL_RETURN = 'SELL_RETURN',
+  PURCHASE_RETURN = 'PURCHASE_RETURN',
 }

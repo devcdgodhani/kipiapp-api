@@ -15,11 +15,23 @@ const startServer = (): void => {
         () => {
           fetch(ENV_VARIABLE.SERVER_URL)
             .then(() => {
-              console.log('Self ping completed:');
+              console.log('Self ping completed');
             })
-            .catch((err) => console.error('❌ Self ping failed:', err.message));
+            .catch((err) => console.error('Self ping failed:', err.message));
         },
         1000 * 60 * 5
+      );
+
+      setInterval(
+        async () => {
+          try {
+            await sequelize.sync();
+            console.log('Self ping to postgresql completed:');
+          } catch (err) {
+            console.log('error while self ping to postgresql', err);
+          }
+        },
+        1000 * 60 * 60 * 24
       );
     }
   });

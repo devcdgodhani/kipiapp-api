@@ -80,3 +80,12 @@ export enum PRODUCT_SPECIFICATION_ERROR_MESSAGES {
   NOT_FOUND = 'Unable to find product specification details!',
   EXIST = 'Product specification is already exist!',
 }
+
+export enum DAILY_TRANSACTION_ERROR_MESSAGES {
+  CREATE_FAIL = 'Unable to create transaction!',
+  GET_FAIL = 'Unable to retrieve transaction details!',
+  UPDATE_FAIL = 'Unable to update transaction details!',
+  DELETE_FAIL = 'Unable to delete transaction details!',
+  NOT_FOUND = 'Unable to find transaction details!',
+  EXIST = 'Transaction is already exist!',
+}

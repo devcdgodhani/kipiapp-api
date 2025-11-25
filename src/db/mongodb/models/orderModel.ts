@@ -75,6 +75,10 @@ const OrderItemSchema = {
 
 export const OrderSchema = new Schema<IOrderDocument>(
   {
+    number: {
+      type: String,
+      required: true,
+    },
     items: {
       type: [OrderItemSchema],
       required: true,
@@ -152,6 +156,10 @@ export const OrderSchema = new Schema<IOrderDocument>(
       type: String,
       enum: Object.values(ORDER_TYPE),
       required: true,
+    },
+    referenceId: {
+      type: Types.ObjectId,
+      required: false,
     },
     ...defaultAttributes,
   },

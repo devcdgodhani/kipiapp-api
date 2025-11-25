@@ -87,6 +87,13 @@ export default class OrderController {
       let reqData = req.body;
       if (!Array.isArray(reqData)) reqData = [reqData];
 
+      reqData = await Promise.all(
+        reqData.map(async (product: IOrderAttributes) => ({
+          ...product,
+          number: await this.orderService.generateUniqueOrderNumber(),
+        }))
+      );
+
       const createdOrder = await this.orderService.bulkCreate(reqData, {
         userId: req.user.id,
         session,
