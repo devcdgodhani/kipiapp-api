@@ -61,7 +61,7 @@ export class SequelizeCommonService<T extends Model> implements ISequelizeCommon
         if (value.lt !== undefined) range[Op.lt] = value.lt;
         rawWhere[field] = range;
       } else {
-        rawWhere[field] = typeof value === 'string' ? { [Op.iLike]: `%${value}%` } : value;
+        rawWhere[field] = value;
       }
     }
 
