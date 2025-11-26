@@ -1,19 +1,19 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { FilterQuery, PipelineStage } from 'mongoose';
-import { TIncomeExpenseChartList, TReportsReq } from '../../types';
-import { IReportsService } from '../contracts';
+import { TIncomeExpenseChartList, TDashboardReq } from '../../types';
+import { IDashboardService } from '../contracts';
 import { TransactionService } from './transactionService';
 import { ITransactionAttributes } from '../../interfaces';
 import { MONTH_NAMES, REPORT_INTERVAL, TRANSACTION_ACTION } from '../../constants';
 import { generateEmptyDateBuckets } from '../../helpers';
 
-export class ReportsService implements IReportsService {
+export class DashboardService implements IDashboardService {
   transactionService = new TransactionService();
 
   constructor() {}
 
   getIncomeExpenseTransactionListByDate = async (
-    reqData: TReportsReq
+    reqData: TDashboardReq
   ): Promise<TIncomeExpenseChartList[]> => {
     const filter: FilterQuery<ITransactionAttributes> = {};
     if (reqData.startDate) filter.date = { $gte: reqData.startDate };

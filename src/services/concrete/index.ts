@@ -15,3 +15,4 @@ export * from './contactAddressService';
 export * from './orderService';
 export * from './transactionService';
 export * from './reportsService';
+export * from './dashboardService';

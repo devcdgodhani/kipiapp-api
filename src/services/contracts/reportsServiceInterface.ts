@@ -1,5 +1,5 @@
-import { TReportsReq, TIncomeExpenseList } from '../../types';
+import { TReportsReq, TIncomeExpenseChartList } from '../../types';
 
 export interface IReportsService {
-  getIncomeExpenseTransactionListByDate: (reqData: TReportsReq) => Promise<TIncomeExpenseList[]>;
+  getIncomeExpenseTransactionListByDate: (reqData: TReportsReq) => Promise<TIncomeExpenseChartList[]>;
 }
