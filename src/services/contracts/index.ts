@@ -15,3 +15,4 @@ export * from './contactAddressServiceInterface';
 export * from './orderServiceInterface';
 export * from './transactionServiceInterface';
 export * from './reportsServiceInterface';
+export * from './dashboardServiceInterface';

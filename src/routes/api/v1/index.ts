@@ -14,6 +14,7 @@ import openRoutes from './openRoutes';
 import orderRoutes from './orderRoutes';
 import transactionRoutes from './transactionRoutes';
 import reportsRoutes from './reportsRoutes';
+import dashboardRoutes from './dashboardRoutes';
 
 router.get('/healthCheck', (req, res) => {
   const now = new Date();
@@ -48,5 +49,7 @@ router.use('/order', jwtAuth(), orderRoutes);
 router.use('/transaction', jwtAuth(), transactionRoutes);
 
 router.use('/reports', jwtAuth(), reportsRoutes);
+
+router.use('/dashboard', jwtAuth(), dashboardRoutes);
 
 export default router;
