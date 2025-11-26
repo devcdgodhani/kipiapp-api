@@ -523,7 +523,12 @@ export const generateQRWithUrl = async (url: string): Promise<string> => {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const generateEmptyDateBuckets = (start: Date, end: Date, interval: REPORT_INTERVAL, data: any) => {
+export const generateEmptyDateBuckets = (
+  start: Date,
+  end: Date,
+  interval: REPORT_INTERVAL,
+  data: any
+) => {
   const buckets: any[] = [];
 
   if (interval === REPORT_INTERVAL.DAILY) {
@@ -557,4 +562,43 @@ export const generateEmptyDateBuckets = (start: Date, end: Date, interval: REPOR
   }
 
   return buckets;
+};
+
+export const getGroupIdAndLabelByDateForChart = (
+  field: string,
+  interval: REPORT_INTERVAL = REPORT_INTERVAL.DAILY
+) => {
+  let groupId: any = {};
+  let labelProject: any = {};
+
+  switch (interval) {
+    case REPORT_INTERVAL.DAILY:
+      groupId = {
+        $dateToString: { format: '%d-%m-%Y', date: '$' + field },
+      };
+      labelProject = '$_id';
+      break;
+
+    case REPORT_INTERVAL.MONTHLY:
+      groupId = {
+        year: { $year: '$' + field },
+        month: { $month: '$' + field },
+      };
+      labelProject = {
+        $concat: [
+          {
+            $arrayElemAt: [MONTH_NAMES, '$_id.month'],
+          },
+          ' ',
+          { $toString: '$_id.year' },
+        ],
+      };
+      break;
+
+    case REPORT_INTERVAL.YEARLY:
+      groupId = { $year: '$' + field };
+      labelProject = { $toString: '$_id' };
+      break;
+  }
+  return { groupId, label: labelProject };
 };
