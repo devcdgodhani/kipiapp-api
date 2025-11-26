@@ -1,33 +1,30 @@
 import { Request, Response, NextFunction } from 'express';
-import { HTTP_STATUS_CODE, STORE_SUCCESS_MESSAGES, STORE_ERROR_MESSAGES } from '../constants';
-import { StoreService } from '../services';
-import { IApiResponse, IStoreAttributes } from '../interfaces';
-import { TStoreListPaginationRes, TStoreListRes, TStoreRes } from '../types';
-import { ApiError } from '../helpers';
-import { Op } from 'sequelize';
-import { sequelize } from '../db/postgreSql';
+import { HTTP_STATUS_CODE, TRANSACTION_SUCCESS_MESSAGES } from '../constants';
+import { MongooseTransactionService, TransactionService } from '../services';
+import { IApiResponse } from '../interfaces';
+import { TTransactionListPaginationRes, TTransactionListRes, TTransactionRes } from '../types';
 
-export default class StoreController {
-  storeService = new StoreService();
+export default class TransactionController {
+  transactionService = new TransactionService();
 
   constructor() {}
 
-  /*********** Fetch store ***********/
+  /*********** Fetch transaction ***********/
   getOne = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const reqData = req.body;
-      const { filter, options } = this.storeService.generateFilter({
+      const { filter, options } = this.transactionService.generateFilter({
         filters: reqData,
         // searchFields: ['email'],
       });
 
-      const store = await this.storeService.findOne(filter, options);
+      const transaction = await this.transactionService.findOne(filter, options);
 
-      const response: TStoreRes = {
+      const response: TTransactionRes = {
         status: HTTP_STATUS_CODE.OK.STATUS,
         code: HTTP_STATUS_CODE.OK.CODE,
-        message: STORE_SUCCESS_MESSAGES.GET_SUCCESS,
-        data: store,
+        message: TRANSACTION_SUCCESS_MESSAGES.GET_SUCCESS,
+        data: transaction,
       };
 
       return res.status(response.status).json(response);
@@ -39,18 +36,18 @@ export default class StoreController {
   getAll = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const reqData = req.body;
-      const { filter, options } = this.storeService.generateFilter({
+      const { filter, options } = this.transactionService.generateFilter({
         filters: reqData,
         // searchFields: ['email'],
       });
 
-      const storeList = await this.storeService.findAll(filter, options);
+      const transactionList = await this.transactionService.findAll(filter, options);
 
-      const response: TStoreListRes = {
+      const response: TTransactionListRes = {
         status: HTTP_STATUS_CODE.OK.STATUS,
         code: HTTP_STATUS_CODE.OK.CODE,
-        message: STORE_SUCCESS_MESSAGES.GET_SUCCESS,
-        data: storeList,
+        message: TRANSACTION_SUCCESS_MESSAGES.GET_SUCCESS,
+        data: transactionList,
       };
       return res.status(response.status).json(response);
     } catch (err) {
@@ -61,18 +58,17 @@ export default class StoreController {
   getWithPagination = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const reqData = req.body;
-      const { filter, options } = this.storeService.generateFilter({
+      const { filter, options } = this.transactionService.generateFilter({
         filters: reqData,
-        searchFields: ['title', 'enTitle'],
       });
 
-      const storeList = await this.storeService.findAllWithPagination(filter, options);
+      const transactionList = await this.transactionService.findAllWithPagination(filter, options);
 
-      const response: TStoreListPaginationRes = {
+      const response: TTransactionListPaginationRes = {
         status: HTTP_STATUS_CODE.OK.STATUS,
         code: HTTP_STATUS_CODE.OK.CODE,
-        message: STORE_SUCCESS_MESSAGES.GET_SUCCESS,
-        data: storeList,
+        message: TRANSACTION_SUCCESS_MESSAGES.GET_SUCCESS,
+        data: transactionList,
       };
 
       return res.status(response.status).json(response);
@@ -81,36 +77,23 @@ export default class StoreController {
     }
   };
 
-  /*********** Create store ***********/
+  /*********** Create transaction ***********/
   create = async (req: Request, res: Response, next: NextFunction) => {
-    const transaction = await sequelize.transaction();
+    const transaction = new MongooseTransactionService();
     try {
+      const session = await transaction.start();
+
       let reqData = req.body;
       if (!Array.isArray(reqData)) reqData = [reqData];
 
-      const existSubCategory = await this.storeService.findOne({
-        [Op.or]: reqData.map((store: IStoreAttributes) => ({
-          userId: store.userId,
-          title: store.title,
-        })),
-      });
-
-      if (existSubCategory) {
-        throw new ApiError(
-          HTTP_STATUS_CODE.BAD_REQUEST.CODE,
-          HTTP_STATUS_CODE.BAD_REQUEST.STATUS,
-          STORE_ERROR_MESSAGES.EXIST
-        );
-      }
-
-      await this.storeService.bulkCreate(reqData, { userId: req.user.id, transaction });
+      await this.transactionService.bulkCreate(reqData, { userId: req.user.id, session });
 
       await transaction.commit();
 
       const response: IApiResponse = {
         status: HTTP_STATUS_CODE.CREATED.STATUS,
         code: HTTP_STATUS_CODE.CREATED.CODE,
-        message: STORE_SUCCESS_MESSAGES.CREATE_SUCCESS,
+        message: TRANSACTION_SUCCESS_MESSAGES.CREATE_SUCCESS,
       };
       return res.status(response.status).json(response);
     } catch (err) {
@@ -119,26 +102,28 @@ export default class StoreController {
     }
   };
 
-  /*********** Update store ***********/
+  /*********** Update transaction ***********/
   updateManyByFilter = async (req: Request, res: Response, next: NextFunction) => {
-    const transaction = await sequelize.transaction();
+    const transaction = new MongooseTransactionService();
 
     try {
+      const session = await transaction.start();
+
       let reqData = req.body;
       if (!Array.isArray(reqData)) reqData = [reqData];
       for (const updateData of reqData) {
-        const { filter } = this.storeService.generateFilter({
+        const { filter } = this.transactionService.generateFilter({
           filters: updateData.filter,
         });
-        await this.storeService.update(filter, updateData.update, {
+        await this.transactionService.update(filter, updateData.update, {
           userId: req.user.id,
-          transaction,
+          session,
         });
       }
       const response: IApiResponse = {
         status: HTTP_STATUS_CODE.OK.STATUS,
         code: HTTP_STATUS_CODE.OK.CODE,
-        message: STORE_SUCCESS_MESSAGES.UPDATE_SUCCESS,
+        message: TRANSACTION_SUCCESS_MESSAGES.UPDATE_SUCCESS,
       };
       await transaction.commit();
       return res.status(response.status).json(response);
@@ -149,21 +134,22 @@ export default class StoreController {
   };
 
   updateOneByFilter = async (req: Request, res: Response, next: NextFunction) => {
-    const transaction = await sequelize.transaction();
+    const transaction = new MongooseTransactionService();
     try {
+      const session = await transaction.start();
       const reqData = req.body;
-      const { filter } = this.storeService.generateFilter({
+      const { filter } = this.transactionService.generateFilter({
         filters: reqData.filter,
       });
-      await this.storeService.update(filter, reqData.update, {
+      await this.transactionService.updateOne(filter, reqData.update, {
         userId: req.user.id,
-        transaction,
+        session,
       });
 
       const response: IApiResponse = {
         status: HTTP_STATUS_CODE.OK.STATUS,
         code: HTTP_STATUS_CODE.OK.CODE,
-        message: STORE_SUCCESS_MESSAGES.UPDATE_SUCCESS,
+        message: TRANSACTION_SUCCESS_MESSAGES.UPDATE_SUCCESS,
       };
       await transaction.commit();
       return res.status(response.status).json(response);
@@ -173,21 +159,22 @@ export default class StoreController {
     }
   };
 
-  /*********** Delete store ***********/
+  /*********** Delete transaction ***********/
   deleteByFilter = async (req: Request, res: Response, next: NextFunction) => {
-    const transaction = await sequelize.transaction();
+    const transaction = new MongooseTransactionService();
     try {
+      const session = await transaction.start();
       const reqData = req.body;
-      const { filter } = this.storeService.generateFilter({
+      const { filter } = this.transactionService.generateFilter({
         filters: reqData,
       });
 
-      await this.storeService.softDelete(filter, { userId: req.user.id, transaction });
+      await this.transactionService.softDelete(filter, { userId: req.user.id, session });
 
       const response: IApiResponse = {
         status: HTTP_STATUS_CODE.OK.STATUS,
         code: HTTP_STATUS_CODE.OK.CODE,
-        message: STORE_SUCCESS_MESSAGES.DELETE_SUCCESS,
+        message: TRANSACTION_SUCCESS_MESSAGES.DELETE_SUCCESS,
       };
       await transaction.commit();
       return res.status(response.status).json(response);

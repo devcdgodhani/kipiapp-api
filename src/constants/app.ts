@@ -8,7 +8,7 @@ export const AUTH_TOKEN_EXPIRATION_IN_MINUTES: Record<TOKEN_TYPE, number> = {
   [TOKEN_TYPE.REFRESH_TOKEN]: 60 * 24 * 365,
   [TOKEN_TYPE.OTP_TOKEN]: 5,
   [TOKEN_TYPE.FORGET_PASSWORD_TOKEN]: 5,
-  [TOKEN_TYPE.ORDER_TOKEN]: 2,
+  [TOKEN_TYPE.ORDER_TOKEN]: 60,
 };
 
 const TEMPLATES = path.join(process.cwd(), 'templates');

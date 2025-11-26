@@ -24,3 +24,4 @@ export * from './models/productModel';
 export * from './models/productSpecificationModel';
 export * from './models/contactAddressModel';
 export * from './models/orderModel';
+export * from './models/transactionModel';

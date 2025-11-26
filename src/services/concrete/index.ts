@@ -13,3 +13,5 @@ export * from './productService';
 export * from './productSpecificationService';
 export * from './contactAddressService';
 export * from './orderService';
+export * from './transactionService';
+export * from './reportsService';

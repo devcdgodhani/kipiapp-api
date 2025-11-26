@@ -13,3 +13,5 @@ export * from './productServiceInterface';
 export * from './productSpecificationServiceInterface';
 export * from './contactAddressServiceInterface';
 export * from './orderServiceInterface';
+export * from './transactionServiceInterface';
+export * from './reportsServiceInterface';

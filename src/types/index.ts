@@ -12,3 +12,5 @@ export * from './product';
 export * from './productSpecification';
 export * from './contactAddress';
 export * from './order';
+export * from './transaction';
+export * from './reports';
