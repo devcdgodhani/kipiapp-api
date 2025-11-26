@@ -111,3 +111,9 @@ export enum TRANSACTION_REFERENCE_MODULE {
   ORDER = 'ORDER',
   OTHER = 'OTHER',
 }
+
+export enum REPORT_INTERVAL {
+  DAILY = 'DAILY',
+  MONTHLY = 'MONTHLY',
+  YEARLY = 'YEARLY',
+}
