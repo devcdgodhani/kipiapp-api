@@ -3,8 +3,9 @@ import fs from 'fs';
 import Joi from 'joi';
 import crypto from 'crypto';
 import qrCode from 'qrcode';
-import { HTTP_STATUS_CODE } from '../constants';
+import { HTTP_STATUS_CODE, MONTH_NAMES, REPORT_INTERVAL } from '../constants';
 import { ApiError } from './apiError';
+import { eachDayOfInterval, eachMonthOfInterval, eachYearOfInterval, format } from 'date-fns';
 
 const PASSWORD_REGEX = new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!.@#$%^&*])(?=.{8,})');
 
@@ -519,4 +520,41 @@ export const validateSchema = (
 export const generateQRWithUrl = async (url: string): Promise<string> => {
   const qrCodeBase64 = await qrCode.toDataURL(url);
   return qrCodeBase64;
+};
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const generateEmptyDateBuckets = (start: Date, end: Date, interval: REPORT_INTERVAL, data: any) => {
+  const buckets: any[] = [];
+
+  if (interval === REPORT_INTERVAL.DAILY) {
+    const days = eachDayOfInterval({ start, end });
+    for (const d of days) {
+      buckets.push({
+        label: format(d, 'dd-MM-yyyy'),
+        data,
+      });
+    }
+  }
+
+  if (interval === REPORT_INTERVAL.MONTHLY) {
+    const months = eachMonthOfInterval({ start, end });
+    for (const d of months) {
+      buckets.push({
+        label: `${MONTH_NAMES[d.getMonth() + 1]} ${d.getFullYear()}`,
+        data,
+      });
+    }
+  }
+
+  if (interval === REPORT_INTERVAL.YEARLY) {
+    const years = eachYearOfInterval({ start, end });
+    for (const d of years) {
+      buckets.push({
+        label: `${d.getFullYear()}`,
+        data,
+      });
+    }
+  }
+
+  return buckets;
 };
