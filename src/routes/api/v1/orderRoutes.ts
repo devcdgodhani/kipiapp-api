@@ -29,7 +29,7 @@ router.put(
 );
 
 /*********** Create order api ************/
-router.post('/bulkCreate', orderValidator.bulkCreate, orderController.create);
+// router.post('/bulkCreate', orderValidator.bulkCreate, orderController.create);
 router.post('/', orderValidator.create, orderController.create);
 
 /*********** Delete order api ************/

@@ -97,4 +97,5 @@ export enum ORDER_ERROR_MESSAGES {
   DELETE_FAIL = 'Unable to delete order details!',
   NOT_FOUND = 'Unable to find order details!',
   EXIST = 'Order is already exist!',
+  STATUS_CANCELLED = 'Cancelled order can not be updated!',
 }
