@@ -36,8 +36,8 @@ const transformIdIdQueryPlugin = (schema: Schema) => {
       hook as RegExp | 'createCollection',
       function (this: mongoose.Query<any, any>, next: CallbackWithoutResultAndOptionalError) {
         const query = this.getQuery();
-        const options: any = this.getOptions();
-        if (!options.sort) this.setOptions({ sort: { updatedAt: -1 }, ...options });
+        // const options: any = this.getOptions();
+        // if (!options.sort) this.setOptions({ sort: { updatedAt: -1 }, ...options });
         transformQuery(query);
         next();
       }

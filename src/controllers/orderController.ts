@@ -187,7 +187,7 @@ export default class OrderController {
         await this.transactionService.softDelete({ referenceId: order.id.toString() });
       }
 
-      if (ORDER_STATUS.PLACED === reqData?.update?.status) {
+      if (ORDER_STATUS.PLACED === reqData?.update?.status && order.status !== ORDER_STATUS.PLACED) {
         order = { ...order, ...reqData.update } as IOrderAttributes;
 
         const newTransaction = {
@@ -206,7 +206,7 @@ export default class OrderController {
         if ([ORDER_TYPE.SELL, ORDER_TYPE.PURCHASE_RETURN].includes(order.type)) {
           newTransaction.action = TRANSACTION_ACTION.CREDIT;
         }
-        await this.transactionService.create(newTransaction);
+        await this.transactionService.create(newTransaction, { session });
       }
 
       const response: IApiResponse = {
