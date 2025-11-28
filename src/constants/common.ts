@@ -133,3 +133,30 @@ export const MONTH_NAMES = [
   'November',
   'December',
 ];
+
+export enum CONTACT_ADDRESS_USER_TYPE {
+  USER = 'USER',
+  STORE = 'STORE',
+}
+
+export enum MOBILE_NUMBER_TYPE {
+  MOBILE = 'MOBILE',
+  LANDLINE = 'LANDLINE',
+  WORK = 'WORK',
+  OTHER = 'OTHER',
+}
+
+export enum ADDRESS_TYPE {
+  HOME = 'HOME',
+  OFFICE = 'OFFICE',
+  BILLING='BILLING',
+  OTHER = 'OTHER',
+}
+
+export enum GEO_SOURCE {
+  GPS = 'GPS',
+  NETWORK = 'NETWORK',
+  MANUAL = 'MANUAL',
+  MAP_CLICK = 'MAP_CLICK',
+  UNKNOWN = 'UNKNOWN',
+}

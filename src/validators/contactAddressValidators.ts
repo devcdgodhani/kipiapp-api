@@ -11,8 +11,7 @@ export default class ContactAddressValidator {
 
   private createSchema = mongooseToJoi<IContactAddressAttributes>({
     schema: ContactAddressSchema,
-    includeFields: ['title', 'userId'],
-    requiredFields: ['title', 'userId'],
+    requiredFields: ['referenceId', 'type'],
   });
 
   private updateSchema = mongooseToJoi<IContactAddressAttributes>({

@@ -602,3 +602,7 @@ export const getGroupIdAndLabelByDateForChart = (
   }
   return { groupId, label: labelProject };
 };
+
+export const getUniqUuid = (): string => {
+  return crypto.randomUUID();
+};

@@ -58,6 +58,7 @@ export const assertDatabaseConnection = async (): Promise<void> => {
     });
     console.log('MongoDB database connection has been established successfully.');
 
+    console.log('Product Varient Add karvano chhe ')
     /***** Redis  Authentication *****/
 
     //await connectRedis();
