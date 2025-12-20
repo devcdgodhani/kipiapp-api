@@ -16,3 +16,4 @@ export * from './orderService';
 export * from './transactionService';
 export * from './reportsService';
 export * from './dashboardService';
+export * from './whatsAppSessionService';

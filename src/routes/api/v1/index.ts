@@ -15,6 +15,7 @@ import orderRoutes from './orderRoutes';
 import transactionRoutes from './transactionRoutes';
 import reportsRoutes from './reportsRoutes';
 import dashboardRoutes from './dashboardRoutes';
+import whatsAppSessionRoutes from './whatsAppSessionRoutes';
 
 router.get('/healthCheck', (req, res) => {
   const now = new Date();
@@ -51,5 +52,7 @@ router.use('/transaction', jwtAuth(), transactionRoutes);
 router.use('/reports', jwtAuth(), reportsRoutes);
 
 router.use('/dashboard', jwtAuth(), dashboardRoutes);
+
+router.use('/whatsAppSession', jwtAuth(), whatsAppSessionRoutes);
 
 export default router;

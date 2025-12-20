@@ -15,3 +15,4 @@ export * from './order';
 export * from './transaction';
 export * from './reports';
 export * from './dashboard';
+export * from './whatsAppSession';

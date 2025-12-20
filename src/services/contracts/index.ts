@@ -16,3 +16,4 @@ export * from './orderServiceInterface';
 export * from './transactionServiceInterface';
 export * from './reportsServiceInterface';
 export * from './dashboardServiceInterface';
+export * from './whatsAppSessionServiceInterface';

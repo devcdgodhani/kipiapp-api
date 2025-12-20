@@ -4,6 +4,7 @@ export enum MONGOOSE_MODEL {
   CONTACT_ADDRESSES = 'contact_addresses',
   TRANSACTION = 'transactions',
   ORDERS = 'orders',
+  WHATSAPP_SESSIONS = 'whatsapp_sessions',
 }
 
 export const POSTGRE_SQL_MODEL_DEFAULT_ASSOCIATIONS = {
